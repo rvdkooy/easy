@@ -31,6 +31,8 @@
     "hbs": "^4.0.1",
     "mongoose": "^4.13.6",
     "morgan": "^1.9.0",
+    "passport": "^0.4.0",
+    "passport-google-oauth2": "^0.1.6",
     "winston": "^2.4.0",
     "winston-daily-rotate-file": "^1.7.2",
     "winston-mongodb": "^3.0.1"
@@ -39,6 +41,8 @@
     "@types/config": "0.0.33",
     "@types/cookie-parser": "^1.4.1",
     "@types/morgan": "^1.7.35",
+    "@types/passport": "^0.4.1",
+    "@types/passport-google-oauth2": "^0.1.1",
     "@types/winston": "^2.3.7",
     "nodemon": "^1.12.5",
     "ts-node": "^3.3.0",

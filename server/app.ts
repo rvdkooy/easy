@@ -29,10 +29,12 @@ const createApp = (settings: any, rootDir: string) => {
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(cookieParser());
 
+    app.use('/static', express.static(path.join(rootDir, 'static')));
+
     app.use('/', defaultRoutes)
 
     logger.info('Judgify admin started up...');
-
+    
     return app;
 }
 
