@@ -1,0 +1,17 @@
+{
+    "DATABASE_CONFIG": {
+        "HOST": "127.0.0.1",
+        "DB_NAME": "easy_db",
+        "PORT": ""
+    },
+    "ADMIN_ACCOUNTS": [
+        "ronaldvdkooy@gmail.com"
+    ],
+    "SESSION_SECRET": "secret...",
+    
+    "GOOGLE_AUTH": {
+        "CLIENT_ID": "687297981445-e591omr2pmqaida8j7a4srp7e6bn50vm.apps.googleusercontent.com",
+        "CLIENT_SECRET": "DrO5AlTXmkGRPv5DY5lRLPy6",
+        "CALLBACK_URL": "http://localhost:3000/auth/google/callback"
+    }
+}
