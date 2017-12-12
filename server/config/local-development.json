@@ -10,8 +10,8 @@
     "SESSION_SECRET": "secret...",
     
     "GOOGLE_AUTH": {
-        "CLIENT_ID": "687297981445-e591omr2pmqaida8j7a4srp7e6bn50vm.apps.googleusercontent.com",
-        "CLIENT_SECRET": "DrO5AlTXmkGRPv5DY5lRLPy6",
+        "CLIENT_ID": "",
+        "CLIENT_SECRET": "",
         "CALLBACK_URL": "http://localhost:3000/auth/google/callback"
     }
 }
