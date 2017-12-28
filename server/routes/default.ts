@@ -1,5 +1,4 @@
 import * as express from 'express';
-import redirectIfNotLoggedIn from '../security/redirectIfNotLoggedIn';
 const router = express.Router();
 
 router.get(['/admin', '/admin/*'], (req, res) => {

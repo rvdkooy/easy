@@ -11,6 +11,7 @@ import Container from '../common/container';
 const DashBoard = () => {
     return (
         <div>
+            <Typography type="headline">DashBoard</Typography>
             <Container>
                 <MainCards />
             </Container>

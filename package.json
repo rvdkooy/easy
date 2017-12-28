@@ -5,8 +5,13 @@
   "main": "index.js",
   "scripts": {
     "compile:server": "tsc --project ./server",
+    "compile:js": "webpack",
     "dev:server": "nodemon --exec \"./node_modules/.bin/ts-node\" -- ./server/server.ts --config ./server/nodemon.json",
-    "dev:js": "webpack --watch"
+    "dev:js": "webpack --watch",
+    "dev": "concurrently --kill-others \"npm run dev:server\" \"npm run dev:js\"",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm run compile:server && npm run compile:js",
+    "start": "node ./server/dist/server.js"
   },
   "repository": {
     "type": "git",
@@ -61,6 +66,7 @@
     "@types/recompose": "^0.24.4",
     "@types/winston": "^2.3.7",
     "awesome-typescript-loader": "^3.4.1",
+    "concurrently": "^3.5.1",
     "nodemon": "^1.12.5",
     "source-map-loader": "^0.2.3",
     "ts-node": "^3.3.0",

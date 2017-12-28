@@ -7,5 +7,10 @@ export interface User {
 
 export const retrieveCurrentUser = (): Promise<User> => {
     return query('/api/users/current')
-                .then((res: any) => res.json()); 
+        .then((res: Response) => {
+            if (res.status === 401) {
+                return null;
+            }
+            return res.json();
+        }); 
 };

@@ -59,7 +59,7 @@ class Layout extends React.Component<Props, State> {
                 <LeftMenu open onClose={() => {}}  />
                 <Paper className={classes.rightContent}>
                     <Switch>
-                        <Route exact path='/' component={Dashboard} />
+                        <Route exact path='/admin' component={Dashboard} />
                         <Route path='/users' component={null} />
                         <Route path='/logs' component={null} />
                     </Switch>

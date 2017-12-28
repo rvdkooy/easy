@@ -2,19 +2,28 @@ import * as React from 'react';
 import { History } from 'history';
 import { withRouter, RouteComponentProps } from 'react-router';
 import { withUser, UserProps } from '../../services/userProvider';
-import withStyles, { WithStyles } from 'material-ui/styles/withStyles';
+import { WithStyles, withStyles, Theme } from 'material-ui/styles';
 import { Link } from 'react-router-dom';
 import Drawer from 'material-ui/Drawer';
 import Divider from 'material-ui/Divider';
+import Collapse from 'material-ui/transitions/Collapse';
+import ExpandLess from 'material-ui-icons/ExpandLess';
+import ExpandMore from 'material-ui-icons/ExpandMore';
 import List, { ListItem, ListItemText, ListItemIcon } from 'material-ui/List';
 import HomeIcon from 'material-ui-icons/Home';
 import EventIcon from 'material-ui-icons/Event';
 import ListIcon from 'material-ui-icons/List';
+import CloudIcon from 'material-ui-icons/Cloud';
 import SecurityIcon from 'material-ui-icons/Security';
+import SettingsIcon from 'material-ui-icons/Settings';
+import WebIcon from 'material-ui-icons/Web';
+import StarIcon from 'material-ui-icons/Star';
+import FileUploadIcon from 'material-ui-icons/FileUpload';
+import TocIcon from 'material-ui-icons/Toc';
 import Avatar from 'material-ui/Avatar';
 import Typography from 'material-ui/Typography';
 
-const styles = {
+const styles = (theme: Theme) => ({
     menu: {
         width: 250
     },
@@ -26,12 +35,19 @@ const styles = {
         height: '100%',
         width: 240,
     } as React.CSSProperties,
-};
+    nested: {
+        paddingLeft: theme.spacing.unit * 4,
+    },
+});
 
-class LeftMenu extends React.Component<AllProps> {
+class LeftMenu extends React.Component<AllProps, State> {
+    state: State = {
+        contentOpen: false
+    }
+    
     _renderItem = (text: string, url: string, Icon: JSX.Element, className: string) => {
         return (
-            <ListItem button onClick={() => this.props.history.push(url)}>
+            <ListItem button onClick={() => this.props.history.push(url)} className={className}>
                 <ListItemIcon>
                     {Icon}
                 </ListItemIcon>
@@ -39,10 +55,26 @@ class LeftMenu extends React.Component<AllProps> {
             </ListItem>
         );
     }
+    _renderContentItem = (text: string, url: string, Icon: JSX.Element, className: string) => {
+        return (
+            <ListItem button onClick={this._toggleContentItem} className={className}>
+                <ListItemIcon>
+                    {Icon}
+                </ListItemIcon>
+                <ListItemText primary={text} />
+                {this.state.contentOpen ? <ExpandLess /> : <ExpandMore />}
+            </ListItem>
+        );
+        
+    }
+
+    _toggleContentItem = () => {
+        this.setState({ contentOpen: !this.state.contentOpen });
+    };
 
     render() {
         const { classes, currentUser } = this.props;
-        
+
         return (
             <Drawer
                 classes={{
@@ -56,11 +88,21 @@ class LeftMenu extends React.Component<AllProps> {
                 <div className={classes.menu}>
                     <div className={classes.avatar}>
                         <Avatar src={currentUser.photo} />
-                        <Typography>{ currentUser.displayName }</Typography>
+                        <Typography>{currentUser.displayName}</Typography>
                     </div>
                     <Divider />
                     <List>
                         <ListItem component={(args) => this._renderItem('Home', '/', <HomeIcon />, args.className)} />
+                        <ListItem component={(args) => this._renderContentItem('Content', '/content', <CloudIcon />, args.className)} />
+                        <Collapse component="li" in={this.state.contentOpen} timeout="auto" unmountOnExit>
+                            <List disablePadding>
+                                <ListItem component={(args) => this._renderItem('Content Pages', '/contentpages', <WebIcon />, classes.nested )} />
+                                <ListItem component={(args) => this._renderItem('File Uploads', '/fileuploads', <FileUploadIcon />, classes.nested)} />
+                                <ListItem component={(args) => this._renderItem("Menu's", '/menus', <TocIcon />, classes.nested)} />
+                            </List>
+                        </Collapse>
+                        <ListItem component={(args) => this._renderItem('Theme', '/theme', <StarIcon />, args.className)} />
+                        <ListItem component={(args) => this._renderItem('Settings', '/settings', <SettingsIcon />, args.className)} />
                         <ListItem component={(args) => this._renderItem('Users', '/users', <SecurityIcon />, args.className)} />
                         <ListItem component={(args) => this._renderItem('Logs', '/logs', <ListIcon />, args.className)} />
                     </List>
@@ -70,12 +112,16 @@ class LeftMenu extends React.Component<AllProps> {
     }
 };
 
+interface State {
+    contentOpen: boolean
+}
+
 interface OuterProps extends RouteComponentProps<any> {
     open: boolean,
     onClose: () => void
 }
 
-interface StyleProps extends WithStyles<keyof typeof styles> { }
+interface StyleProps extends WithStyles<"menu" | "avatar" | "nested" | "drawerPaper"> { }
 interface RouterProps extends RouteComponentProps<any> { }
 interface AllProps extends OuterProps, StyleProps, RouterProps, UserProps { }
 

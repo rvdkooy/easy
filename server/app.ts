@@ -6,9 +6,14 @@ import * as path from 'path';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 
+import configurePassport from './security/pasportConfig';
 import { setupLogger } from './infrastructure/logging';
 import { connect as dbConnect } from './db/index';
 import defaultRoutes from './routes/default';
+import usersRoutes from './routes/users';
+import loggingRoutes from './routes/logging';
+
+import UserModel from './db/userModel';
 
 const MongoStore = connectMongo(expressSession);
 const createApp = (settings: any, rootDir: string) => {
@@ -28,12 +33,16 @@ const createApp = (settings: any, rootDir: string) => {
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(cookieParser());
+    configurePassport(app, logger);
 
     app.use('/static', express.static(path.join(rootDir, 'static')));
-
+    
+    app.use('/api', usersRoutes(UserModel));
+    app.use('/api', loggingRoutes(mongooseConnection));
     app.use('/', defaultRoutes)
+    
 
-    logger.info('Judgify admin started up...');
+    logger.info('easy has started up...');
     
     return app;
 }
