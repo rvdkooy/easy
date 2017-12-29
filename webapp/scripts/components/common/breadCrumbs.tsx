@@ -34,7 +34,7 @@ const styles = (theme: Theme) => ({
 const BreadCrumbs = (props: Props) => {
     
     const items = [(<ListItem key="home" className={props.classes.listItem}>
-                        <Link to="/">
+                        <Link to="/admin">
                         
                             <ListItemText className={props.classes.text} primary="Home" />
                         </Link>

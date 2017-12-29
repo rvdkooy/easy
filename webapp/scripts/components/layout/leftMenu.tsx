@@ -93,17 +93,17 @@ class LeftMenu extends React.Component<AllProps, State> {
                     <Divider />
                     <List>
                         <ListItem component={(args) => this._renderItem('Home', '/admin', <HomeIcon />, args.className)} />
-                        <ListItem component={(args) => this._renderContentItem('Content', '/content', <CloudIcon />, args.className)} />
+                        <ListItem component={(args) => this._renderContentItem('Content', '/admin/content', <CloudIcon />, args.className)} />
                         <Collapse component="li" in={this.state.contentOpen} timeout="auto" unmountOnExit>
                             <List disablePadding>
-                                <ListItem component={(args) => this._renderItem('Content Pages', '/contentpages', <WebIcon />, classes.nested )} />
-                                <ListItem component={(args) => this._renderItem('File Uploads', '/fileuploads', <FileUploadIcon />, classes.nested)} />
-                                <ListItem component={(args) => this._renderItem("Menu's", '/menus', <TocIcon />, classes.nested)} />
+                                <ListItem component={(args) => this._renderItem('Content Pages', '/admin/contentpages', <WebIcon />, classes.nested )} />
+                                <ListItem component={(args) => this._renderItem('File Uploads', '/admin/fileuploads', <FileUploadIcon />, classes.nested)} />
+                                <ListItem component={(args) => this._renderItem("Menu's", '/admin/menus', <TocIcon />, classes.nested)} />
                             </List>
                         </Collapse>
-                        <ListItem component={(args) => this._renderItem('Theme', '/theme', <StarIcon />, args.className)} />
-                        <ListItem component={(args) => this._renderItem('Settings', '/settings', <SettingsIcon />, args.className)} />
-                        <ListItem component={(args) => this._renderItem('Users', '/users', <SecurityIcon />, args.className)} />
+                        <ListItem component={(args) => this._renderItem('Theme', '/admin/theme', <StarIcon />, args.className)} />
+                        <ListItem component={(args) => this._renderItem('Settings', '/admin/settings', <SettingsIcon />, args.className)} />
+                        <ListItem component={(args) => this._renderItem('Users', '/admin/users', <SecurityIcon />, args.className)} />
                         <ListItem component={(args) => this._renderItem('Logs', '/admin/logs', <ListIcon />, args.className)} />
                     </List>
                 </div>
