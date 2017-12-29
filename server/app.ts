@@ -18,9 +18,9 @@ import UserModel from './db/userModel';
 const MongoStore = connectMongo(expressSession);
 const createApp = (settings: any, rootDir: string) => {
     const app = express();
-
-    const mongooseConnection = dbConnect(settings.DB_URL);
-    const logger = setupLogger(app, settings.DB_URL);
+    
+    const mongooseConnection = dbConnect(settings.DATABASE_CONNECTION_STRING);
+    const logger = setupLogger(app, settings.DATABASE_CONNECTION_STRING);
     
     app.use(expressSession({ 
         secret: settings.SESSION_SECRET ,

@@ -14,7 +14,7 @@ declare module 'winston' {
     }
 }
 
-export const setupLogger = (app: express.Express, mongoDbConnectionString: string ) => {
+export const setupLogger = (app: express.Express, connectionString: string ) => {
     const inProduction = process.env.NODE_ENV === 'production';
     
     var logsDir = path.resolve(__dirname, '../logs');
@@ -27,7 +27,7 @@ export const setupLogger = (app: express.Express, mongoDbConnectionString: strin
         exitOnError: true
     });
     generalLogger.add(winston.transports.MongoDB, {
-        db: mongoDbConnectionString,
+        db: connectionString,
         level: 'info',
     });
 

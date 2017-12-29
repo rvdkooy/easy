@@ -1,9 +1,9 @@
 import mongoose = require('mongoose'); 
 mongoose.Promise = global.Promise;
 
-export const connect = (dbUrl: string): mongoose.Connection => {
+export const connect = (connectionString: string): mongoose.Connection => {
     mongoose.connection.on('connected', () => {  
-        console.log(`Mongoose default connection open to ${dbUrl}`);
+        console.log(`Mongoose default connection open to ${connectionString}`);
     }); 
 
     mongoose.connection.on('error', (err): any => {  
@@ -21,7 +21,7 @@ export const connect = (dbUrl: string): mongoose.Connection => {
         }); 
     }); 
 
-    mongoose.connect(dbUrl, {
+    mongoose.connect(connectionString, {
         useMongoClient: true,
     });
     return mongoose.connection;

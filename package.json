@@ -10,7 +10,7 @@
     "dev:js": "webpack --watch",
     "dev": "concurrently --kill-others \"npm run dev:server\" \"npm run dev:js\"",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "npm run compile:server && npm run compile:js",
+    "postinstall": "npm run compile:server && npm run compile:js",
     "start": "node ./server/dist/server.js"
   },
   "repository": {

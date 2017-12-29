@@ -1,13 +1,9 @@
 {
-    "DATABASE_CONFIG": {
-        "HOST": "127.0.0.1",
-        "DB_NAME": "easy_db",
-        "PORT": "27017"
-    },
+    "DATABASE_CONNECTION_STRING": "mongodb://localhost:27017/easy_db",
     "ADMIN_ACCOUNTS": [
         "ronaldvdkooy@gmail.com"
     ],
-    "SESSION_SECRET": "secret...",
+    "SESSION_SECRET": "keyboard cat",
     
     "GOOGLE_AUTH": {
         "CLIENT_ID": "687297981445-2c7i45qgt4asptkdo4lo4vvv343nl61t.apps.googleusercontent.com",

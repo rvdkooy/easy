@@ -16,14 +16,9 @@ process.env["NODE_CONFIG_DIR"] = path.join(rootDir, './config');
 import createApp from './app';
 import * as config from 'config';  
 
-const DATABASE_CONFIG = config.get('DATABASE_CONFIG') as any;
-const DB_URL = `mongodb://${DATABASE_CONFIG.HOST}/${DATABASE_CONFIG.DB_NAME}`; 
-const SESSION_SECRET = config.get('SESSION_SECRET')
-
 const options = {
-    DATABASE_CONFIG,
-    DB_URL,
-    SESSION_SECRET
+    DATABASE_CONNECTION_STRING: config.get('DATABASE_CONNECTION_STRING'),
+    SESSION_SECRET: config.get('SESSION_SECRET')
 };
 
 const app = createApp(options, rootDir);
