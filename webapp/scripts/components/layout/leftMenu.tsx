@@ -92,7 +92,7 @@ class LeftMenu extends React.Component<AllProps, State> {
                     </div>
                     <Divider />
                     <List>
-                        <ListItem component={(args) => this._renderItem('Home', '/', <HomeIcon />, args.className)} />
+                        <ListItem component={(args) => this._renderItem('Home', '/admin', <HomeIcon />, args.className)} />
                         <ListItem component={(args) => this._renderContentItem('Content', '/content', <CloudIcon />, args.className)} />
                         <Collapse component="li" in={this.state.contentOpen} timeout="auto" unmountOnExit>
                             <List disablePadding>
@@ -104,7 +104,7 @@ class LeftMenu extends React.Component<AllProps, State> {
                         <ListItem component={(args) => this._renderItem('Theme', '/theme', <StarIcon />, args.className)} />
                         <ListItem component={(args) => this._renderItem('Settings', '/settings', <SettingsIcon />, args.className)} />
                         <ListItem component={(args) => this._renderItem('Users', '/users', <SecurityIcon />, args.className)} />
-                        <ListItem component={(args) => this._renderItem('Logs', '/logs', <ListIcon />, args.className)} />
+                        <ListItem component={(args) => this._renderItem('Logs', '/admin/logs', <ListIcon />, args.className)} />
                     </List>
                 </div>
             </Drawer>

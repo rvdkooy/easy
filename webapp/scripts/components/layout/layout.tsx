@@ -9,7 +9,7 @@ import LeftMenu from './leftMenu';
 import Header from './header';
 import Dashboard from '../dashboard/main';
 // import UsersContainer from '../users/usersContainer';
-// import LogsPage from '../logs/logsPage';
+import LogsPage from '../logging/logsPage';
 
 const styles = (theme: Theme) => ({
     root: {
@@ -60,8 +60,8 @@ class Layout extends React.Component<Props, State> {
                 <Paper className={classes.rightContent}>
                     <Switch>
                         <Route exact path='/admin' component={Dashboard} />
-                        <Route path='/users' component={null} />
-                        <Route path='/logs' component={null} />
+                        <Route path='/admin/users' component={null} />
+                        <Route path='/admin/logs' component={LogsPage} />
                     </Switch>
                 </Paper>
             </div>

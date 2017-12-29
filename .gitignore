@@ -61,3 +61,4 @@ jspm_packages/
 dist
 
 #config related
+server/config/
