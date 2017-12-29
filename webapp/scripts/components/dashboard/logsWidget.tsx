@@ -3,8 +3,8 @@ import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Ta
 import { WithStyles, withStyles } from 'material-ui/styles';
 import { Theme } from 'material-ui/styles';
 import Typography from 'material-ui/Typography';
-import LogsTable from '../logs/logsTable';
-import { getLogs, LogItem } from '../logs/logsService';
+import LogsTable from '../logging/logsTable';
+import { getLogs, LogItem } from '../logging/logsService';
 
 
 class LogsWidget extends React.Component<undefined, State> {
