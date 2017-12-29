@@ -7,12 +7,12 @@ import * as fs from 'fs';
 import 'winston-mongodb';
 import 'winston-daily-rotate-file';
 
-declare module 'winston' {
-    interface MongoDBTransportInstance extends TransportInstance {}
-    interface Transports {
-        MongoDB: MongoDBTransportInstance;
-    }
-}
+// declare module 'winston' {
+//     interface MongoDBTransportInstance extends TransportInstance {}
+//     interface Transports {
+//         MongoDB: MongoDBTransportInstance;
+//     }
+// }
 
 export const setupLogger = (app: express.Express, connectionString: string ) => {
     const inProduction = process.env.NODE_ENV === 'production';
