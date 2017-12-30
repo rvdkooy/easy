@@ -6,7 +6,7 @@ export interface User {
 }
 
 export const retrieveCurrentUser = (): Promise<User> => {
-    return query('/api/users/current')
+    return query('/admin/api/users/current')
         .then((res: Response) => {
             if (res.status === 401) {
                 return null;

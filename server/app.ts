@@ -11,8 +11,10 @@ import { setupLogger } from './infrastructure/logging';
 import { connect as dbConnect } from './db/index';
 import defaultRoutes from './routes/default';
 import usersRoutes from './routes/users';
+import contentPagesRoutes from './routes/contentPages';
 import loggingRoutes from './routes/logging';
 
+import ContentPageModel from './db/contentPage';
 import UserModel from './db/userModel';
 
 const MongoStore = connectMongo(expressSession);
@@ -37,8 +39,9 @@ const createApp = (settings: any, rootDir: string) => {
 
     app.use('/static', express.static(path.join(rootDir, 'static')));
     
-    app.use('/api', usersRoutes(UserModel));
-    app.use('/api', loggingRoutes(mongooseConnection));
+    app.use('/admin/api', contentPagesRoutes(ContentPageModel));
+    app.use('/admin/api', usersRoutes(UserModel));
+    app.use('/admin/api', loggingRoutes(mongooseConnection));
     app.use('/', defaultRoutes)
     
 

@@ -10,6 +10,7 @@ import Header from './header';
 import Dashboard from '../dashboard/main';
 import UsersPage from '../users/usersPage';
 import LogsPage from '../logging/logsPage';
+import ContentPagesPage from '../contentpages/contentPagesPage';
 
 const styles = (theme: Theme) => ({
     root: {
@@ -62,6 +63,7 @@ class Layout extends React.Component<Props, State> {
                         <Route exact path='/admin' component={Dashboard} />
                         <Route path='/admin/users' component={UsersPage} />
                         <Route path='/admin/logs' component={LogsPage} />
+                        <Route path='/admin/contentpages' component={ContentPagesPage} />
                     </Switch>
                 </Paper>
             </div>
