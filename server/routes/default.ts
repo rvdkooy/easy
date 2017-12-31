@@ -1,21 +1,37 @@
 import * as express from 'express';
-const router = express.Router();
+import * as mongoose from 'mongoose';
+import { IContentPageModel, findContentPageByUrl } from '../db/contentPage';
 
-router.get(['/admin', '/admin/*'], (req, res) => {
-    res.render('admin', { title: 'Easy Admin', layout: null });
-});
+const createMiddleware = (contentModelInstance: mongoose.Model<IContentPageModel>) => {
+    const router = express.Router();
+    
+    router.get(['/admin', '/admin/*'], (req, res) => {
+        res.render('admin', { title: 'Easy Admin', layout: null });
+    });
+    
+    router.get('/login', (req, res, next) => {
+        res.render('login', { title: 'Easy Admin login', layout: null });
+    });
+    
+    router.get('/logout', (req, res) => {
+        req.logout();
+        res.redirect('/');
+    });
+    
+    router.get('/*', (req, res) => {
+        findContentPageByUrl(req.path).then(contentPage => {
+            if (contentPage) {
+                res.render('index', { 
+                    title: contentPage.name,
+                    content: contentPage.content
+                });
+            } else {
+                res.send(404);
+            }
+        });
+    });
 
-router.get('/login', (req, res, next) => {
-    res.render('login', { title: 'Easy Admin login', layout: null });
-});
+    return router;
+};
 
-router.get('/logout', (req, res) => {
-    req.logout();
-    res.redirect('/');
-});
-
-router.get('/*', (req, res) => {
-    res.render('index', { title: 'Easy' });
-});
-
-export default router;
+export default createMiddleware;

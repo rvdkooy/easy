@@ -1,4 +1,4 @@
-//import EditModel from './models/edit';
+import EditModel from './models/edit';
 import ListModel from './models/list';
 import { query, post, put, del } from '../../utils/httpClient';
 
@@ -8,9 +8,9 @@ export function getContentPages(): Promise<ListModel[]> {
         .then(json => json.map((x: any) => ListModel.fromJson(x))));
 };
 
-// export function saveUser(model: EditModel) {
-//     return post('/admin/api/users', model);
-// };
+export function saveContentPage(model: EditModel) {
+    return post('/admin/api/contentpages', model);
+};
 
 // export function updateUser(model: EditModel) {
 //     return put(`/admin/api/users/${model.id}`, model);

@@ -35,7 +35,7 @@ class ContentPagesListRow extends React.Component<Props, State> {
                     <Link to={`/admin/contentpages/${item.id}`}>{item.name}</Link>
                 </TableCell>
                 <TableCell>{item.url}</TableCell>
-                <TableCell>{item.published}</TableCell>
+                <TableCell></TableCell>
                 <TableCell>
                     <IconButton aria-label="Delete" onClick={this._onDeleteClicked}>
                         <DeleteIcon />

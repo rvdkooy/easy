@@ -42,9 +42,8 @@ const createApp = (settings: any, rootDir: string) => {
     app.use('/admin/api', contentPagesRoutes(ContentPageModel));
     app.use('/admin/api', usersRoutes(UserModel));
     app.use('/admin/api', loggingRoutes(mongooseConnection));
-    app.use('/', defaultRoutes)
+    app.use('/', defaultRoutes(ContentPageModel))
     
-
     logger.info('easy has started up...');
     
     return app;

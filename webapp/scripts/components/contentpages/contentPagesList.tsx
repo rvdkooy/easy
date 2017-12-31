@@ -59,6 +59,14 @@ class ContentPagesList extends React.Component<Props, State> {
                     <BreadCrumbs items={breadCrumbItems} />
                     <Typography type="headline">ContentPages</Typography>
                     <Container>
+                        <Button 
+                            component={({ ...props }) => <Link to="/admin/contentpages/new" { ...props } />}
+                            raised color="primary"
+                        >
+                            Create new page
+                        </Button>
+                    </Container>
+                    <Container>
                         <Paper>
                             {
                                 (this.state.isLoading) ?

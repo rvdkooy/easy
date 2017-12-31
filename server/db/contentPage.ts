@@ -37,6 +37,6 @@ export const contentPageSchema = new Schema({
 const ContentPageModel = mongoose.model<IContentPageModel>('ContentPage', contentPageSchema);
 export default ContentPageModel;
 
-export const findByName = (name: string) => {
-    return ContentPageModel.findOne({ name: name}).exec();
+export const findContentPageByUrl = (url: string) => {
+    return ContentPageModel.findOne({ url: url}).exec();
 };
