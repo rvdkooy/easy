@@ -5,7 +5,7 @@ import { IContentPageModel, findContentPageByUrl } from '../db/contentPage';
 const createMiddleware = (contentModelInstance: mongoose.Model<IContentPageModel>) => {
     const router = express.Router();
     
-    router.get(['/admin', '/admin/*'], (req, res) => {
+    router.get(['/admin', '/admin/*', '!/admin/api/*'], (req, res) => {
         res.render('admin', { title: 'Easy Admin', layout: null });
     });
     

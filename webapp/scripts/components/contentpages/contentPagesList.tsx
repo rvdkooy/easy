@@ -42,7 +42,7 @@ class ContentPagesList extends React.Component<Props, State> {
 
 	render() {
         const breadCrumbItems = [
-            { text: 'ContentPages' }
+            { text: 'Content Pages' }
         ];
         
         var rows = this.state.contentPages.map(p => {

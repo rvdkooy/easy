@@ -4,6 +4,8 @@ export default class EditModel {
     constructor(id?: string) {
         if (!id) {
             this.id = uuid.v4();
+        } else {
+            this.id = id;
         }
     }
 
@@ -14,7 +16,6 @@ export default class EditModel {
     content: string;
 
     update(key: string, value: any) {
-        console.log(key, value);
         switch (key) {
             case 'name':
                 this.name = value;
@@ -36,6 +37,11 @@ export default class EditModel {
     }
 
     static fromJson(json: any) {
-
+        const result = new EditModel(json.id);
+        result.name = json.name;
+        result.url = json.url;
+        result.content = json.content;
+        result.published = json.published;
+        return result;
     }
 }
