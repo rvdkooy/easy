@@ -43,7 +43,7 @@ class Header extends React.Component<Props> {
                 <Toolbar>
 
                     <Typography type="title" color="inherit" className={classes.flex}>
-                        Easy
+                        Easy admin system
                     </Typography>
                     <Button
                         onClick={() => window.location.href = '/logout'}
