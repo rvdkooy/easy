@@ -9,7 +9,7 @@
     "dev:server": "nodemon --exec \"./node_modules/.bin/ts-node --project server\" -- ./server/server.ts --config ./server/nodemon.json",
     "dev:js": "webpack --watch",
     "dev": "concurrently --kill-others \"npm run dev:server\" \"npm run dev:js\"",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Warning: no test specified\" && exit 0",
     "postinstall": "npm run compile:server && npm run compile:js",
     "start": "node ./server/dist/server.js"
   },
