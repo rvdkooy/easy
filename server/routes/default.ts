@@ -26,7 +26,7 @@ const createMiddleware = (contentModelInstance: mongoose.Model<IContentPageModel
                     content: contentPage.content
                 });
             } else {
-                res.send(404);
+                res.render('404');
             }
         });
     });
