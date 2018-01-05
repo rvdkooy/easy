@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+- '8'
+deploy:
+  provider: heroku
+  on:
+    branch: master
+  app: easyadminsystem
+  api_key:
+    secure: DPi4AsXlCmYJngDrHfQ81UcNeWskSJzvc993QrpHLo847kMMsR+TnfA2tPyb7HIsjsrWSEQ7fBDPnsBMw7UQBjdaowtk8pL/vu7VnVrfMmD6qoSmcqxEA9V/+jPNpk8FS9CMLpjqmEXs1s0Hd31RZo/W/XGbW2gTbixXE3QXKMxgh5+CPiWd4gR+fgptzxm4eQmkJSBWCJGow3w3l3JUjtMCg8UgqhrLZeflsE9GnmigqKNTxxrMitz/Yi03jnmLoJ2ZFw2tUkUJ3vKNRNB+vlvedn/S/yzOhy84DtawdgP2Kej7oVumP/1gf1nnnFIfhdJZFXRaisZU5mFKpHriAveLF5jABOkIakK8vG7w/aFAvI7kQeHK67x3X8UmuDyWDCM5eu8V9T23LPIbJhxehwYtwvr9Gp/BgWPEsnV/CVmlnC5cUG0P7PLOcuvvXyUqnJyABI+su3V/C31aL/eDkeWWhZQyZjbgneeG7R6cua1ULDZOxzny6qm4fu7ZZ1+qMc12HXdO1IKBen2WXtp16ZawHvCVuCkGFLvaYLqFVoRJB3Rt2L6CX47ay/HlPH9x7Yo/CNXYuMMitEHEovNZlQr/wXZpSu5CaI6+LQ4oDcYtRGSMUr6CR8wLvuwYXqVqFmtOLHgttwmrgF4axDR+qjtlC0ucAEDgVVS7U7LcFWk=
+  skip_cleanup: true
