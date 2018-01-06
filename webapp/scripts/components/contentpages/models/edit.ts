@@ -10,15 +10,18 @@ export default class EditModel {
     }
 
     id: string;
-    name: string;
+    title: string;
     url: string;
     published: boolean;
     content: string;
+    keywords: string;
+    description: string;
+
 
     update(key: string, value: any) {
         switch (key) {
-            case 'name':
-                this.name = value;
+            case 'title':
+                this.title = value;
                 break;
             case 'url':
                 this.url = value;
@@ -29,19 +32,27 @@ export default class EditModel {
             case 'published':
                 this.published = value;
                 break;
+            case 'keywords':
+                this.keywords = value;
+                break;
+            case 'description':
+                this.description = value;
+                break;
         }
     }
 
     isValid() {
-        return !!this.id && !!this.name && !!this.url;
+        return !!this.id && !!this.title && !!this.url;
     }
 
     static fromJson(json: any) {
         const result = new EditModel(json.id);
-        result.name = json.name;
+        result.title = json.title;
         result.url = json.url;
         result.content = json.content;
         result.published = json.published;
+        result.keywords = json.keywords;
+        result.description = json.description;
         return result;
     }
 }

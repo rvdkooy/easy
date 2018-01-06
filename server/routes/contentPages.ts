@@ -23,11 +23,13 @@ const createMiddleware = (contentModelInstance: mongoose.Model<IContentPageModel
     validateFromRequest(req, res, () => {
 
       var newContentPage = new ContentPageModel({
-        name: req.body.name,
+        title: req.body.title,
         url: req.body.url,
         content: req.body.content,
         template: 'default',
-        published: true
+        published: true,
+        keywords: req.body.keywords,
+        description: req.body.description
       });
 
       newContentPage.save()
@@ -43,10 +45,12 @@ const createMiddleware = (contentModelInstance: mongoose.Model<IContentPageModel
 
       if (doc) {
         const updates = {
-          name: req.body.name,
+          title: req.body.title,
           url: req.body.url,
           content: req.body.content,
-          published: req.body.publised
+          published: req.body.publised,
+          keywords: req.body.keywords,
+          description: req.body.description
         };
 
         try {
@@ -85,15 +89,17 @@ const createMiddleware = (contentModelInstance: mongoose.Model<IContentPageModel
 const createEditModel = (doc: IContentPageModel) => {
   return {
     id: doc._id,
-    name: doc.name,
+    title: doc.title,
     url: doc.url,
     content: doc.content,
-    published: doc.published
+    published: doc.published,
+    description: doc.description,
+    keywords: doc.keywords
   };
 };
 
 const validateFromRequest = (request: express.Request, response: express.Response, successHandler: () => void) => {
-  
+
   check('name', 'Name cannot be empty').not().isEmpty;
   check('url', 'Url cannot be empty').not().isEmpty;
   check('template', 'Template cannot be empty').not().isEmpty;
@@ -109,7 +115,7 @@ const validateFromRequest = (request: express.Request, response: express.Respons
 const createListModel = (doc: IContentPageModel) => {
   return {
     id: doc._id,
-    name: doc.name,
+    title: doc.title,
     url: doc.url,
     published: doc.published
   };

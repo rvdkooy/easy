@@ -1,17 +1,17 @@
 export default class ListModel {
-    constructor(id: string, name: string, url: string, published: boolean) {
+    constructor(id: string, title: string, url: string, published: boolean) {
         this.id = id;
-        this.name = name;
+        this.title = title;
         this.url = url;
         this.published = published;
     }
 
     id: string;
-    name: string;
+    title: string;
     url: string;
     published: boolean;
 
     static fromJson(json: any) {
-        return new ListModel(json.id, json.name, json.url, json.published);
+        return new ListModel(json.id, json.title, json.url, json.published);
     }
 }

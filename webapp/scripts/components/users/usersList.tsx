@@ -3,17 +3,16 @@ import * as PropTypes from 'prop-types';
 import { CircularProgress } from 'material-ui/Progress';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
-import Paper from 'material-ui/Paper';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 import { Link } from 'react-router-dom';
-import { Container, BreadCrumbs } from '../common';
+import { Container, BreadCrumbs, PaddedPaper } from '../common';
 
 import UsersListRow from './usersListRow';
 import { getUsers, deleteUser } from './usersApi'
 import ListModel from './models/list';
 
 class UsersList extends React.Component<Props, State> {
-    
+
     state: State = {
         isLoading: false,
         users: []
@@ -31,7 +30,7 @@ class UsersList extends React.Component<Props, State> {
                 users: users
             });
         })
-        .catch(console.error);
+            .catch(console.error);
     };
 
     _onDeleteClicked = (id: string) => {
@@ -40,11 +39,11 @@ class UsersList extends React.Component<Props, State> {
             .catch(console.error)
     };
 
-	render() {
+    render() {
         const breadCrumbItems = [
             { text: 'Users' }
         ];
-        
+
         var rows = this.state.users.map(user => {
             return (
                 <UsersListRow
@@ -55,32 +54,35 @@ class UsersList extends React.Component<Props, State> {
             );
         })
 
-        return (<div>
-                    <BreadCrumbs items={breadCrumbItems} />
-                    <Typography type="headline">Users</Typography>
+        return (
+            <div>
+                <BreadCrumbs items={breadCrumbItems} />
+                <PaddedPaper>
+                    <Typography type="headline">List of users</Typography>
                     <Container>
-                        <Paper>
-                            {
-                                (this.state.isLoading) ?
-                                    <CircularProgress /> :
-                                    <Table>
-                                        <TableHead>
-                                            <TableRow>
-                                                <TableCell>Photo</TableCell>
-                                                <TableCell>Username</TableCell>
-                                                <TableCell>Email</TableCell>
-                                                <TableCell>Actions</TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {rows}
-                                        </TableBody>
-                                    </Table>
-                            }
-                        </Paper>
+                        {
+                            (this.state.isLoading) ?
+                                <CircularProgress /> :
+                                <Table>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>Photo</TableCell>
+                                            <TableCell>Username</TableCell>
+                                            <TableCell>Email</TableCell>
+                                            <TableCell>Actions</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {rows}
+                                    </TableBody>
+                                </Table>
+                        }
+
                     </Container>
-                </div>);
-	}
+                </PaddedPaper>
+            </div>
+        );
+    }
 }
 
 interface Props {

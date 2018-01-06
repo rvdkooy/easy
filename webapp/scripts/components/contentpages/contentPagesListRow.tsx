@@ -32,7 +32,7 @@ class ContentPagesListRow extends React.Component<Props, State> {
         return (
             <TableRow key={item.id}>
                 <TableCell>
-                    <Link to={`/admin/contentpages/${item.id}`}>{item.name}</Link>
+                    <Link to={`/admin/contentpages/${item.id}`}>{item.title}</Link>
                 </TableCell>
                 <TableCell>{item.url}</TableCell>
                 <TableCell></TableCell>
@@ -45,7 +45,7 @@ class ContentPagesListRow extends React.Component<Props, State> {
                         show={this.state.confirmDelete}
                         onHide={this._onHideConfirmDelete}
                         onConfirm={this._onDeleteConfirmed}>
-                            <span>{ `Are you sure that you want to delete the content page: ${item.name}?`}</span>
+                            <span>{ `Are you sure that you want to delete the content page: ${item.title}?`}</span>
                     </ConfirmModal>
                 </TableCell>
             </TableRow>

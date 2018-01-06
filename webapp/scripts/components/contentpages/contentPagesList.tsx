@@ -3,7 +3,7 @@ import * as PropTypes from 'prop-types';
 import { CircularProgress } from 'material-ui/Progress';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
-import Paper from 'material-ui/Paper';
+import PaddedPaper from '../common/paddedPaper';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 import { Link } from 'react-router-dom';
 import { Container, BreadCrumbs } from '../common';
@@ -13,7 +13,7 @@ import { getContentPages } from './contentPagesApi'
 import ListModel from './models/list';
 
 class ContentPagesList extends React.Component<Props, State> {
-    
+
     state: State = {
         isLoading: false,
         contentPages: []
@@ -31,7 +31,7 @@ class ContentPagesList extends React.Component<Props, State> {
                 contentPages: contentPages
             });
         })
-        .catch(console.error);
+            .catch(console.error);
     };
 
     _onDeleteClicked = (id: string) => {
@@ -40,11 +40,11 @@ class ContentPagesList extends React.Component<Props, State> {
         //     .catch(console.error)
     };
 
-	render() {
+    render() {
         const breadCrumbItems = [
             { text: 'Content Pages' }
         ];
-        
+
         var rows = this.state.contentPages.map(p => {
             return (
                 <ListRow
@@ -55,40 +55,41 @@ class ContentPagesList extends React.Component<Props, State> {
             );
         })
 
-        return (<div>
-                    <BreadCrumbs items={breadCrumbItems} />
-                    <Typography type="headline">ContentPages</Typography>
+        return (
+            <div>
+                <BreadCrumbs items={breadCrumbItems} />
+
+                <PaddedPaper>
+                    <Typography type="headline">List of content pages</Typography>
                     <Container>
-                        <Button 
+                        <Button
                             component={({ ...props }) => <Link to="/admin/contentpages/new" { ...props } />}
                             raised color="primary"
                         >
-                            Create new page
+                            Create a new page
                         </Button>
                     </Container>
-                    <Container>
-                        <Paper>
-                            {
-                                (this.state.isLoading) ?
-                                    <CircularProgress /> :
-                                    <Table>
-                                        <TableHead>
-                                            <TableRow>
-                                                <TableCell>Name</TableCell>
-                                                <TableCell>Url</TableCell>
-                                                <TableCell>Published</TableCell>
-                                                <TableCell>Actions</TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {rows}
-                                        </TableBody>
-                                    </Table>
-                            }
-                        </Paper>
-                    </Container>
-                </div>);
-	}
+                    {
+                        (this.state.isLoading) ?
+                            <CircularProgress /> :
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Name</TableCell>
+                                        <TableCell>Url</TableCell>
+                                        <TableCell>Published</TableCell>
+                                        <TableCell>Actions</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {rows}
+                                </TableBody>
+                            </Table>
+                    }
+                </PaddedPaper>
+            </div>
+        );
+    }
 }
 
 interface Props {

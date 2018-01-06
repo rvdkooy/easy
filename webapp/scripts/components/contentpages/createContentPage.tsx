@@ -2,6 +2,8 @@ import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { match } from 'react-router-dom';
 import Button from 'material-ui/Button';
+import AppBar from 'material-ui/AppBar';
+import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import { ProgressIndicator, BreadCrumbs } from '../../components/common';
 import ContentPageForm from './contentPageForm';
@@ -34,11 +36,11 @@ class CreateContentPage extends React.Component<undefined, State> {
         ];
         return (<div>
                     <BreadCrumbs items={breadCrumbItems} />
-                    <Typography type="headline">Create new</Typography>
+
                     <ContentPageForm
                         model={this.state.model}
                         onPropertyChange={this._onPropertyChange}
-                        onSubmit={this._onUpdate}>
+                    >
                         <Button
                             disabled={!this.state.model.isValid()}
                             color="primary"

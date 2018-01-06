@@ -4,7 +4,7 @@ import * as mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 export interface IContentPage {
-    name: string,
+    title: string,
     url: string,
     template: string,
     published: boolean,
@@ -16,7 +16,7 @@ export interface IContentPage {
 export interface IContentPageModel extends IContentPage, mongoose.Document{}
 
 export const contentPageSchema = new Schema({
-    name: {
+    title: {
         type: String,
         required: true
     },

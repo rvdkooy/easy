@@ -10,7 +10,7 @@ import { getContentPage, updateContentPage } from './contentPagesApi';
 import EditModel from './models/edit';
 
 class EditContentPage extends React.Component<Props, State> {
-    state: State = { 
+    state: State = {
         model: null,
         isLoading: true
     };
@@ -24,7 +24,7 @@ class EditContentPage extends React.Component<Props, State> {
                 });
             })
             .catch(err => {
-                this.setState({isLoading:false});
+                this.setState({ isLoading: false });
             });
     }
 
@@ -38,7 +38,7 @@ class EditContentPage extends React.Component<Props, State> {
 
         updateContentPage(this.state.model).then(() => {
             // show confirm message
-        }, (err: Error) => {}); // show error message
+        }, (err: Error) => { }); // show error message
     };
 
     render() {
@@ -46,27 +46,27 @@ class EditContentPage extends React.Component<Props, State> {
             { text: 'Content Pages', url: '/admin/contentpages' },
             { text: 'Edit' }
         ];
-        
-        return (<div>
-                    <BreadCrumbs items={breadCrumbItems} />
-                    <Typography type="headline">Edit Content page</Typography>
-                    {
-                        (this.state.isLoading) ? 
-                            <ProgressIndicator /> : 
-                            <ContentPageForm
-                                model={this.state.model}
-                                onPropertyChange={this._onPropertyChange}
-                                onSubmit={this._onSubmit}
-                            >
-                                <Button
-                                    disabled={!this.state.model.isValid()}
-                                    color="primary"
-                                    raised
-                                    onClick={this._onSubmit}
-                                >Update</Button>                      
-                            </ContentPageForm>
-                    }                    
-                </div>);
+
+        return (
+            <div>
+                <BreadCrumbs items={breadCrumbItems} />
+                {
+                    (this.state.isLoading) ?
+                        <ProgressIndicator /> :
+                        <ContentPageForm
+                            model={this.state.model}
+                            onPropertyChange={this._onPropertyChange}
+                        >
+                            <Button
+                                disabled={!this.state.model.isValid()}
+                                color="primary"
+                                raised
+                                onClick={this._onSubmit}
+                            >Update</Button>
+                        </ContentPageForm>
+                }
+            </div>
+        );
     }
 }
 

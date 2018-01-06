@@ -11,7 +11,7 @@ const styles = (theme: Theme) => ({
     },
     listItem: {
         float: 'left',
-        paddingTop: 2,
+        paddingTop: 10,
         paddingRight: 0,
         paddingBottom: 2,
         paddingLeft: 0 
@@ -42,7 +42,7 @@ const BreadCrumbs = (props: Props) => {
     
     props.items.forEach((item, index) => {
         items.push((<ListItem key={`arrow_${index}`} className={props.classes.listItem}>
-                        <ListItemText className={props.classes.text} primary=">" />
+                        <ListItemText className={props.classes.text} primary="/" />
                     </ListItem>));
 
         items.push((<ListItem key={`item_${index}`} className={props.classes.listItem}>

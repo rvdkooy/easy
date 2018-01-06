@@ -22,8 +22,10 @@ const createMiddleware = (contentModelInstance: mongoose.Model<IContentPageModel
         findContentPageByUrl(req.path).then(contentPage => {
             if (contentPage) {
                 res.render('index', { 
-                    title: contentPage.name,
-                    content: contentPage.content
+                    title: contentPage.title,
+                    content: contentPage.content,
+                    description: contentPage.description,
+                    keywords: contentPage.keywords
                 });
             } else {
                 res.render('404');

@@ -3,18 +3,18 @@ import * as PropTypes from 'prop-types';
 import { match } from 'react-router-dom';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
-import { ProgressIndicator, BreadCrumbs } from '../../components/common';
+import { ProgressIndicator, BreadCrumbs, PaddedPaper } from '../../components/common';
 import UserForm from './userForm';
 import { getUser, updateUser } from './usersApi';
 import EditModel from './models/edit';
 
 class UpdateEditor extends React.Component<Props, State> {
-    
-    state: State = { 
+
+    state: State = {
         model: null,
         isLoading: true
     };
-    
+
     componentDidMount() {
         getUser(this.props.match.params.id)
             .then((model) => {
@@ -24,7 +24,7 @@ class UpdateEditor extends React.Component<Props, State> {
                 });
             })
             .catch(err => {
-                this.setState({isLoading:false});
+                this.setState({ isLoading: false });
             });
     }
 
@@ -38,20 +38,22 @@ class UpdateEditor extends React.Component<Props, State> {
 
         updateUser(this.state.model).then(() => {
             // show confirm message
-        }, (err: Error) => {}); // show error message
+        }, (err: Error) => { }); // show error message
     };
-    
+
     render() {
         const breadCrumbItems = [
             { text: 'Users', url: '/admin/users' },
             { text: 'User details' }
         ];
-        
-        return (<div>
-                    <BreadCrumbs items={breadCrumbItems} />
+
+        return (
+            <div>
+                <BreadCrumbs items={breadCrumbItems} />
+                <PaddedPaper>
                     <Typography type="headline">User details</Typography>
                     {
-                        (this.state.isLoading) ? 
+                        (this.state.isLoading) ?
                             <ProgressIndicator /> :
                             <UserForm
                                 model={this.state.model}
@@ -62,10 +64,12 @@ class UpdateEditor extends React.Component<Props, State> {
                                     color="primary"
                                     raised
                                     onClick={this._onUpdate}
-                                >Update</Button>                      
+                                >Update</Button>
                             </UserForm>
-                    }          
-                </div>);
+                    }
+                </PaddedPaper>
+            </div>
+        );
     }
 }
 

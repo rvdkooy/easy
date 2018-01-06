@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import Paper from 'material-ui/Paper';
 import { withStyles, WithStyles } from 'material-ui/styles';
 import { Theme } from 'material-ui/styles';
 import withRoot from '../withRoot';
@@ -21,13 +20,11 @@ const styles = (theme: Theme) => ({
         flexDirection: 'column'
     } as React.CSSProperties, // somehow this is needed for the 'flexDirection' property
     rightContent: theme.mixins.gutters({
-        paddingTop: theme.spacing.unit * 2,
         paddingBottom: theme.spacing.unit * 2,
         display: 'flex',
         flex: '1 1 auto',
         flexDirection: 'column',
-        marginLeft: theme.spacing.unit * 2,
-        marginRight: theme.spacing.unit * 2,
+        
     }),
     mainContent: {
         flexDirection: 'row',
@@ -58,14 +55,14 @@ class Layout extends React.Component<Props, State> {
             <Header />
             <div className={classes.mainContent}>
                 <LeftMenu open onClose={() => {}}  />
-                <Paper className={classes.rightContent}>
+                <div className={classes.rightContent}>
                     <Switch>
                         <Route exact path='/admin' component={Dashboard} />
                         <Route path='/admin/users' component={UsersPage} />
                         <Route path='/admin/logs' component={LogsPage} />
                         <Route path='/admin/contentpages' component={ContentPagesPage} />
                     </Switch>
-                </Paper>
+                </div>
             </div>
           </div>
         );
