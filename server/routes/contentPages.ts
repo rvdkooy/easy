@@ -77,11 +77,11 @@ const createMiddleware = (contentModelInstance: mongoose.Model<IContentPageModel
       .catch(err => handleError(err, res));
   });
 
-  //   router.delete('/users/:id', (req, res) => {
-  //     userModelInstance.remove({ _id: req.params.id }).exec()
-  //       .then(() => res.sendStatus(200))
-  //       .catch(err => handleError(err, res));
-  //   });
+  router.delete('/contentpages/:id', (req, res) => {
+    contentModelInstance.remove({ _id: req.params.id }).exec()
+      .then(() => res.sendStatus(200))
+      .catch(err => handleError(err, res));
+  });
 
   return router;
 }

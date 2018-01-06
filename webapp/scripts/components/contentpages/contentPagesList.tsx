@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 import { Container, BreadCrumbs } from '../common';
 
 import ListRow from './contentPagesListRow';
-import { getContentPages } from './contentPagesApi'
+import { getContentPages, deleteContentPage } from './contentPagesApi'
 import ListModel from './models/list';
 
 class ContentPagesList extends React.Component<Props, State> {
@@ -20,10 +20,10 @@ class ContentPagesList extends React.Component<Props, State> {
     };
 
     componentDidMount() {
-        this._refreshUsers();
+        this._refreshList();
     }
 
-    _refreshUsers = () => {
+    _refreshList = () => {
         this.setState({ isLoading: true });
         getContentPages().then(contentPages => {
             this.setState({
@@ -35,9 +35,9 @@ class ContentPagesList extends React.Component<Props, State> {
     };
 
     _onDeleteClicked = (id: string) => {
-        // deleteUser(id)
-        //     .then(this._refreshUsers)
-        //     .catch(console.error)
+        deleteContentPage(id)
+            .then(this._refreshList)
+            .catch(console.error)
     };
 
     render() {

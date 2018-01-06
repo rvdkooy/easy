@@ -21,9 +21,9 @@ export function getContentPage(id: string): Promise<EditModel> {
         .then((res: Response) => res.json().then(json => EditModel.fromJson(json)));
 };
 
-// export function deleteUser(id: string) {
-//     return del(`/admin/api/users/${id}`);
-// }
+export function deleteContentPage(id: string) {
+    return del(`/admin/api/contentpages/${id}`);
+}
 
 
 
