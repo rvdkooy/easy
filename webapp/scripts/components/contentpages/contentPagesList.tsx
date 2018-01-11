@@ -11,6 +11,7 @@ import { Container, BreadCrumbs } from '../common';
 import ListRow from './contentPagesListRow';
 import { getContentPages, deleteContentPage } from './contentPagesApi'
 import ListModel from './models/list';
+import { notify } from '../../services/notificationService';
 
 class ContentPagesList extends React.Component<Props, State> {
 
@@ -31,13 +32,16 @@ class ContentPagesList extends React.Component<Props, State> {
                 contentPages: contentPages
             });
         })
-            .catch(console.error);
+        .catch(() => notify('An error occured while getting the content pages', 'ERROR'));
     };
 
     _onDeleteClicked = (id: string) => {
         deleteContentPage(id)
-            .then(this._refreshList)
-            .catch(console.error)
+            .then(() => {
+                notify('Content page deleted', 'INFO');
+                this._refreshList();
+            })
+            .catch(() => notify('An error occured while deleting the content page', 'ERROR'));
     };
 
     render() {

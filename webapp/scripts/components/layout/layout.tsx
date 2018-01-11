@@ -1,7 +1,11 @@
 import * as React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { withStyles, WithStyles } from 'material-ui/styles';
+import Typography from 'material-ui/Typography';
 import { Theme } from 'material-ui/styles';
+import Snackbar from 'material-ui/Snackbar';
+import DoneIcon from 'material-ui-icons/Done';
+import ErrorIcon from 'material-ui-icons/ErrorOutline';
 import withRoot from '../withRoot';
 
 import LeftMenu from './leftMenu';
@@ -10,6 +14,7 @@ import Dashboard from '../dashboard/main';
 import UsersPage from '../users/usersPage';
 import LogsPage from '../logging/logsPage';
 import ContentPagesPage from '../contentpages/contentPagesPage';
+import { listenToNotifications, messageType } from '../../services/notificationService';
 
 const styles = (theme: Theme) => ({
     root: {
@@ -31,25 +36,52 @@ const styles = (theme: Theme) => ({
         flex: '1 0 auto',
         display: 'flex',
     } as React.CSSProperties,
+    snackbarIcon: {
+        verticalAlign: 'top',
+        marginRight: 8
+    }
 });
 
 class Layout extends React.Component<Props, State> {
-    
+    _unregisterListenToNotifications: () => void | null = null;
     state: State = {
-        menuOpen: false
-    }
-
-    _onOpenMenu = () => {
-        this.setState({ menuOpen: true });
-    }
-
-    _onCloseMenu = () => {
-        this.setState({ menuOpen: false });
+        snackbarMessage: null,
     }
     
+    _closeSnackbar = () => {
+        this.setState({ snackbarMessage: null });
+    };
+    
+    _showSnackbar = (message: string, type: messageType) => {
+        this.setState({ snackbarMessage: { message, type } });
+    };
+    
+    componentDidMount() {
+        this._unregisterListenToNotifications = listenToNotifications(this._showSnackbar);
+    }
+
+    componentWillUnmount() {
+        this._unregisterListenToNotifications && this._unregisterListenToNotifications();
+    }
+
+    _renderSnackbarContent = () => {
+        if (!this.state.snackbarMessage) return null;
+        
+        return (
+            <div id="message-id">
+                {
+                    (this.state.snackbarMessage.type === 'INFO') ?
+                        (<DoneIcon className={this.props.classes.snackbarIcon} />) :
+                        (<ErrorIcon className={this.props.classes.snackbarIcon} />)
+                }
+                <span>{ this.state.snackbarMessage.message }</span>
+            </div>
+        );
+    };
+
     render() {
         const { classes } = this.props;
-
+        
         return (
           <div className={classes.root}>
             <Header />
@@ -64,15 +96,31 @@ class Layout extends React.Component<Props, State> {
                     </Switch>
                 </div>
             </div>
+            <Snackbar
+                anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  open={!!this.state.snackbarMessage}
+                  autoHideDuration={4000}
+                  onClose={this._closeSnackbar}
+                  SnackbarContentProps={{
+                    'aria-describedby': 'message-id',
+                  }}
+                  message={this._renderSnackbarContent()}
+            />
           </div>
         );
     }
 }
 
 interface State {
-    menuOpen: boolean;
+    snackbarMessage: {
+        message: string,
+        type: messageType
+    };
 }
 
-interface Props extends WithStyles<'root' | 'rightContent' | 'mainContent'> { }
+interface Props extends WithStyles<'root' | 'rightContent' | 'mainContent' | 'snackbarIcon'> { }
 
 export default withRoot(withStyles(styles)<Props>(Layout));

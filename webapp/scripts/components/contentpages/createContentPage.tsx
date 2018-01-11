@@ -9,6 +9,7 @@ import { ProgressIndicator, BreadCrumbs } from '../../components/common';
 import ContentPageForm from './contentPageForm';
 import { saveContentPage } from './contentPagesApi';
 import EditModel from './models/edit';
+import { notify } from '../../services/notificationService';
 
 class CreateContentPage extends React.Component<undefined, State> {
     
@@ -25,7 +26,7 @@ class CreateContentPage extends React.Component<undefined, State> {
         e.preventDefault();
 
         saveContentPage(this.state.model).then(() => {
-            // show confirm message
+            notify('Content page created.', 'INFO');
         }, (err: Error) => {}); // show error message
     };
     

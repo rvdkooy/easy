@@ -8,6 +8,7 @@ import { ProgressIndicator, BreadCrumbs } from '../../components/common';
 import ContentPageForm from './contentPageForm';
 import { getContentPage, updateContentPage } from './contentPagesApi';
 import EditModel from './models/edit';
+import { notify } from '../../services/notificationService';
 
 class EditContentPage extends React.Component<Props, State> {
     state: State = {
@@ -25,6 +26,7 @@ class EditContentPage extends React.Component<Props, State> {
             })
             .catch(err => {
                 this.setState({ isLoading: false });
+                notify('An error occured while retrieving the content page.', 'ERROR');
             });
     }
 
@@ -37,7 +39,7 @@ class EditContentPage extends React.Component<Props, State> {
         e.preventDefault();
 
         updateContentPage(this.state.model).then(() => {
-            // show confirm message
+            notify('Content page changed.', 'INFO');
         }, (err: Error) => { }); // show error message
     };
 
