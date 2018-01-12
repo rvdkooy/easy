@@ -6,6 +6,7 @@ import LoginPage from './components/login/index';
 import bootstrapper from './bootstrapper';
 import { CurrentUserProvider } from './services/userProvider';
 import { retrieveCurrentUser } from './services/userService';
+import ErrorBoundary from './components/common/errorBoundary';
 
 bootstrapper().then((user) => {
     console.log(user);
@@ -14,7 +15,9 @@ bootstrapper().then((user) => {
             <BrowserRouter>
                 <CurrentUserProvider currentUser={user}>
                     <Switch>
-                        <Route path='/admin' component={Layout} />
+                        <ErrorBoundary>
+                            <Route path='/admin' component={Layout} />
+                        </ErrorBoundary>
                     </Switch>
                 </CurrentUserProvider>
             </BrowserRouter>, document.getElementById('maincontainer')
