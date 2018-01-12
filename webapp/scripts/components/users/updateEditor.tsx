@@ -7,6 +7,7 @@ import { ProgressIndicator, BreadCrumbs, PaddedPaper } from '../../components/co
 import UserForm from './userForm';
 import { getUser, updateUser } from './usersApi';
 import EditModel from './models/edit';
+import { notify } from '../../services/notificationService';
 
 class UpdateEditor extends React.Component<Props, State> {
 
@@ -24,6 +25,7 @@ class UpdateEditor extends React.Component<Props, State> {
                 });
             })
             .catch(err => {
+                notify('An error occured while retrieving the user', 'ERROR')
                 this.setState({ isLoading: false });
             });
     }
@@ -37,8 +39,8 @@ class UpdateEditor extends React.Component<Props, State> {
         e.preventDefault();
 
         updateUser(this.state.model).then(() => {
-            // show confirm message
-        }, (err: Error) => { }); // show error message
+            notify('User was updated', 'INFO')
+        }, () => notify('An error occured while updating the user', 'ERROR'));
     };
 
     render() {

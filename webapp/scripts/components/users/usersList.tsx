@@ -7,6 +7,7 @@ import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Ta
 import { Link } from 'react-router-dom';
 import { Container, BreadCrumbs, PaddedPaper } from '../common';
 
+import { notify } from '../../services/notificationService';
 import UsersListRow from './usersListRow';
 import { getUsers, deleteUser } from './usersApi'
 import ListModel from './models/list';
@@ -30,13 +31,13 @@ class UsersList extends React.Component<Props, State> {
                 users: users
             });
         })
-            .catch(console.error);
+        .catch(() => notify('An error occured while retrieving the list of users', 'ERROR'));
     };
 
     _onDeleteClicked = (id: string) => {
         deleteUser(id)
             .then(this._refreshUsers)
-            .catch(console.error)
+            .catch(() => notify('An error occured while deleting the user', 'ERROR'))
     };
 
     render() {
