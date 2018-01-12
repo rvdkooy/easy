@@ -47,8 +47,14 @@ const configurePassport = (app: express.Express, logger: LoggerInstance) => {
                 });
                 
                 newUser.save()
-                    .then(()=> cb(null, serializeUser(newUser)))
-                    .catch(err => cb(err));
+                    .then(()=> { 
+                        logger.info(`User '${profile.displayNam}' created`);
+                        cb(null, serializeUser(newUser));
+                    })
+                    .catch(err => {
+                        logger.error(`Error occured while creating user '${profile.displayNam}'`); 
+                        cb(err)
+                    });
             } else {
                 cb(null, serializeUser(user));
             }
