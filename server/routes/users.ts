@@ -2,20 +2,22 @@ import * as express from 'express';
 import * as mongoose from 'mongoose';
 import { protectApi } from '../security/protectApi';
 import { IUserModel } from '../db/userModel';
+import { LoggerInstance } from 'winston';
+
 const router = express.Router();
 
-const handleError = (error: Error, res: express.Response) => {
-  console.error(error);
+const handleError = (error: Error, res: express.Response, logger: LoggerInstance) => {
+  logger.error(`The following error occured: ${error.message}`);
   res.sendStatus(400);
 };
 
-const createMiddleware = (userModelInstance: mongoose.Model<IUserModel>) => {
+const createMiddleware = (userModelInstance: mongoose.Model<IUserModel>, logger: LoggerInstance) => {
   router.all('*', protectApi);
 
   router.get('/users', (req, res) => {
     userModelInstance.find({}).exec()
     .then(docs => res.send(docs.map(createListModel)))
-    .catch(err => handleError(err, res));
+    .catch(err => handleError(err, res, logger));
   });
 
   router.get('/users/current', (req, res) => {
@@ -35,13 +37,13 @@ const createMiddleware = (userModelInstance: mongoose.Model<IUserModel>) => {
         res.sendStatus(404);
       }
     })
-    .catch(err => handleError(err, res));
+    .catch(err => handleError(err, res, logger));
   });
 
   router.delete('/users/:id', (req, res) => {
     userModelInstance.remove({ _id: req.params.id }).exec()
       .then(() => res.sendStatus(200))
-      .catch(err => handleError(err, res));
+      .catch(err => handleError(err, res, logger));
   });
 
   return router;

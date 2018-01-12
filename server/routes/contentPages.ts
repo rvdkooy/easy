@@ -3,25 +3,27 @@ import * as mongoose from 'mongoose';
 import { protectApi } from '../security/protectApi';
 import { check, validationResult } from 'express-validator/check'
 import ContentPageModel, { IContentPageModel, IContentPage } from '../db/contentPage';
+import { LoggerInstance } from 'winston';
+
 const router = express.Router();
 
-const handleError = (error: Error, res: express.Response) => {
-  console.error(error);
+const handleError = (error: Error, res: express.Response, logger: LoggerInstance) => {
+  logger.error(`The following error occured: ${error.message}`);
   res.sendStatus(400);
 };
 
-const createMiddleware = (contentModelInstance: mongoose.Model<IContentPageModel>) => {
+const createMiddleware = (contentModelInstance: mongoose.Model<IContentPageModel>, logger: LoggerInstance
+) => {
   router.all('*', protectApi);
 
   router.get('/contentpages', (req, res) => {
     contentModelInstance.find({}).exec()
       .then(docs => res.send(docs.map(createListModel)))
-      .catch(err => handleError(err, res));
+      .catch(err => handleError(err, res, logger));
   });
 
   router.post('/contentpages', (req, res) => {
-    validateFromRequest(req, res, () => {
-
+    validateFromRequest(req, res, logger, () => {
       var newContentPage = new ContentPageModel({
         title: req.body.title,
         url: req.body.url,
@@ -33,13 +35,16 @@ const createMiddleware = (contentModelInstance: mongoose.Model<IContentPageModel
       });
 
       newContentPage.save()
-        .then(() => res.sendStatus(200))
-        .catch(err => handleError(err, res));
+        .then(() => { 
+          logger.info(`Creation of contentpage with title '${req.body.title}' was successful`);
+          res.sendStatus(200)
+        })
+        .catch(err => handleError(err, res, logger));
     });
   });
 
   router.put('/contentpages/:id', async (req, res) => {
-    validateFromRequest(req, res, async () => {
+    validateFromRequest(req, res, logger, async () => {
 
       const doc = await contentModelInstance.findById(req.params.id).exec()
 
@@ -55,9 +60,10 @@ const createMiddleware = (contentModelInstance: mongoose.Model<IContentPageModel
 
         try {
           await contentModelInstance.findByIdAndUpdate({ _id: req.params.id }, { $set: updates }).exec();
+          logger.info(`Update of contentpage with title '${req.body.title}' was successful`);
           res.sendStatus(200);
         } catch (ex) {
-          handleError(ex, res);
+          handleError(ex, res, logger);
         }
       } else {
         res.sendStatus(404);
@@ -74,13 +80,16 @@ const createMiddleware = (contentModelInstance: mongoose.Model<IContentPageModel
           res.sendStatus(404);
         }
       })
-      .catch(err => handleError(err, res));
+      .catch(err => handleError(err, res, logger));
   });
 
   router.delete('/contentpages/:id', (req, res) => {
     contentModelInstance.remove({ _id: req.params.id }).exec()
-      .then(() => res.sendStatus(200))
-      .catch(err => handleError(err, res));
+      .then(() => { 
+        logger.info(`Deletion of contentpage with id '${req.params.id}' was successful`);
+        res.sendStatus(200)
+      })
+      .catch(err => handleError(err, res, logger));
   });
 
   return router;
@@ -98,7 +107,7 @@ const createEditModel = (doc: IContentPageModel) => {
   };
 };
 
-const validateFromRequest = (request: express.Request, response: express.Response, successHandler: () => void) => {
+const validateFromRequest = (request: express.Request, response: express.Response, logger: LoggerInstance, successHandler: () => void) => {
 
   check('name', 'Name cannot be empty').not().isEmpty;
   check('url', 'Url cannot be empty').not().isEmpty;
@@ -106,7 +115,11 @@ const validateFromRequest = (request: express.Request, response: express.Respons
 
   const result = validationResult(request);
   if (!result.isEmpty()) {
-    response.status(400).json({ validationErrors: result.array() });
+    const validationErrors = result.array();
+    
+    validationErrors.forEach(err => logger.error(`Validation error: '${err}' occured!`));
+    
+    response.status(400).json({ validationErrors: validationErrors });
   } else {
     successHandler();
   }

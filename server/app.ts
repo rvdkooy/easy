@@ -39,8 +39,8 @@ const createApp = (settings: any, rootDir: string) => {
 
     app.use('/static', express.static(path.join(rootDir, 'static')));
     
-    app.use('/admin/api', contentPagesRoutes(ContentPageModel));
-    app.use('/admin/api', usersRoutes(UserModel));
+    app.use('/admin/api', contentPagesRoutes(ContentPageModel, logger));
+    app.use('/admin/api', usersRoutes(UserModel, logger));
     app.use('/admin/api', loggingRoutes(mongooseConnection));
     app.use('/', defaultRoutes(ContentPageModel))
     
