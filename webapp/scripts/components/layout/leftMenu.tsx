@@ -97,7 +97,7 @@ class LeftMenu extends React.Component<AllProps, State> {
                         <Collapse component="li" in={this.state.contentOpen} timeout="auto" unmountOnExit>
                             <List disablePadding>
                                 <ListItem component={(args) => this._renderItem('Content Pages', '/admin/contentpages', <WebIcon />, classes.nested )} />
-                                <ListItem component={(args) => this._renderItem('File Uploads', '/admin/fileuploads', <FileUploadIcon />, classes.nested)} />
+                                <ListItem component={(args) => this._renderItem('Files', '/admin/files', <FileUploadIcon />, classes.nested)} />
                                 <ListItem component={(args) => this._renderItem("Menu's", '/admin/menus', <TocIcon />, classes.nested)} />
                             </List>
                         </Collapse>

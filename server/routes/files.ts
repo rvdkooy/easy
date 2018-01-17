@@ -17,15 +17,24 @@ const createMiddleware = (s3Client: S3Client, logger: LoggerInstance
 
   router.get('/files', (req, res) => {
     s3Client.listFiles()
-        .then(result => {
-            res.send(result.Contents);
-        })
-        .catch(err => handleError(err, res, logger))
+      .then(result => {
+        if (result.Contents) {
+          res.send(result.Contents.map((file) => ({
+            key: file.Key,
+            lastModified: file.LastModified,
+            etag: file.ETag,
+            size: file.Size
+          })));
+        } else {
+          res.send([]);
+        }
+      })
+      .catch(err => handleError(err, res, logger))
   });
 
   // router.post('/files/upload', (req, res) => {
   //   validateFromRequest(req, res, logger, () => {
-      
+
 
   //     res.send(200);
   //   });
@@ -38,13 +47,13 @@ const validateFromRequest = (request: express.Request, response: express.Respons
 
   check('name', 'Name cannot be empty').not().isEmpty;
   check('key', 'Key cannot be empty').not().isEmpty;
-  
+
   const result = validationResult(request);
   if (!result.isEmpty()) {
     const validationErrors = result.array();
-    
+
     validationErrors.forEach(err => logger.error(`Validation error: '${err}' occured!`));
-    
+
     response.status(400).json({ validationErrors: validationErrors });
   } else {
     successHandler();

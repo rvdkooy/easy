@@ -14,6 +14,7 @@ import Dashboard from '../dashboard/main';
 import UsersPage from '../users/usersPage';
 import LogsPage from '../logging/logsPage';
 import ContentPagesPage from '../contentpages/contentPagesPage';
+import FilesPage from '../files/filesPage';
 import { listenToNotifications, messageType } from '../../services/notificationService';
 
 const styles = (theme: Theme) => ({
@@ -92,6 +93,7 @@ class Layout extends React.Component<Props, State> {
                         <Route exact path='/admin' component={Dashboard} />
                         <Route path='/admin/users' component={UsersPage} />
                         <Route path='/admin/logs' component={LogsPage} />
+                        <Route path='/admin/files' component={FilesPage} />
                         <Route path='/admin/contentpages' component={ContentPagesPage} />
                     </Switch>
                 </div>
