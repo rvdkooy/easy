@@ -1,0 +1,11 @@
+mongo:
+  image: mongo:3.0
+  ports:
+    - "27017:27017"
+  restart: always
+
+s3:
+  image: scality/s3server
+  ports:
+    - "8000:8000"
+  restart: always

@@ -43,6 +43,7 @@
     "@types/uuid": "^3.4.3",
     "@types/winston": "^2.3.7",
     "awesome-typescript-loader": "^3.4.1",
+    "aws-sdk": "^2.182.0",
     "body-parser": "^1.18.2",
     "concurrently": "^3.5.1",
     "config": "^1.28.1",
