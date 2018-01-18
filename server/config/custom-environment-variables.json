@@ -13,7 +13,7 @@
         },
         "S3": {
             "BUCKETNAME": "AWS_S3_BUCKETNAME",
-            "ENDPOINT": "BUCKETNAME_S3_ENDPOINT"
+            "ENDPOINT": "AWS_S3_ENDPOINT"
         }
     }
 }

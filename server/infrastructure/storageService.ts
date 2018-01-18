@@ -15,7 +15,7 @@ export class S3Client {
             region: "eu"
         };
         
-        if (endpoint) options.endpoint = endpoint;
+        if (process.env.NODE_ENV !== 'production') options.endpoint = endpoint;
         
         this.s3 = new aws.S3(options);
         this.bucketName = bucketName;
