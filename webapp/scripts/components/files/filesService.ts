@@ -1,7 +1,8 @@
 import { query } from '../../utils/httpClient'
 
 export const getFiles = (): Promise<FileItem[]> => {
-    return query(`/admin/api/files`).then(res => res.json());
+    return query(`/admin/api/files`)
+        .then(res => res.json());
 }
 
 export interface FileItem {

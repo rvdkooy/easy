@@ -26,7 +26,7 @@ const createApp = (settings: any, rootDir: string) => {
     
     const mongooseConnection = dbConnect(settings.DATABASE_CONNECTION_STRING);
     const logger = setupLogger(app, settings.DATABASE_CONNECTION_STRING);
-    const s3Client = storageService.createS3Client(logger);
+    const s3Client = storageService.createS3Client(settings.AWS, logger);
 
     app.use(expressSession({ 
         secret: settings.SESSION_SECRET ,

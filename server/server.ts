@@ -16,12 +16,13 @@ process.env["NODE_CONFIG_DIR"] = path.join(rootDir, './config');
 import createApp from './app';
 import * as config from 'config';  
 
-const options = {
+const settings = {
     DATABASE_CONNECTION_STRING: config.get('DATABASE_CONNECTION_STRING'),
-    SESSION_SECRET: config.get('SESSION_SECRET')
+    SESSION_SECRET: config.get('SESSION_SECRET'),
+    AWS: config.get("AWS")
 };
 
-const app = createApp(options, rootDir);
+const app = createApp(settings, rootDir);
 
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);

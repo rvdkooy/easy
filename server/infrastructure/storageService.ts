@@ -3,26 +3,31 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { LoggerInstance } from 'winston';
 
-const bucketName = 'easyadminsystem';
-
 export class S3Client {
-    constructor(logger: LoggerInstance) {
-        this.s3 = new aws.S3({
-            accessKeyId: "accessKey1",
-            secretAccessKey: "verySecretKey1",
-            endpoint: 'http://127.0.0.1:8000',
+    constructor(accessKeyId: string, secretAccessKey: string, 
+                bucketName: string, endpoint: string,
+                logger: LoggerInstance) {
+        
+        const options: aws.S3.Types.ClientConfiguration = {
+            accessKeyId: accessKeyId,
+            secretAccessKey: secretAccessKey,
             s3ForcePathStyle: true,
-        });
-
+        };
+        
+        if (endpoint) options.endpoint = endpoint;
+        
+        this.s3 = new aws.S3(options);
+        this.bucketName = bucketName;
         this.logger = logger;
     }
+    bucketName: string = 'easyadminsystem';
     logger: LoggerInstance;
     s3: aws.S3;
 
     uploadFile = (key: string, data: Buffer, acl?: string): Promise<aws.S3.PutObjectOutput> => {
         return new Promise((resolve, reject) => {
             const params = {
-                Bucket: bucketName,
+                Bucket: this.bucketName,
                 Key: key,
                 Body: data,
                 ACL: acl || 'public-read',
@@ -30,7 +35,7 @@ export class S3Client {
     
             this.s3.putObject(params, (err, data) => {
                 if (err) {
-                    this.logger.error(`Error uploading object to bucket with name '${bucketName}' and key ('${key}') to s3: ${err.message}`);
+                    this.logger.error(`Error uploading object to bucket with name '${this.bucketName}' and key ('${key}') to s3: ${err.message}`);
                     if (err.stack) this.logger.error(err.stack);
                     reject(err);
                 } else {
@@ -44,10 +49,10 @@ export class S3Client {
 
         return new Promise((resolve, reject) => {
             this.s3.listObjects({
-                Bucket: bucketName
+                Bucket: this.bucketName
             }, (err, data) => {
                 if (err) {
-                    this.logger.error(`Error listing objects from s3 with bucket name: '${bucketName}'`);
+                    this.logger.error(`Error listing objects from s3 with bucket name: '${this.bucketName}'`);
                     if (err.stack) this.logger.error(err.stack);
                     reject(err);
                 } else {
@@ -59,8 +64,12 @@ export class S3Client {
 }
 
 export default {
-    createS3Client: (logger: LoggerInstance) => {    
-        return new S3Client(logger);
+    createS3Client: (awsSettings: any, logger: LoggerInstance) => {    
+        return new S3Client(awsSettings.AUTH.ACCESSKEYID, 
+                            awsSettings.AUTH.SECRETACCESSKEY,
+                            awsSettings.S3.BUCKETNAME,
+                            awsSettings.S3.ENDPOINT,
+                            logger);
     }
 }
 

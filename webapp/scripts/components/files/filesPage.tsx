@@ -13,9 +13,10 @@ class FilesPage extends React.Component<undefined, State> {
     };
 
     componentDidMount() {
-        getFiles().then(files => {
-            this.setState({ files: files });
-        })
+        getFiles()
+            .then(files => {
+                this.setState({ files: files });
+            })
     }
 
     render() {
