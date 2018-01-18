@@ -12,7 +12,7 @@ export class S3Client {
             accessKeyId: accessKeyId,
             secretAccessKey: secretAccessKey,
             s3ForcePathStyle: true,
-            region: "eu"
+            region: "eu-west-1"
         };
         
         if (process.env.NODE_ENV !== 'production') options.endpoint = endpoint;
