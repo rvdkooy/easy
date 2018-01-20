@@ -5,6 +5,10 @@ export const getFiles = (): Promise<FileItem[]> => {
         .then(res => res.json());
 }
 
+export const uploadFile = () => {
+    
+}
+
 export interface FileItem {
     key: string,
     size: number,

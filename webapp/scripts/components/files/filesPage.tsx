@@ -5,19 +5,41 @@ import { Link } from 'react-router-dom';
 import { BreadCrumbs, PaddedPaper, Container } from '../common';
 import { FileItem, getFiles } from './filesService';
 import FilesTable from './filesTable';
+import UploadFileDialog from './uploadFileDialog';
+import { notify } from '../../services/notificationService';
 
 class FilesPage extends React.Component<undefined, State> {
 
     state: State = {
-        files: []
+        files: [],
+        showUploadDialog: false
     };
 
     componentDidMount() {
+        this._refreshFilesTable();
+    }
+
+    _refreshFilesTable = () => {
         getFiles()
             .then(files => {
                 this.setState({ files: files });
             })
-    }
+            .catch(() => {
+                notify('An error occured while retrieving the list of files', 'ERROR');
+            });;
+    };
+
+    _onNewFileUploadClicked = () => {
+        this.setState({ showUploadDialog: true });
+    };
+
+    _onCloseUploadDialog = (refresh?: boolean) => { 
+        this.setState({ showUploadDialog: false });
+
+        if (refresh) {
+            this._refreshFilesTable();
+        }
+    };
 
     render() {
         const breadCrumbItems = [
@@ -31,7 +53,7 @@ class FilesPage extends React.Component<undefined, State> {
                     <Typography type="headline">Uploaded files</Typography>
                     <Container>
                         <Button
-                            component={({ ...props }) => <Link to="/admin/files/upload" { ...props } />}
+                            onClick={this._onNewFileUploadClicked}
                             raised color="primary"
                         >
                             Upload new file
@@ -39,12 +61,17 @@ class FilesPage extends React.Component<undefined, State> {
                     </Container>
                     <FilesTable files={this.state.files}></FilesTable>
                 </PaddedPaper>
+                <UploadFileDialog
+                    open={ this.state.showUploadDialog }
+                    onClose={ this._onCloseUploadDialog }
+                />
             </div>);
     }
 }
 
 interface State {
-    files: FileItem[]
+    files: FileItem[],
+    showUploadDialog: boolean
 };
 
 export default FilesPage;
