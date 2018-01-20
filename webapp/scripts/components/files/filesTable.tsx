@@ -58,9 +58,13 @@ const FilesTable = (props: Props) => {
     );
 };
 
-interface Props extends WithStyles<keyof typeof styles> {
+interface OuterProps {
     files: FileItem[],
     onDeleteFile: (key: string) => void
 }
 
-export default withStyles(styles)<{ files: FileItem[] }>(FilesTable);
+interface Props extends OuterProps, WithStyles<keyof typeof styles> {
+    
+}
+
+export default withStyles(styles)<OuterProps>(FilesTable);
