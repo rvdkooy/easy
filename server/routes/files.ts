@@ -38,13 +38,23 @@ const createMiddleware = (s3Client: S3Client, logger: LoggerInstance
         const file = req.file;
 
         if (!file) {
-            res.status(400).json({ validationErrors: [ "File is required" ]});
+            res.status(400).json({ validationErrors: ["File is required"] });
         } else {
-            s3Client.uploadFile(file.originalname, file.buffer).then(() => {
+            s3Client.uploadFile(file.originalname, file.buffer)
+                .then(() => {
+                    res.send(200);
+                })
+                .catch(err => handleError(err, res, logger));
+        }
+    });
+
+    router.delete('/files/:key', (req, res) => {
+
+        s3Client.deleteFile(req.params.key)
+            .then(() => {
                 res.send(200);
             })
             .catch(err => handleError(err, res, logger));
-        }
     });
 
     return router;

@@ -4,7 +4,7 @@ import Typography from 'material-ui/Typography';
 import TextField from 'material-ui/TextField';
 import Dialog, { DialogActions, DialogContent, DialogContentText, DialogTitle } from 'material-ui/Dialog';
 import { Container } from '../common';
-import { postFormData } from '../../utils/httpClient';
+import { uploadFile } from './filesService';
 import { notify } from '../../services/notificationService';
 
 class UploadFileDialog extends React.Component<Props, State> {
@@ -25,12 +25,9 @@ class UploadFileDialog extends React.Component<Props, State> {
     };
 
     _uploadClicked = () => {
-        const file =  this._fileInput.files[0]
-        const data = new FormData();
-        data.append('file', file);
-        data.append('name', name);
-
-        postFormData('/admin/api/files/upload', data)
+        const file = this._fileInput.files[0];
+        
+        uploadFile(file)
             .then(() => {
                 notify(`File: ${file.name} uploaded successfully.`, "INFO")
                 this.props.onClose(true);
@@ -41,7 +38,7 @@ class UploadFileDialog extends React.Component<Props, State> {
     };
 
     _onClose = () => {
-        //this.setState({ fileName: null });
+        this.setState({ fileName: null });
         this.props.onClose();
     }
 

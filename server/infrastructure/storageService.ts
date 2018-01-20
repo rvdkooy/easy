@@ -62,6 +62,23 @@ export class S3Client {
             });
         });
     }
+
+    deleteFile = (key: string): Promise<aws.S3.DeleteObjectOutput> => {
+        return new Promise((resolve, reject) => {
+            this.s3.deleteObject({
+                Bucket: this.bucketName,
+                Key: key
+            }, (err, data) => {
+                if (err) {
+                    this.logger.error(`Error deleting object with key: '${key}' from bucket: '${this.bucketName}'`);
+                    if (err.stack) this.logger.error(err.stack);
+                    reject(err);
+                } else {
+                    resolve(data);
+                }
+            })
+        });
+    }
 }
 
 export default {

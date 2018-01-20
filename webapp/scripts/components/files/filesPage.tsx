@@ -3,7 +3,7 @@ import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
 import { Link } from 'react-router-dom';
 import { BreadCrumbs, PaddedPaper, Container } from '../common';
-import { FileItem, getFiles } from './filesService';
+import { FileItem, getFiles, deleteFile } from './filesService';
 import FilesTable from './filesTable';
 import UploadFileDialog from './uploadFileDialog';
 import { notify } from '../../services/notificationService';
@@ -41,6 +41,15 @@ class FilesPage extends React.Component<undefined, State> {
         }
     };
 
+    _onDeleteFile = (key: string) => {
+        deleteFile(key)
+            .then(() => {
+                notify(`File: '${key} was deleted successfully'`, "INFO");
+                this._refreshFilesTable();
+            })
+            .catch(() => notify('An error occured while deleting your file', 'ERROR'));
+    }
+
     render() {
         const breadCrumbItems = [
             { text: 'Files' }
@@ -59,7 +68,10 @@ class FilesPage extends React.Component<undefined, State> {
                             Upload new file
                         </Button>
                     </Container>
-                    <FilesTable files={this.state.files}></FilesTable>
+                    <FilesTable 
+                        files={this.state.files}
+                        onDeleteFile={this._onDeleteFile}
+                    />
                 </PaddedPaper>
                 <UploadFileDialog
                     open={ this.state.showUploadDialog }
