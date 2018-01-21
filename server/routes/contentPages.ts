@@ -1,8 +1,8 @@
 import * as express from 'express';
 import * as mongoose from 'mongoose';
-import { protectApi } from '../security/protectApi';
+
 import { check, validationResult } from 'express-validator/check'
-import ContentPageModel, { IContentPageModel, IContentPage } from '../db/contentPage';
+import ContentPageModel, { IContentPageModel, IContentPage } from '../db/contentPageModel';
 import { LoggerInstance } from 'winston';
 
 const router = express.Router();
@@ -14,8 +14,6 @@ const handleError = (error: Error, res: express.Response, logger: LoggerInstance
 
 const createMiddleware = (contentModelInstance: mongoose.Model<IContentPageModel>, logger: LoggerInstance
 ) => {
-  router.all('*', protectApi);
-
   router.get('/contentpages', (req, res) => {
     contentModelInstance.find({}).exec()
       .then(docs => res.send(docs.map(createListModel)))

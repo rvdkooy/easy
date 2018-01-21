@@ -4,19 +4,19 @@ import * as path from 'path';
 import { LoggerInstance } from 'winston';
 
 export class S3Client {
-    constructor(accessKeyId: string, secretAccessKey: string, 
-                bucketName: string, endpoint: string,
-                logger: LoggerInstance) {
-        
+    constructor(accessKeyId: string, secretAccessKey: string,
+        bucketName: string, endpoint: string,
+        logger: LoggerInstance) {
+
         const options: aws.S3.Types.ClientConfiguration = {
             accessKeyId: accessKeyId,
             secretAccessKey: secretAccessKey,
             s3ForcePathStyle: true,
             region: "eu-west-1"
         };
-        
+
         if (process.env.NODE_ENV !== 'production') options.endpoint = endpoint;
-        
+
         this.s3 = new aws.S3(options);
         this.bucketName = bucketName;
         this.logger = logger;
@@ -33,7 +33,7 @@ export class S3Client {
                 Body: data,
                 ACL: acl || 'public-read',
             };
-    
+
             this.s3.putObject(params, (err, data) => {
                 if (err) {
                     this.logger.error(`Error uploading object to bucket with name '${this.bucketName}' and key ('${key}') to s3: ${err.message}`);
@@ -81,15 +81,14 @@ export class S3Client {
     }
 }
 
-export default {
-    createS3Client: (awsSettings: any, logger: LoggerInstance) => {    
-        return new S3Client(awsSettings.AUTH.ACCESSKEYID, 
-                            awsSettings.AUTH.SECRETACCESSKEY,
-                            awsSettings.S3.BUCKETNAME,
-                            awsSettings.S3.ENDPOINT,
-                            logger);
-    }
+export const createS3Client = (awsSettings: any, logger: LoggerInstance) => {
+    return new S3Client(awsSettings.AUTH.ACCESSKEYID,
+        awsSettings.AUTH.SECRETACCESSKEY,
+        awsSettings.S3.BUCKETNAME,
+        awsSettings.S3.ENDPOINT,
+        logger);
 }
+
 
 // const file = path.join(rootDir, 'pdf-test.pdf');
 

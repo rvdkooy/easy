@@ -1,6 +1,6 @@
 import * as express from 'express';
 import * as mongoose from 'mongoose';
-import { IContentPageModel, findContentPageByUrl } from '../db/contentPage';
+import { IContentPageModel, findContentPageByUrl } from '../db/contentPageModel';
 
 const createMiddleware = (contentModelInstance: mongoose.Model<IContentPageModel>) => {
     const router = express.Router();

@@ -6,19 +6,10 @@ import * as path from 'path';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 
-import configurePassport from './security/pasportConfig';
-import { setupLogger } from './infrastructure/logging';
-import storageService from './infrastructure/storageService';
-
-import { connect as dbConnect } from './db/index';
-import defaultRoutes from './routes/default';
-import usersRoutes from './routes/users';
-import contentPagesRoutes from './routes/contentPages';
-import loggingRoutes from './routes/logging';
-import files from './routes/files';
-
-import ContentPageModel from './db/contentPage';
-import UserModel from './db/userModel';
+import { protectApi, configurePassport } from './security';
+import { setupLogger, createS3Client  } from './infrastructure/';
+import { connect as dbConnect, ContentPageModel, UserModel } from './db';
+import { defaultRoutes, usersRoutes, contentPagesRoutes, loggingRoutes, filesRoutes } from './routes';
 
 const MongoStore = connectMongo(expressSession);
 const createApp = (settings: any, rootDir: string) => {
@@ -26,7 +17,7 @@ const createApp = (settings: any, rootDir: string) => {
     
     const mongooseConnection = dbConnect(settings.DATABASE_CONNECTION_STRING);
     const logger = setupLogger(app, settings.DATABASE_CONNECTION_STRING);
-    const s3Client = storageService.createS3Client(settings.AWS, logger);
+    const s3Client = createS3Client(settings.AWS, logger);
 
     app.use(expressSession({ 
         secret: settings.SESSION_SECRET ,
@@ -43,10 +34,13 @@ const createApp = (settings: any, rootDir: string) => {
 
     app.use('/static', express.static(path.join(rootDir, 'static')));
     
-    app.use('/admin/api', contentPagesRoutes(ContentPageModel, logger));
-    app.use('/admin/api', usersRoutes(UserModel, logger));
-    app.use('/admin/api', loggingRoutes(mongooseConnection));
-    app.use('/admin/api', files(s3Client, logger));
+    app.use('/admin/api', 
+        protectApi,
+        contentPagesRoutes(ContentPageModel, logger),
+        usersRoutes(UserModel, logger),
+        loggingRoutes(mongooseConnection),
+        filesRoutes(s3Client, logger)
+    );
     app.use('/', defaultRoutes(ContentPageModel))
     
     logger.info('easy has started up...');

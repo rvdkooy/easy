@@ -1,6 +1,5 @@
 import * as express from 'express';
 import * as mongoose from 'mongoose';
-import { protectApi } from '../security/protectApi';
 import { IUserModel } from '../db/userModel';
 import { LoggerInstance } from 'winston';
 
@@ -12,8 +11,6 @@ const handleError = (error: Error, res: express.Response, logger: LoggerInstance
 };
 
 const createMiddleware = (userModelInstance: mongoose.Model<IUserModel>, logger: LoggerInstance) => {
-  router.all('*', protectApi);
-
   router.get('/users', (req, res) => {
     userModelInstance.find({}).exec()
     .then(docs => res.send(docs.map(createListModel)))

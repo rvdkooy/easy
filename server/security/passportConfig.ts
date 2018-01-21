@@ -16,7 +16,7 @@ const serializeUser = (userModel: IUserModel) => {
     };
 }
 
-const configurePassport = (app: express.Express, logger: LoggerInstance) => {
+export const configurePassport = (app: express.Express, logger: LoggerInstance) => {
     app.use(passport.initialize());
     app.use(passport.session());
 
@@ -74,5 +74,3 @@ const configurePassport = (app: express.Express, logger: LoggerInstance) => {
 
     return passport;
 };
-
-export default configurePassport;

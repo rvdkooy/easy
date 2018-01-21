@@ -1,5 +1,4 @@
 import * as express from 'express';
-import { protectApi } from '../security/protectApi';
 import { check, validationResult } from 'express-validator/check'
 import { LoggerInstance } from 'winston';
 import { S3Client } from '../infrastructure/storageService';
@@ -15,8 +14,6 @@ const handleError = (error: Error, res: express.Response, logger: LoggerInstance
 
 const createMiddleware = (s3Client: S3Client, logger: LoggerInstance
 ) => {
-    router.all('*', protectApi);
-
     router.get('/files', (req, res) => {
         s3Client.listFiles()
             .then(result => {
