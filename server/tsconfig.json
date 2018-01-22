@@ -5,7 +5,8 @@
       
       "strict": true,                            /* Enable all strict type-checking options. */
       "outDir": "./dist",
-      "lib": ["es6", "dom"]
+      "lib": ["es6", "dom"],
+      "sourceMap": true
     },
     "include": [
       "./**/*.ts"

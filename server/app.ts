@@ -39,9 +39,10 @@ const createApp = (settings: any, rootDir: string) => {
         contentPagesRoutes(ContentPageModel, logger),
         usersRoutes(UserModel, logger),
         loggingRoutes(mongooseConnection),
-        filesRoutes(s3Client, logger)
+        filesRoutes(rootDir, s3Client, logger),
+        (req, res) => res.send(404)
     );
-    app.use('/', defaultRoutes(ContentPageModel))
+    app.use('/', defaultRoutes(rootDir, logger, ContentPageModel))
     
     logger.info('easy has started up...');
     
