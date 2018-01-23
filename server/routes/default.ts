@@ -42,7 +42,7 @@ const createMiddleware = (rootDir: string, logger: LoggerInstance, contentModelI
 
 
     const handleCustomTheme = (res: express.Response, model: object) => {
-        const customThemeFile = path.resolve(rootDir, './tmp/theme/layout.hbs');
+        const customThemeFile = path.resolve(rootDir, './localfiles/themes/layout.hbs');
 
         fs.stat(customThemeFile, (err, stat) => {
             if (err) {

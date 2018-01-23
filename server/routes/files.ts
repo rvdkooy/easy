@@ -45,27 +45,19 @@ const createMiddleware = (rootDir: string, s3Client: S3Client, logger: LoggerIns
             // temp theme logic
             if (uploadedFile.originalname === 'theme.zip') {
                 try {
-                    const outputFolder = path.resolve(rootDir, 'localfiles/themes');
-                    const tmZipFile = path.resolve(rootDir, 'localfiles/tmp/tmp_theme.zip');
-                    
+                    const outputFolder = path.resolve(rootDir, './localfiles/themes');
+                    const tmZipFile = path.resolve(rootDir, `./localfiles/tmp/${new Date().getTime()}_theme.zip`);
+
                     fs.writeFileSync(tmZipFile, uploadedFile.buffer);
-                    
-                    unzip(tmZipFile, outputFolder).then((files) => {
-                        fs.unlinkSync(tmZipFile);
-    
-                        const promises: Promise<any>[] = [];
-                        for (let file of files) {
-                            let key = `theme/${file}`;
-    
-                            const buff = fs.readFileSync(path.resolve(outputFolder, file));
-                            promises.push(s3Client.uploadFile(key, buff));
-                        }
-    
-                        Promise.all(promises)
-                                .then(() => res.sendStatus(200))
-                                .catch(err => handleError(err, res, logger));
+
+                    unzip(tmZipFile, outputFolder).then(() => {
+                        fs.unlinkSync(tmZipFile)
+
+                        s3Client.uploadFile('/themes/theme.zip', uploadedFile.buffer)
+                            .then(() => res.sendStatus(200))
+                            .catch(err => handleError(err, res, logger));
                     })
-                    .catch(err => handleError(err, res, logger));
+                        .catch(err => handleError(err, res, logger));
                 } catch (err) {
                     handleError(err, res, logger);
                 }
