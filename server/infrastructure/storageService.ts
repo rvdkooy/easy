@@ -83,16 +83,36 @@ export class S3Client {
     }
 
     createBucket = () => {
-        return new Promise((resolve, reject) => {
-            this.s3.createBucket({
-                Bucket: this.bucketName,
-                ACL: 'public-read',
-                CreateBucketConfiguration: {
-                    LocationConstraint:  defaultRegion
+        this.listBuckets().then(data => {
+            if (data.Buckets) {
+                const found = data.Buckets.find(b => b.Name === this.bucketName);
+
+                if (!found) {
+                    this.logger.info(`No bucket found yet, creating: '${this.bucketName}'`);
+                    this.s3.createBucket({
+                        Bucket: this.bucketName,
+                        ACL: 'public-read',
+                        CreateBucketConfiguration: {
+                            LocationConstraint: defaultRegion
+                        }
+                    }, (err, data) => {
+                        if (err) {
+                            this.logger.error(`Error creating a bucket with name: '${this.bucketName}'`);
+                            if (err.stack) this.logger.error(err.stack);
+                        }
+                    });
+                } else {
+                    this.logger.info(`Bucket with name: '${this.bucketName}' found, skipping creation`);
                 }
-            }, (err, data) => {
+            }
+        });
+    }
+
+    listBuckets = (): Promise<aws.S3.ListBucketsOutput> => {
+        return new Promise((resolve, reject) => {
+            this.s3.listBuckets((err, data) => {
                 if (err) {
-                    this.logger.error(`Error creating a bucket with name: '${this.bucketName}'`);
+                    this.logger.error(`Error listing buckets`);
                     if (err.stack) this.logger.error(err.stack);
                     reject(err);
                 } else {
