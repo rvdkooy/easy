@@ -1,14 +1,17 @@
-import * as fs from 'fs';
+import * as mkdirp from 'mkdirp';
 
-export const ensureDirExistsSync = (path: string) => {
-    
-    try {
-        const stats = fs.statSync(path);
-    } catch (err) {
-        fs.mkdirSync(path);
-    }
+export const ensureDirExists = (dirPath: string) => {
+    return new Promise((resolve, reject) => {
+        mkdirp(dirPath, (err: Error) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve();
+            }
+        });
+    });   
 }
 
 export default {
-    ensureDirExistsSync
+    ensureDirExists
 }

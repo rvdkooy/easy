@@ -3,6 +3,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { LoggerInstance } from 'winston';
 
+const defaultRegion = 'eu-west-1';
+
 export class S3Client {
     constructor(accessKeyId: string, secretAccessKey: string,
         bucketName: string, endpoint: string,
@@ -12,7 +14,7 @@ export class S3Client {
             accessKeyId: accessKeyId,
             secretAccessKey: secretAccessKey,
             s3ForcePathStyle: true,
-            region: "eu-west-1"
+            region: defaultRegion
         };
 
         if (process.env.NODE_ENV !== 'production') options.endpoint = endpoint;
@@ -77,6 +79,26 @@ export class S3Client {
                     resolve(data);
                 }
             })
+        });
+    }
+
+    createBucket = () => {
+        return new Promise((resolve, reject) => {
+            this.s3.createBucket({
+                Bucket: this.bucketName,
+                ACL: 'public-read',
+                CreateBucketConfiguration: {
+                    LocationConstraint:  defaultRegion
+                }
+            }, (err, data) => {
+                if (err) {
+                    this.logger.error(`Error creating a bucket with name: '${this.bucketName}'`);
+                    if (err.stack) this.logger.error(err.stack);
+                    reject(err);
+                } else {
+                    resolve(data);
+                }
+            });
         });
     }
 }

@@ -7,9 +7,10 @@ import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 
 import { protectApi, configurePassport } from './security';
-import { setupLogger, createS3Client  } from './infrastructure/';
+import { setupLogger, createS3Client, setupEnvironment  } from './infrastructure/';
 import { connect as dbConnect, ContentPageModel, UserModel } from './db';
 import { defaultRoutes, usersRoutes, contentPagesRoutes, loggingRoutes, filesRoutes } from './routes';
+
 
 const MongoStore = connectMongo(expressSession);
 const createApp = (settings: any, rootDir: string) => {
@@ -18,6 +19,8 @@ const createApp = (settings: any, rootDir: string) => {
     const mongooseConnection = dbConnect(settings.DATABASE_CONNECTION_STRING);
     const logger = setupLogger(app, settings.DATABASE_CONNECTION_STRING);
     const s3Client = createS3Client(settings.AWS, logger);
+
+    setupEnvironment(rootDir, s3Client);
 
     app.use(expressSession({ 
         secret: settings.SESSION_SECRET ,

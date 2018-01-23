@@ -45,11 +45,9 @@ const createMiddleware = (rootDir: string, s3Client: S3Client, logger: LoggerIns
             // temp theme logic
             if (uploadedFile.originalname === 'theme.zip') {
                 try {
-                    const outputFolder = path.resolve(rootDir, 'tmp/theme');
-                    const tmZipFile = path.resolve(outputFolder, 'tmp_theme.zip');
+                    const outputFolder = path.resolve(rootDir, 'localfiles/themes');
+                    const tmZipFile = path.resolve(rootDir, 'localfiles/tmp/tmp_theme.zip');
                     
-                    fsUtils.ensureDirExistsSync(outputFolder);
-
                     fs.writeFileSync(tmZipFile, uploadedFile.buffer);
                     
                     unzip(tmZipFile, outputFolder).then((files) => {
