@@ -52,13 +52,19 @@ export function put (url: string, data: object) {
     //.then(checkStatus); //todo
 };
 
-export function del (url: string) {
-    return fetch(new Request(url), { 
+export function del (url: string, data?: object) {
+    
+    const requestInit = { 
         method: 'DELETE',
         headers: {
             "Content-Type": "application/json"
         },
         credentials: 'include'
-    })
+    } as RequestInit;
+
+    if (data) {
+        requestInit.body = JSON.stringify(data)
+    }
+    return fetch(new Request(url), requestInit)
     //.then(checkStatus); //todo
 };

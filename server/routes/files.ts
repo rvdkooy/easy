@@ -70,11 +70,9 @@ const createMiddleware = (rootDir: string, s3Client: S3Client, logger: LoggerIns
         }
     });
 
-    router.delete('/files/:path*', (req, res) => {
-        const path = req.param('path');
-        const file = req.param("0");
-
-        s3Client.deleteFile(path + file)
+    router.delete('/files', (req, res) => {
+        
+        s3Client.deleteFile(req.body.key)
             .then(() => {
                 res.send(200);
             })

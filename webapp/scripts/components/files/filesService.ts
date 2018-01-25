@@ -12,7 +12,7 @@ export const uploadFile = (file: File) => {
 }
 
 export const deleteFile = (key: string) => {
-    return del(`/admin/api/files/${key}`);
+    return del(`/admin/api/files`, { key });
 }
 
 export interface FileItem {
