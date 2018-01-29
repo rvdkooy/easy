@@ -16,6 +16,16 @@ const UserForm = (props: Props) => {
             <Container>
                 <FormControl fullWidth>
                     <TextField
+                        label="TenantId"
+                        value={model.tenantId}
+                        disabled
+                        margin="dense"
+                    />
+                </FormControl>
+            </Container>
+            <Container>
+                <FormControl fullWidth>
+                    <TextField
                         label="Display name"
                         value={model.displayName}
                         disabled
@@ -28,6 +38,16 @@ const UserForm = (props: Props) => {
                     <TextField
                         label="Email"
                         value={model.email}
+                        disabled
+                        margin="dense"
+                    />
+                </FormControl>
+            </Container>
+            <Container>
+                <FormControl fullWidth>
+                    <TextField
+                        label="Sites"
+                        value={model.sites.join(', ')}
                         disabled
                         margin="dense"
                     />

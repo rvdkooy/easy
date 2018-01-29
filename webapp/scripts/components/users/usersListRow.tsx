@@ -35,6 +35,7 @@ class UsersListRow extends React.Component<Props, State> {
                 <TableCell>
                     <Avatar src={user.photo} />
                 </TableCell>
+                <TableCell>{user.tenantId}</TableCell>
                 <TableCell>
                     <Link to={`/admin/users/${user.id}`}>{user.displayName}</Link>
                 </TableCell>

@@ -6,6 +6,7 @@ import * as path from 'path';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 
+import { Config } from './config';
 import { protectApi, configurePassport } from './security';
 import { setupLogger, createS3Client, setupEnvironment  } from './infrastructure/';
 import { connect as dbConnect, ContentPageModel, UserModel } from './db';
@@ -13,17 +14,17 @@ import { defaultRoutes, usersRoutes, contentPagesRoutes, loggingRoutes, filesRou
 
 
 const MongoStore = connectMongo(expressSession);
-const createApp = (settings: any, rootDir: string) => {
+const createApp = (config: Config, rootDir: string) => {
     const app = express();
     
-    const mongooseConnection = dbConnect(settings.DATABASE_CONNECTION_STRING);
-    const logger = setupLogger(app, settings.DATABASE_CONNECTION_STRING);
-    const s3Client = createS3Client(settings.AWS, logger);
+    const mongooseConnection = dbConnect(config.DATABASE_CONNECTION_STRING);
+    const logger = setupLogger(app, config.DATABASE_CONNECTION_STRING);
+    const s3Client = createS3Client(config.AWS, logger);
 
     setupEnvironment(rootDir, s3Client);
 
     app.use(expressSession({ 
-        secret: settings.SESSION_SECRET ,
+        secret: config.SESSION_SECRET ,
         store: new MongoStore({ mongooseConnection: mongooseConnection }),
         resave: false,
         saveUninitialized: true,

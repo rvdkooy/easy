@@ -49,6 +49,8 @@ const createMiddleware = (userModelInstance: mongoose.Model<IUserModel>, logger:
 const createEditModel = (doc: IUserModel) => {
   return {
     id: doc._id,
+    tenantId: doc.tenantId,
+    sites: doc.sites,
     displayName: doc.displayName,
     email: doc.email,
     photo: doc.photo,
@@ -60,6 +62,7 @@ const createEditModel = (doc: IUserModel) => {
 const createListModel = (doc: IUserModel) => {
   return {
     id: doc._id,
+    tenantId: doc.tenantId,
     displayName: doc.displayName,
     email: doc.email,
     photo: doc.photo

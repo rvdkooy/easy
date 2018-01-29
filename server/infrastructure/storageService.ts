@@ -2,6 +2,7 @@ import * as aws from 'aws-sdk';
 import * as fs from 'fs';
 import * as path from 'path';
 import { LoggerInstance } from 'winston';
+import { AWS } from '../config';
 
 const defaultRegion = 'eu-west-1';
 
@@ -123,7 +124,7 @@ export class S3Client {
     }
 }
 
-export const createS3Client = (awsSettings: any, logger: LoggerInstance) => {
+export const createS3Client = (awsSettings: AWS, logger: LoggerInstance) => {
     return new S3Client(awsSettings.AUTH.ACCESSKEYID,
         awsSettings.AUTH.SECRETACCESSKEY,
         awsSettings.S3.BUCKETNAME,

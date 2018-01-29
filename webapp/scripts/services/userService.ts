@@ -1,6 +1,8 @@
 import { query } from '../utils/httpClient';
 
 export interface User {
+    tenantId: string;
+    sites: string[];
     displayName: string;
     photo: string;
 }

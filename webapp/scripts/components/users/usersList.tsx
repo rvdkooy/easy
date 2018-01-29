@@ -68,6 +68,7 @@ class UsersList extends React.Component<Props, State> {
                                     <TableHead>
                                         <TableRow>
                                             <TableCell>Photo</TableCell>
+                                            <TableCell>TenantId</TableCell>
                                             <TableCell>Username</TableCell>
                                             <TableCell>Email</TableCell>
                                             <TableCell>Actions</TableCell>

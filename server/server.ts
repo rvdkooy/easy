@@ -3,6 +3,7 @@
 import * as http from 'http';
 import * as path from 'path'; 
 import * as fs from 'fs';
+import { Config } from './config';
 
 let rootDir = __dirname;
 
@@ -14,15 +15,9 @@ console.log(`current rootDir: ${rootDir}`);
 process.env["NODE_CONFIG_DIR"] = path.join(rootDir, './config');
 
 import createApp from './app';
-import * as config from 'config';  
+const config = require('config') as Config;  
 
-const settings = {
-    DATABASE_CONNECTION_STRING: config.get('DATABASE_CONNECTION_STRING'),
-    SESSION_SECRET: config.get('SESSION_SECRET'),
-    AWS: config.get("AWS")
-};
-
-const app = createApp(settings, rootDir);
+const app = createApp(config, rootDir);
 
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);

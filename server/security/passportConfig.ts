@@ -4,13 +4,16 @@ import { Strategy as GoogleStrategy } from 'passport-google-oauth2';
 import * as config from 'config';
 import UserModel, { IUserModel, findByEmail } from '../db/userModel';
 import { LoggerInstance } from 'winston';
+import { GOOGLE_AUTH, ACCOUNT } from '../config';
 
-const GOOGLE_AUTH = config.get('GOOGLE_AUTH') as any;
-const ADMIN_ACCOUNTS = config.get('ADMIN_ACCOUNTS') as string[];
+const GOOGLE_AUTH = config.get('GOOGLE_AUTH') as GOOGLE_AUTH;
+const ACCOUNTS = config.get('ACCOUNTS') as ACCOUNT[];
 
 const serializeUser = (userModel: IUserModel) => {
     return {    
         displayName: userModel.displayName,
+        tenantId: userModel.tenantId,
+        sites: userModel.sites,
         email: userModel.email,
         photo: userModel.photo       
     };
@@ -28,14 +31,18 @@ export const configurePassport = (app: express.Express, logger: LoggerInstance) 
       (accessToken: string, refreshToken: string, profile: any, cb: any) => {
         findByEmail(profile.emails[0].value).then(user => {
             
-            if (ADMIN_ACCOUNTS.indexOf(profile.emails[0].value) === -1) {
-                logger.error("The user that wants to login is not an admin account");
+            const adminAccount = ACCOUNTS.find(a => a.email === profile.emails[0].value) as any;
+    
+            if (!adminAccount) {
+                logger.error("The user that wants to login is unknown");
                 cb(null, false);
                 return;
             }
 
             if (!user) {
                 var newUser = new UserModel({
+                    tenantId: adminAccount.tenantId,
+                    sites: adminAccount.sites,
                     displayName: profile.displayName,
                     email: profile.emails[0].value,
                     gender: profile.gender,
