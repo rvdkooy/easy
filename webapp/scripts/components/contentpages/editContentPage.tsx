@@ -9,6 +9,7 @@ import ContentPageForm from './contentPageForm';
 import { getContentPage, updateContentPage } from './contentPagesApi';
 import EditModel from './models/edit';
 import { notify } from '../../services/notificationService';
+import { withUser, UserProps } from '../../services/userProvider';
 
 class EditContentPage extends React.Component<Props, State> {
     state: State = {
@@ -17,7 +18,7 @@ class EditContentPage extends React.Component<Props, State> {
     };
 
     componentDidMount() {
-        getContentPage(this.props.match.params.id)
+        getContentPage(this.props.currentUser.tenantId, this.props.match.params.id)
             .then((model) => {
                 this.setState({
                     model,
@@ -38,7 +39,7 @@ class EditContentPage extends React.Component<Props, State> {
     _onSubmit = (e: React.MouseEvent<HTMLInputElement>) => {
         e.preventDefault();
 
-        updateContentPage(this.state.model).then(() => {
+        updateContentPage(this.props.currentUser.tenantId, this.state.model).then(() => {
             notify('Content page changed.', 'INFO');
         }, (err: Error) => { }); // show error message
     };
@@ -72,7 +73,7 @@ class EditContentPage extends React.Component<Props, State> {
     }
 }
 
-interface Props {
+interface Props extends UserProps {
     match: match<{ id: string }>
 }
 
@@ -81,4 +82,4 @@ interface State {
     isLoading: boolean
 }
 
-export default EditContentPage;
+export default withUser<{}>(EditContentPage);

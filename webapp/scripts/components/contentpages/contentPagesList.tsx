@@ -12,6 +12,7 @@ import ListRow from './contentPagesListRow';
 import { getContentPages, deleteContentPage } from './contentPagesApi'
 import ListModel from './models/list';
 import { notify } from '../../services/notificationService';
+import { withUser, UserProps } from '../../services/userProvider';
 
 class ContentPagesList extends React.Component<Props, State> {
 
@@ -26,7 +27,7 @@ class ContentPagesList extends React.Component<Props, State> {
 
     _refreshList = () => {
         this.setState({ isLoading: true });
-        getContentPages().then(contentPages => {
+        getContentPages(this.props.currentUser.tenantId).then(contentPages => {
             this.setState({
                 isLoading: false,
                 contentPages: contentPages
@@ -36,7 +37,7 @@ class ContentPagesList extends React.Component<Props, State> {
     };
 
     _onDeleteClicked = (id: string) => {
-        deleteContentPage(id)
+        deleteContentPage(this.props.currentUser.tenantId, id)
             .then(() => {
                 notify('Content page deleted', 'INFO');
                 this._refreshList();
@@ -96,7 +97,7 @@ class ContentPagesList extends React.Component<Props, State> {
     }
 }
 
-interface Props {
+interface Props extends UserProps {
 
 }
 
@@ -105,4 +106,4 @@ interface State {
     isLoading: boolean
 }
 
-export default ContentPagesList;
+export default withUser<{}>(ContentPagesList);

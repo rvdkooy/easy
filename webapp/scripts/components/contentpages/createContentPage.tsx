@@ -10,8 +10,9 @@ import ContentPageForm from './contentPageForm';
 import { saveContentPage } from './contentPagesApi';
 import EditModel from './models/edit';
 import { notify } from '../../services/notificationService';
+import { withUser, UserProps } from '../../services/userProvider';
 
-class CreateContentPage extends React.Component<undefined, State> {
+class CreateContentPage extends React.Component<UserProps, State> {
     
     state: State = { 
         model: new EditModel()
@@ -25,7 +26,7 @@ class CreateContentPage extends React.Component<undefined, State> {
     _onUpdate = (e: React.FormEvent<HTMLElement>) => {
         e.preventDefault();
 
-        saveContentPage(this.state.model).then(() => {
+        saveContentPage(this.props.currentUser.tenantId, this.state.model).then(() => {
             notify('Content page created.', 'INFO');
         }, (err: Error) => {}); // show error message
     };
@@ -57,4 +58,4 @@ interface State {
     model: EditModel
 }
 
-export default CreateContentPage;
+export default withUser<{}>(CreateContentPage);

@@ -7,7 +7,7 @@ import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 
 import { Config } from './config';
-import { protectApi, configurePassport } from './security';
+import { authenticatedApi, configurePassport } from './security';
 import { setupLogger, createS3Client, setupEnvironment  } from './infrastructure/';
 import { connect as dbConnect, ContentPageModel, UserModel } from './db';
 import { defaultRoutes, usersRoutes, contentPagesRoutes, loggingRoutes, filesRoutes } from './routes';
@@ -39,7 +39,7 @@ const createApp = (config: Config, rootDir: string) => {
     app.use('/static', express.static(path.join(rootDir, 'static')));
     
     app.use('/admin/api', 
-        protectApi,
+        authenticatedApi,
         contentPagesRoutes(ContentPageModel, logger),
         usersRoutes(UserModel, logger),
         loggingRoutes(mongooseConnection),
