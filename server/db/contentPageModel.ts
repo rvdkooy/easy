@@ -39,7 +39,14 @@ export const contentPageSchema = new Schema({
     description: String,
 });
 
-const ContentPageModel = mongoose.model<IContentPageModel>('ContentPage', contentPageSchema);
+let ContentPageModel: mongoose.Model<IContentPageModel>;
+
+if (mongoose.modelNames().find(m => m === 'ContentPage')) {
+    ContentPageModel = mongoose.model<IContentPageModel>('ContentPage');
+} else {
+    ContentPageModel = mongoose.model<IContentPageModel>('ContentPage', contentPageSchema);
+}
+
 export default ContentPageModel;
 
 export const findContentPageByUrl = (url: string) => {

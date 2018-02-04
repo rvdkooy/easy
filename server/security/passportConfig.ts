@@ -6,9 +6,6 @@ import UserModel, { IUserModel, findByEmail } from '../db/userModel';
 import { LoggerInstance } from 'winston';
 import { GOOGLE_AUTH, ACCOUNT } from '../config';
 
-const GOOGLE_AUTH = config.get('GOOGLE_AUTH') as GOOGLE_AUTH;
-const ACCOUNTS = config.get('ACCOUNTS') as ACCOUNT[];
-
 const serializeUser = (userModel: IUserModel) => {
     return {    
         displayName: userModel.displayName,
@@ -20,6 +17,9 @@ const serializeUser = (userModel: IUserModel) => {
 }
 
 export const configurePassport = (app: express.Express, logger: LoggerInstance) => {
+    const GOOGLE_AUTH = config.get('GOOGLE_AUTH') as GOOGLE_AUTH;
+    const ACCOUNTS = config.get('ACCOUNTS') as ACCOUNT[];
+    
     app.use(passport.initialize());
     app.use(passport.session());
 

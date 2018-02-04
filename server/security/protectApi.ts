@@ -10,11 +10,10 @@ export const authenticatedApi = (req: express.Request, res: express.Response, ne
 }
 
 export const tenantAuthorize = (req: express.Request, res: express.Response, next: express.NextFunction) => {
-
-    if (req.user.tenantId !== req.params.tenantId) {
+    if (!req.user || (req.user.tenantId !== req.params.tenantId)) {
         res.sendStatus(403);
     } else {
-        next();
+        next(); 
     }
 
 }

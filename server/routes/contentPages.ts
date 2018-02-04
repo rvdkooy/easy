@@ -108,7 +108,6 @@ const createEditModel = (doc: IContentPageModel) => {
 };
 
 const validateFromRequest = (request: express.Request, response: express.Response, logger: LoggerInstance, successHandler: () => void) => {
-
     check('name', 'Name cannot be empty').not().isEmpty;
     check('url', 'Url cannot be empty').not().isEmpty;
     check('template', 'Template cannot be empty').not().isEmpty;
