@@ -16,7 +16,7 @@ export interface IUser {
     }
 }
 
-export interface UserModel extends IUser, mongoose.Document{}
+export interface IUserModel extends IUser, mongoose.Document{}
 
 export const userSchema = new Schema({
     tenantId: {
@@ -46,12 +46,12 @@ export const userSchema = new Schema({
     },
 });
 
-let UserModel: mongoose.Model<UserModel>;
+let UserModel: mongoose.Model<IUserModel>;
 
 if (mongoose.modelNames().find(m => m === 'UserModel')) {
-    UserModel = mongoose.model<UserModel>('UserModel');
+    UserModel = mongoose.model<IUserModel>('UserModel');
 } else {
-    UserModel = mongoose.model<UserModel>('UserModel', userSchema);
+    UserModel = mongoose.model<IUserModel>('UserModel', userSchema);
 }
 
 export default UserModel;
