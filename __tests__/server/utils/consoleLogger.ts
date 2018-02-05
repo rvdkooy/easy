@@ -5,7 +5,7 @@ var consoleLogger = new winston.Logger({
 });
 
 consoleLogger.add(winston.transports.Console, {
-    level: 'debug',
+    level: 'error',
     handleExceptions: true,
     json: false,
     colorize: true

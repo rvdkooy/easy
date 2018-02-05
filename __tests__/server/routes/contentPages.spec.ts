@@ -58,7 +58,7 @@ describe('content pages route tests', () => {
         before(async () => {
             mockgoose = await initializeInMemoryMondoDb();
             testHost = createTestHost();
-            testHost.express.use('/api', addUser, createRoutes(ContentPageModel, logger));
+            testHost.express.use('/api', addUser({ tenantId: "100" }), createRoutes(ContentPageModel, logger));
             testHost.listen();
         });
 
