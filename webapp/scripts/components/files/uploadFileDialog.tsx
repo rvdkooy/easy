@@ -6,8 +6,9 @@ import Dialog, { DialogActions, DialogContent, DialogContentText, DialogTitle } 
 import { Container } from '../common';
 import { uploadFile } from './filesService';
 import { notify } from '../../services/notificationService';
+import { withUser, UserProps } from '../../services/userProvider';
 
-class UploadFileDialog extends React.Component<Props, State> {
+class UploadFileDialog extends React.Component<InnerProps, State> {
 
     state: State = {
         fileName: null
@@ -27,7 +28,7 @@ class UploadFileDialog extends React.Component<Props, State> {
     _uploadClicked = () => {
         const file = this._fileInput.files[0];
         
-        uploadFile(file)
+        uploadFile(this.props.currentUser.tenantId, file)
             .then(() => {
                 notify(`File: ${file.name} uploaded successfully.`, "INFO")
                 this.props.onClose(true);
@@ -94,9 +95,11 @@ interface State {
     fileName: string
 }
 
-interface Props {
+interface OuterProps {
     open: boolean,
     onClose: (refresh?: boolean) => void
 }
 
-export default UploadFileDialog;
+interface InnerProps extends OuterProps, UserProps {  }
+
+export default withUser<OuterProps>(UploadFileDialog);

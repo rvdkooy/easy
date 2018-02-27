@@ -1,3 +1,5 @@
+# docker-compose rm -v db
+
 mongo:
   image: mongo:3.0
   ports:

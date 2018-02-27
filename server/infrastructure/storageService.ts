@@ -53,7 +53,8 @@ export class S3Client {
 
         return new Promise((resolve, reject) => {
             this.s3.listObjects({
-                Bucket: this.bucketName
+                Bucket: this.bucketName,
+                Prefix: prefix
             }, (err, data) => {
                 if (err) {
                     this.logger.error(`Error listing objects from s3 with bucket name: '${this.bucketName}'`);

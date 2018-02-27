@@ -7,8 +7,9 @@ import { FileItem, getFiles, deleteFile } from './filesService';
 import FilesTable from './filesTable';
 import UploadFileDialog from './uploadFileDialog';
 import { notify } from '../../services/notificationService';
+import { withUser, UserProps } from '../../services/userProvider';
 
-class FilesPage extends React.Component<undefined, State> {
+class FilesPage extends React.Component<UserProps, State> {
 
     state: State = {
         files: [],
@@ -20,7 +21,7 @@ class FilesPage extends React.Component<undefined, State> {
     }
 
     _refreshFilesTable = () => {
-        getFiles()
+        getFiles(this.props.currentUser.tenantId)
             .then(files => {
                 this.setState({ files: files });
             })
@@ -42,7 +43,7 @@ class FilesPage extends React.Component<undefined, State> {
     };
 
     _onDeleteFile = (key: string) => {
-        deleteFile(key)
+        deleteFile(this.props.currentUser.tenantId, key)
             .then(() => {
                 notify(`File: '${key} was deleted successfully'`, "INFO");
                 this._refreshFilesTable();
@@ -86,4 +87,4 @@ interface State {
     showUploadDialog: boolean
 };
 
-export default FilesPage;
+export default withUser<{}>(FilesPage);
