@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "compile:server": "tsc --project ./server",
-    "compile:js": "webpack",
+    "compile:js": "webpack --config ./webapp/webpack.config.js",
     "dev:server": "nodemon --exec \"./node_modules/.bin/ts-node --project server\" -- ./server/server.ts --config ./server/nodemon.json",
-    "dev:js": "webpack --watch",
+    "dev:js": "npm run compile:js -- --watch",
     "dev": "concurrently --kill-others \"npm run dev:server\" \"npm run dev:js\"",
     "debug:server": "npm run compile:server && npm run start",
     "postinstall": "npm run compile:server && npm run compile:js",
