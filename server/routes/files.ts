@@ -7,6 +7,7 @@ import { S3Client } from '../infrastructure/storageService';
 import { unzip, fsUtils } from '../infrastructure';
 import { tenantAuthorize } from '../security/protectApi';
 import * as multer from 'multer';
+import { ensureDirExists } from '../infrastructure/fsUtils';
 
 const upload = multer();
 const router = express.Router();
@@ -47,23 +48,22 @@ const createMiddleware = (rootDir: string, s3Client: S3Client, logger: LoggerIns
 
             // temp theme logic
             if (uploadedFile.originalname === 'theme.zip') {
-                try {
-                    const outputFolder = path.resolve(rootDir, './localfiles/themes');
+                const tenantLocalThemeDir = path.resolve(rootDir, `./localfiles/themes/${tenantId}`);
+                ensureDirExists(tenantLocalThemeDir).then(() => {
                     const tmZipFile = path.resolve(rootDir, `./localfiles/tmp/${tenantId}_${new Date().getTime()}_theme.zip`);
 
                     fs.writeFileSync(tmZipFile, uploadedFile.buffer);
 
-                    unzip(tmZipFile, outputFolder).then(() => {
+                    unzip(tmZipFile, tenantLocalThemeDir).then(() => {
                         fs.unlinkSync(tmZipFile)
 
                         s3Client.uploadFile(`${tenantId}/themes/theme.zip`, uploadedFile.buffer)
                             .then(() => res.sendStatus(200))
                             .catch(err => handleError(err, res, logger));
-                    }).catch(err => handleError(err, res, logger));
-
-                } catch (err) {
-                    handleError(err, res, logger);
-                }
+                    })
+                    .catch(err => handleError(err, res, logger));
+                })
+                .catch(err => handleError(err, res, logger));
             } else {
                 let key = `${tenantId}/docs/${uploadedFile.originalname}`;
                 s3Client.uploadFile(key, uploadedFile.buffer)
