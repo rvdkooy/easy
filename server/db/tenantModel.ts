@@ -37,4 +37,8 @@ export const findTenantByEmail = (email: string) => {
     return TenantModel.findOne({ email: email }).exec();
 };
 
+export const findTenantBySite = (host: string) => {
+    return TenantModel.findOne({ sites: host }).exec();
+}
+
 export default TenantModel;
