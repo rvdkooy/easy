@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { Route, match } from 'react-router';
 import pageWithRoutes from '../common/pageWithRoutes';
+import List from './list';
+import Edit from './edit';
 
 export default pageWithRoutes((match: match<{}>) => [
-    <Route exact path={`${match.url}`} component={null} />,
-    <Route exact path={`${match.url}/new`} component={null} />,
-    <Route exact path={`${match.url}/:id`} component={null} />
+    <Route key="list" exact path={`${match.url}`} component={List} />,
+    <Route key="new" exact path={`${match.url}/new`} component={null} />,
+    <Route key="edit" exact path={`${match.url}/:id`} component={Edit} />
 ]);

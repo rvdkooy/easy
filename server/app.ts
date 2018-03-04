@@ -10,7 +10,7 @@ import { Config } from './config';
 import { authenticatedApi, configurePassport } from './security';
 import { setupLogger, createS3Client, setupEnvironment  } from './infrastructure/';
 import { connect as dbConnect, ContentPageModel, UserModel, TenantModel } from './db';
-import { defaultRoutes, usersRoutes, contentPagesRoutes, loggingRoutes, filesRoutes } from './routes';
+import { defaultRoutes, usersRoutes, contentPagesRoutes, loggingRoutes, filesRoutes, TenantRoutes } from './routes';
 
 
 const MongoStore = connectMongo(expressSession);
@@ -44,6 +44,7 @@ const createApp = (config: Config, rootDir: string) => {
         usersRoutes(UserModel, logger),
         loggingRoutes(mongooseConnection),
         filesRoutes(rootDir, s3Client, logger),
+        TenantRoutes(TenantModel, logger),
         (req, res) => res.send(404)
     );
     app.use('/', defaultRoutes(rootDir, logger, ContentPageModel))

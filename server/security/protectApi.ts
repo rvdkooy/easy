@@ -15,5 +15,12 @@ export const tenantAuthorize = (req: express.Request, res: express.Response, nex
     } else {
         next(); 
     }
+}
 
+export const rootAuthorize = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (!req.user || req.user.tenantId !== '*') {
+        res.sendStatus(403);
+    } else {
+        next(); 
+    }
 }

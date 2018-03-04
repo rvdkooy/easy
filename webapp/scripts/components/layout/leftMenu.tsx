@@ -105,6 +105,7 @@ class LeftMenu extends React.Component<AllProps, State> {
                         <ListItem component={(args) => this._renderItem('Settings', '/admin/settings', <SettingsIcon />, args.className)} />
                         <ListItem component={(args) => this._renderItem('Users', '/admin/users', <SecurityIcon />, args.className)} />
                         <ListItem component={(args) => this._renderItem('Logs', '/admin/logs', <ListIcon />, args.className)} />
+                        <ListItem component={(args) => this._renderItem('Tenants', '/admin/tenants', <ListIcon />, args.className)} />
                     </List>
                 </div>
             </Drawer>
