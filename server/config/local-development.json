@@ -1,21 +1,10 @@
 {
     "DATABASE_CONNECTION_STRING": "mongodb://localhost:27017/easy_db",
-    "ACCOUNTS": [
-        { 
-            "tenantId": "101", 
-            "email": "ronaldvdkooy@gmail.com", 
-            "sites": [ "www.sharpsolutions.nl", "localhost" ]
-        },
-        { 
-            "tenantid": "102",
-            "email": "test@test.nl", 
-            "sites": [ "www.test.nl" ]
-        }
-    ],
+    "ROOT_ACCOUNT": "ronaldvdkooy@gmail.com",
     "SESSION_SECRET": "keyboard cat",
     "GOOGLE_AUTH": {
         "CLIENT_ID": "687297981445-2c7i45qgt4asptkdo4lo4vvv343nl61t.apps.googleusercontent.com",
-        "CLIENT_SECRET": "7ceaRKFf5j4U0wrZ4kMMwW1S",
+        "CLIENT_SECRET": "K5JelznVUo9neWpVt4IwxWLA",
         "CALLBACK_URL": "http://localhost:3000/auth/google/callback"
     },
     "AWS": {

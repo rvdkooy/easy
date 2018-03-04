@@ -9,7 +9,7 @@ import * as cookieParser from 'cookie-parser';
 import { Config } from './config';
 import { authenticatedApi, configurePassport } from './security';
 import { setupLogger, createS3Client, setupEnvironment  } from './infrastructure/';
-import { connect as dbConnect, ContentPageModel, UserModel } from './db';
+import { connect as dbConnect, ContentPageModel, UserModel, TenantModel } from './db';
 import { defaultRoutes, usersRoutes, contentPagesRoutes, loggingRoutes, filesRoutes } from './routes';
 
 
@@ -21,7 +21,7 @@ const createApp = (config: Config, rootDir: string) => {
     const logger = setupLogger(app, config.DATABASE_CONNECTION_STRING);
     const s3Client = createS3Client(config.AWS, logger);
 
-    setupEnvironment(rootDir, s3Client);
+    setupEnvironment(rootDir, s3Client, logger);
 
     app.use(expressSession({ 
         secret: config.SESSION_SECRET ,
@@ -34,7 +34,7 @@ const createApp = (config: Config, rootDir: string) => {
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(cookieParser());
-    configurePassport(app, logger);
+    configurePassport(app, TenantModel, logger);
 
     app.use('/static', express.static(path.join(rootDir, 'static')));
     

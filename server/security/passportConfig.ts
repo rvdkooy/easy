@@ -1,10 +1,12 @@
 import * as passport from 'passport';
 import * as express from 'express';
+import * as mongoose from 'mongoose';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth2';
 import * as config from 'config';
 import UserModel, { IUserModel, findByEmail } from '../db/userModel';
+import { ITenantModel, findTenantByEmail } from '../db/tenantModel';
 import { LoggerInstance } from 'winston';
-import { GOOGLE_AUTH, ACCOUNT } from '../config';
+import { GOOGLE_AUTH } from '../config';
 
 const serializeUser = (userModel: IUserModel) => {
     return {    
@@ -16,9 +18,8 @@ const serializeUser = (userModel: IUserModel) => {
     };
 }
 
-export const configurePassport = (app: express.Express, logger: LoggerInstance) => {
+export const configurePassport = (app: express.Express, tenantModelInstance: mongoose.Model<ITenantModel>, logger: LoggerInstance) => {
     const GOOGLE_AUTH = config.get('GOOGLE_AUTH') as GOOGLE_AUTH;
-    const ACCOUNTS = config.get('ACCOUNTS') as ACCOUNT[];
     
     app.use(passport.initialize());
     app.use(passport.session());
@@ -28,52 +29,50 @@ export const configurePassport = (app: express.Express, logger: LoggerInstance) 
         clientSecret: GOOGLE_AUTH.CLIENT_SECRET,
         callbackURL: GOOGLE_AUTH.CALLBACK_URL
       }, 
-      (accessToken: string, refreshToken: string, profile: any, cb: any) => {
-        findByEmail(profile.emails[0].value).then(user => {
-            
-            const adminAccount = ACCOUNTS.find(a => a.email === profile.emails[0].value) as any;
-    
-            if (!adminAccount) {
-                logger.error("The user that wants to login is unknown");
-                cb(null, false);
-                return;
-            }
+      async (accessToken: string, refreshToken: string, profile: any, cb: any) => {
 
-            if (!user) {
-                var newUser = new UserModel({
-                    tenantId: adminAccount.tenantId,
-                    sites: adminAccount.sites,
-                    displayName: profile.displayName,
-                    email: profile.emails[0].value,
-                    gender: profile.gender,
-                    photo: (profile.photos.length) ? profile.photos[0].value : null ,
-                    provider: {
-                        name: 'google',
-                        id: profile.id
-                    }
-                });
+            try {
+                const existingUser = await findByEmail(profile.emails[0].value);
+                const existingTenant = await findTenantByEmail(profile.emails[0].value);
                 
-                newUser.save()
-                    .then(()=> { 
-                        logger.info(`User '${profile.displayNam}' created`);
-                        cb(null, serializeUser(newUser));
-                    })
-                    .catch(err => {
-                        logger.error(`Error occured while creating user '${profile.displayNam}'`); 
-                        cb(err)
+                if (!existingTenant) {
+                    logger.error("The user that wants to login is unknown");
+                    cb(null, false);
+                    return;
+                }
+
+                if (!existingUser) {
+                    var newUser = new UserModel({
+                        tenantId: existingTenant.tenantId,
+                        sites: existingTenant.sites,
+                        displayName: profile.displayName,
+                        email: profile.emails[0].value,
+                        gender: profile.gender,
+                        photo: (profile.photos.length) ? profile.photos[0].value : null ,
+                        provider: {
+                            name: 'google',
+                            id: profile.id
+                        }
                     });
-            } else {
-                cb(null, serializeUser(user));
+                    
+                    await newUser.save();    
+                    logger.info(`User '${profile.displayNam}' created`);
+                    cb(null, serializeUser(newUser));
+                        
+                } else {
+                    cb(null, serializeUser(existingUser));
+                }
+            } catch (err) {
+                logger.error(err);
+                logger.error(`Error occured while logging in the current user '${profile.displayNam}'`);
+                cb(err)
             }
-        })
-        .catch(err => cb(err));
-      }
+        }
     ));
     app.get('/auth/google', passport.authenticate('google', { scope: ['email', 'profile', 'openid'] }));
     
     app.get('/auth/google/callback', 
         passport.authenticate('google', { successRedirect: '/admin', failureRedirect: 'admin/login' }));
-
 
     passport.serializeUser((user, cb) => cb(null, user));
     

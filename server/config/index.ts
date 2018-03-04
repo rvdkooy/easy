@@ -1,15 +1,9 @@
 export interface Config {
     DATABASE_CONNECTION_STRING: string,
-    ACCOUNTS: ACCOUNT[],
+    ROOT_ACCOUNT: string,
     SESSION_SECRET: string,
     GOOGLE_AUTH: GOOGLE_AUTH,
     AWS: AWS
-}
-
-export interface ACCOUNT {
-    tenantId: string,
-    email: string,
-    sites: string[]
 }
 
 export interface GOOGLE_AUTH {

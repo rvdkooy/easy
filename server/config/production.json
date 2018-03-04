@@ -1,12 +1,6 @@
 {
     "DATABASE_CONNECTION_STRING": "DATABASE_CONNECTION_STRING",
-    "ACCOUNTS": [
-        { 
-            "tenantId": "101", 
-            "email": "ronaldvdkooy@gmail.com", 
-            "sites": [ "www.sharpsolutions.nl" ]
-        }
-    ],
+    "ROOT_ACCOUNT": "ROOT_ACCOUNT",
     "SESSION_SECRET": "SESSION_SECRET",
     
     "GOOGLE_AUTH": {
