@@ -8,40 +8,47 @@ import EditModel from './models/edit';
 import { Container } from '../common';
 
 const TenantForm = (props: Props) => {
-    const { model, onPropertyChange, onSubmit } = props;
+    const { model, onPropertyChange, createMode, children } = props;
     return (
         <PaddedPaper>
             <form>
+                { !props.createMode && 
+                    <Container>
+                        <FormControl fullWidth>
+                            <TextField
+                                label="TenantId"
+                                value={model.tenantId}
+                                disabled
+                                margin="dense"
+                            />
+                        </FormControl>
+                    </Container>
+                }
                 <Container>
                     <FormControl fullWidth>
                         <TextField
-                            label="TenantId"
-                            value={model.tenantId}
-                            disabled
-                            margin="dense"
-                        />
-                    </FormControl>
-                </Container>
-                <Container>
-                    <FormControl fullWidth>
-                        <TextField
+                            onChange={onPropertyChange}
                             label="Email"
-                            value={model.email}
-                            disabled
+                            value={model.email || ''}
+                            disabled={!props.createMode}
                             margin="dense"
+                            name="email"
                         />
                     </FormControl>
                 </Container>
                 <Container>
                     <FormControl fullWidth>
                         <TextField
+                            onChange={onPropertyChange}
                             label="Sites"
-                            value={model.sites.join(', ')}
-                            disabled
+                            value={model.sites || ''}
+                            disabled={!props.createMode}
                             margin="dense"
+                            name="sites"
                         />
                     </FormControl>
                 </Container>
+                { children }
             </form>
         </PaddedPaper>
     );
@@ -50,7 +57,8 @@ const TenantForm = (props: Props) => {
 interface Props {
     model: EditModel,
     onPropertyChange: (e: React.FormEvent<HTMLInputElement>) => void,
-    onSubmit: (e: React.FormEvent<HTMLButtonElement>) => void
+    createMode?: boolean,
+    children?: JSX.Element
 }
 
 export default TenantForm;

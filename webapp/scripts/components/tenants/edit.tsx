@@ -58,7 +58,6 @@ class EditTenant extends React.Component<Props, State> {
                     (this.state.model && <Form
                         model={this.state.model}
                         onPropertyChange={this._onPropertyChange}
-                        onSubmit={this._onSubmit}
                     >
                         <Button
                             disabled={!this.state.model.isValid()}

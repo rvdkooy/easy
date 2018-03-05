@@ -1,7 +1,7 @@
 class EditModel {
     id: string;
     tenantId: string;
-    sites: string[];
+    sites: string;
     email: string = '';
     
     isValid() {

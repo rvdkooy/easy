@@ -23,27 +23,31 @@ const createMiddleware = (tenantModelInstance: mongoose.Model<ITenantModel>, log
 
     // CHECK IF EMAIL ADDRESS IS NOT ALREADY USED
 
-    // router.post('/:tenantId/contentpages', tenantAuthorize, (req, res) => {
-    //     validateFromRequest(req, res, logger, () => {
-    //         var newContentPage = new ContentPageModel({
-    //             tenantId: req.params.tenantId,
-    //             title: req.body.title,
-    //             url: req.body.url,
-    //             content: req.body.content,
-    //             template: 'default',
-    //             published: true,
-    //             keywords: req.body.keywords,
-    //             description: req.body.description
-    //         });
-
-    //         newContentPage.save()
-    //             .then(() => {
-    //                 logger.info(`Creation of contentpage with title '${req.body.title}' was successful`);
-    //                 res.sendStatus(200)
-    //             })
-    //             .catch(err => handleError(err, res, logger));
-    //     });
-    // });
+    router.post('/tenants', rootAuthorize, (req, res) => {
+        validateFromRequest(req, res, logger, () => {
+            
+            tenantModelInstance.findOne({ email: req.body.email }).exec().then(tenant => {
+                if (!tenant) {
+                    var newTenant = new TenantModel({
+                        tenantId: 'random',
+                        email: req.body.email,
+                        sites: req.body.sites
+                    });
+        
+                    newTenant.save()
+                        .then(() => {
+                            logger.info(`Creation of tenant for '${req.body.email}' was successful`);
+                            res.sendStatus(200)
+                        })
+                        .catch(err => handleError(err, res, logger));
+                } else {
+                    const errorMessage = `Tenant for '${req.body.email}' already exists`;
+                    logger.info(errorMessage);
+                    res.sendStatus(400).json({ validationErrors: [ { msg: errorMessage } ] });;
+                }
+            });
+        });
+    });
 
     // router.put('/:tenantId/contentpages/:id', tenantAuthorize, async (req, res) => {
     //     validateFromRequest(req, res, logger, async () => {
