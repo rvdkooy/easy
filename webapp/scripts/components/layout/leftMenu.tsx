@@ -9,7 +9,7 @@ import Divider from 'material-ui/Divider';
 import Collapse from 'material-ui/transitions/Collapse';
 import ExpandLess from 'material-ui-icons/ExpandLess';
 import ExpandMore from 'material-ui-icons/ExpandMore';
-import List, { ListItem, ListItemText, ListItemIcon } from 'material-ui/List';
+import List, { ListItem, ListItemText, ListItemIcon, ListSubheader } from 'material-ui/List';
 import HomeIcon from 'material-ui-icons/Home';
 import EventIcon from 'material-ui-icons/Event';
 import ListIcon from 'material-ui-icons/List';
@@ -20,6 +20,7 @@ import WebIcon from 'material-ui-icons/Web';
 import StarIcon from 'material-ui-icons/Star';
 import FileUploadIcon from 'material-ui-icons/FileUpload';
 import TocIcon from 'material-ui-icons/Toc';
+import BusinessIcon from 'material-ui-icons/Business';
 import Avatar from 'material-ui/Avatar';
 import Typography from 'material-ui/Typography';
 
@@ -92,6 +93,7 @@ class LeftMenu extends React.Component<AllProps, State> {
                     </div>
                     <Divider />
                     <List>
+                        <ListSubheader component="div">Main</ListSubheader>
                         <ListItem component={(args) => this._renderItem('Home', '/admin', <HomeIcon />, args.className)} />
                         <ListItem component={(args) => this._renderContentItem('Content', '/admin/content', <CloudIcon />, args.className)} />
                         <Collapse component="li" in={this.state.contentOpen} timeout="auto" unmountOnExit>
@@ -103,9 +105,11 @@ class LeftMenu extends React.Component<AllProps, State> {
                         </Collapse>
                         <ListItem component={(args) => this._renderItem('Theme', '/admin/theme', <StarIcon />, args.className)} />
                         <ListItem component={(args) => this._renderItem('Settings', '/admin/settings', <SettingsIcon />, args.className)} />
+                        <Divider />
+                        <ListSubheader component="div">Advanced</ListSubheader>
                         <ListItem component={(args) => this._renderItem('Users', '/admin/users', <SecurityIcon />, args.className)} />
                         <ListItem component={(args) => this._renderItem('Logs', '/admin/logs', <ListIcon />, args.className)} />
-                        <ListItem component={(args) => this._renderItem('Tenants', '/admin/tenants', <ListIcon />, args.className)} />
+                        <ListItem component={(args) => this._renderItem('Tenants', '/admin/tenants', <BusinessIcon />, args.className)} />
                     </List>
                 </div>
             </Drawer>

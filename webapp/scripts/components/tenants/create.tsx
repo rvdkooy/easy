@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
-import { match } from 'react-router-dom';
+import { match, withRouter, RouteComponentProps } from 'react-router-dom';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
 import { ProgressIndicator, BreadCrumbs } from '../../components/common';
@@ -8,9 +8,8 @@ import Form from './form';
 import { saveTenant } from './api';
 import EditModel from './models/edit';
 import { notify } from '../../services/notificationService';
-import { withUser, UserProps } from '../../services/userProvider';
 
-class CreateContentPage extends React.Component<UserProps, State> {
+class CreateContentPage extends React.Component<Props, State> {
     
     state: State = { 
         model: new EditModel()
@@ -28,12 +27,16 @@ class CreateContentPage extends React.Component<UserProps, State> {
         this.forceUpdate();
     };
 
-    _onUpdate = (e: React.FormEvent<HTMLElement>) => {
-        e.preventDefault();
+    _onUpdate = async (e: React.FormEvent<HTMLElement>) => {
+        try {
+            e.preventDefault();
 
-        saveTenant(this.state.model).then(() => {
+            await saveTenant(this.state.model);
             notify('Tenant created.', 'INFO');
-        }, (err: Error) => {}); // show error message
+            this.props.history.push('/admin/tenants');
+        } catch(err) {
+            notify('An error occured when creating a tenant.', 'ERROR')
+        }
     };
     
     render() {
@@ -64,4 +67,6 @@ interface State {
     model: EditModel
 }
 
-export default withUser<{}>(CreateContentPage);
+interface Props extends RouteComponentProps<any> { }
+
+export default withRouter(CreateContentPage);

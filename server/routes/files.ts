@@ -49,19 +49,19 @@ const createMiddleware = (rootDir: string, s3Client: S3Client, logger: LoggerIns
             // temp theme logic
             if (uploadedFile.originalname === 'theme.zip') {
                 const tenantLocalThemeDir = path.resolve(rootDir, `./localfiles/themes/${tenantId}`);
-                ensureDirExists(tenantLocalThemeDir).then(() => {
+                ensureDirExists(tenantLocalThemeDir)
+                    .then(() => {
                     const tmZipFile = path.resolve(rootDir, `./localfiles/tmp/${tenantId}_${new Date().getTime()}_theme.zip`);
 
                     fs.writeFileSync(tmZipFile, uploadedFile.buffer);
 
-                    unzip(tmZipFile, tenantLocalThemeDir).then(() => {
+                    return unzip(tmZipFile, tenantLocalThemeDir).then(() => {
                         fs.unlinkSync(tmZipFile)
 
                         s3Client.uploadFile(`${tenantId}/themes/theme.zip`, uploadedFile.buffer)
                             .then(() => res.sendStatus(200))
                             .catch(err => handleError(err, res, logger));
-                    })
-                    .catch(err => handleError(err, res, logger));
+                    });
                 })
                 .catch(err => handleError(err, res, logger));
             } else {

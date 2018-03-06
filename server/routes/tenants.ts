@@ -1,5 +1,6 @@
 import * as express from 'express';
 import * as mongoose from 'mongoose';
+import * as shortid from 'shortid';
 
 import { check, validationResult } from 'express-validator/check'
 import TenantModel, { ITenantModel, ITenant } from '../db/tenantModel';
@@ -21,31 +22,21 @@ const createMiddleware = (tenantModelInstance: mongoose.Model<ITenantModel>, log
             .catch(err => handleError(err, res, logger));
     });
 
-    // CHECK IF EMAIL ADDRESS IS NOT ALREADY USED
-
     router.post('/tenants', rootAuthorize, (req, res) => {
         validateFromRequest(req, res, logger, () => {
-            
-            tenantModelInstance.findOne({ email: req.body.email }).exec().then(tenant => {
-                if (!tenant) {
-                    var newTenant = new TenantModel({
-                        tenantId: 'random',
-                        email: req.body.email,
-                        sites: req.body.sites
-                    });
-        
-                    newTenant.save()
-                        .then(() => {
-                            logger.info(`Creation of tenant for '${req.body.email}' was successful`);
-                            res.sendStatus(200)
-                        })
-                        .catch(err => handleError(err, res, logger));
-                } else {
-                    const errorMessage = `Tenant for '${req.body.email}' already exists`;
-                    logger.info(errorMessage);
-                    res.sendStatus(400).json({ validationErrors: [ { msg: errorMessage } ] });;
-                }
+
+            var newTenant = new TenantModel({
+                tenantId: shortid.generate(),
+                email: req.body.email,
+                sites: req.body.sites
             });
+
+            newTenant.save()
+                .then(() => {
+                    logger.info(`Creation of tenant for '${req.body.email}' was successful`);
+                    res.sendStatus(200)
+                })
+                .catch(err => handleError(err, res, logger));
         });
     });
 
@@ -89,17 +80,16 @@ const createMiddleware = (tenantModelInstance: mongoose.Model<ITenantModel>, log
             .catch(err => handleError(err, res, logger));
     });
 
-    // REMOVE ALL TENANT RELAED DATA? S3? LOCALFILES?
-    // CHECK IF IT IS NOT THE ROOTADMIN TENANT?
-
-    // router.delete('/:tenantId/contentpages/:id', tenantAuthorize, (req, res) => {
-    //     contentModelInstance.remove({ tenantId: req.params.tenantId, _id: req.params.id }).exec()
-    //         .then(() => {
-    //             logger.info(`Deletion of contentpage with id '${req.params.id}' was successful`);
-    //             res.sendStatus(200)
-    //         })
-    //         .catch(err => handleError(err, res, logger));
-    // });
+    router.delete('/tenants/:id', rootAuthorize, (req, res) => {
+        // REMOVE ALL TENANT RELAED DATA? S3? LOCALFILES?
+        // CHECK IF IT IS NOT THE ROOTADMIN TENANT?
+        tenantModelInstance.remove({ _id: req.params.id }).exec()
+            .then(() => {
+                logger.info(`Deletion of tenant with id '${req.params.id}' was successful`);
+                res.sendStatus(200)
+            })
+            .catch(err => handleError(err, res, logger));
+    });
 
     return router;
 }

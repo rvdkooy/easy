@@ -1,4 +1,4 @@
-# docker-compose rm -v db
+# docker-compose rm -v mongo
 
 mongo:
   image: mongo:3.0

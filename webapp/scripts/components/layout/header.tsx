@@ -10,6 +10,8 @@ import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
 import Avatar from 'material-ui/Avatar';
+import Select from 'material-ui/Select';
+import { MenuItem } from 'material-ui/Menu';
 
 const styles = {
     flex: {
@@ -21,6 +23,11 @@ const styles = {
     },
     logoutText: {
         marginLeft: 8
+    },
+    tenantSelector: {
+        backgroundColor: 'white',
+        paddingLeft: 8,
+        paddingRight: 8
     }
 };
 
@@ -33,7 +40,27 @@ const styles = {
     <MenuIcon />
 </IconButton> */}
 
-class Header extends React.Component<Props> {
+class Header extends React.Component<Props, State> {
+
+    state: State = {
+        tenants: [ 
+            'www.vdkooy.com' ,
+            'www.thijsvanderkooij.nl',
+            'www.stefvanderkooij.nl',
+            'www.sharpsolutions.nl',
+        ],
+        selectedTenant: 'www.vdkooy.com'
+    }
+
+    _renderTenants = () => {
+        return this.state.tenants.map(t => {
+            return (<MenuItem key={t} value={t}>{ t }</MenuItem>);
+        });
+    }
+
+    _onTenantChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
+        this.setState({ selectedTenant: e.target.value });
+    }
 
     render() {
         const { classes, currentUser } = this.props;
@@ -45,6 +72,13 @@ class Header extends React.Component<Props> {
                     <Typography type="title" color="inherit" className={classes.flex}>
                         Easy admin system
                     </Typography>
+                    <Select 
+                        className={classes.tenantSelector} 
+                        value={this.state.selectedTenant} 
+                        onChange={this._onTenantChanged}
+                    >
+                        { this._renderTenants() }
+                    </Select>
                     <Button
                         onClick={() => window.location.href = '/logout'}
                         color="contrast" title={currentUser.displayName}>
@@ -57,6 +91,11 @@ class Header extends React.Component<Props> {
             </AppBar>);
     }
 };
+
+interface State {
+    tenants: string[],
+    selectedTenant: string
+}
 
 interface StyleProps extends WithStyles<keyof typeof styles> {}
 interface Props extends StyleProps, UserProps { test: boolean }
