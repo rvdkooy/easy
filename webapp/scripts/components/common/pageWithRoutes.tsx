@@ -1,15 +1,14 @@
 import * as React from 'react';
-import { Switch, match } from 'react-router';
+import { match, Switch } from 'react-router';
 
 interface Props {
-    match: match<{}>
+    match: match<{}>;
 }
 
 type PageWithRoutsArg = (match: match<{}>) => JSX.Element[];
 
-
 const pageWithRoutes = (arg: PageWithRoutsArg) => {
-    
+
     const PageWithRoutes = (props: Props) => {
 
         return (
@@ -17,10 +16,9 @@ const pageWithRoutes = (arg: PageWithRoutsArg) => {
                 { arg(props.match) }
             </Switch>
         );
-    }
+    };
 
     return PageWithRoutes;
-}
+};
 
 export default pageWithRoutes;
-

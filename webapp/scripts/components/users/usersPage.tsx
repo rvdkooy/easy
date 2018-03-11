@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { Route, match } from 'react-router';
+import { match, Route  } from 'react-router';
 import pageWithRoutes from '../common/pageWithRoutes';
-import UsersList from './usersList';
 import UpdateEditor from './updateEditor';
+import UsersList from './usersList';
 
-export default pageWithRoutes((match: match<{}>) => [
-    <Route key='list' exact path={`${match.url}`} component={UsersList} />,
-    <Route key='edit' exact path={`${match.url}/:id`} component={UpdateEditor} />
+export default pageWithRoutes((m: match<{}>) => [
+    <Route key="lis" exact path={`${m.url}`} component={UsersList} />,
+    <Route key="edit" exact path={`${m.url}/:id`} component={UpdateEditor} />,
 ]);

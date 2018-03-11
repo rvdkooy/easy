@@ -3,9 +3,9 @@ class EditModel {
     tenantId: string;
     sites: string;
     email: string = '';
-    
+
     isValid() {
-        return true;    
+        return true;
     }
 
     static fromJson(json: any) {

@@ -2,9 +2,9 @@ import * as express from 'express';
 import * as mongoose from 'mongoose';
 import * as shortid from 'shortid';
 
-import { check, validationResult } from 'express-validator/check'
-import TenantModel, { ITenantModel, ITenant } from '../db/tenantModel';
+import { check, validationResult } from 'express-validator/check';
 import { LoggerInstance } from 'winston';
+import TenantModel, { ITenant, ITenantModel } from '../db/tenantModel';
 import { rootAuthorize } from '../security';
 
 const router = express.Router();
@@ -14,29 +14,30 @@ const handleError = (error: Error, res: express.Response, logger: LoggerInstance
     res.sendStatus(400);
 };
 
-const createMiddleware = (tenantModelInstance: mongoose.Model<ITenantModel>, logger: LoggerInstance
+const createMiddleware = (tenantModelInstance: mongoose.Model<ITenantModel>,
+                          logger: LoggerInstance,
 ) => {
     router.get('/tenants', rootAuthorize, (req, res) => {
         tenantModelInstance.find().exec()
-            .then(docs => res.send(docs.map(createListModel)))
-            .catch(err => handleError(err, res, logger));
+            .then((docs) => res.send(docs.map(createListModel)))
+            .catch((err) => handleError(err, res, logger));
     });
 
     router.post('/tenants', rootAuthorize, (req, res) => {
         validateFromRequest(req, res, logger, () => {
 
-            var newTenant = new TenantModel({
+            const newTenant = new TenantModel({
                 tenantId: shortid.generate(),
                 email: req.body.email,
-                sites: req.body.sites
+                sites: req.body.sites,
             });
 
             newTenant.save()
                 .then(() => {
                     logger.info(`Creation of tenant for '${req.body.email}' was successful`);
-                    res.sendStatus(200)
+                    res.sendStatus(200);
                 })
-                .catch(err => handleError(err, res, logger));
+                .catch((err) => handleError(err, res, logger));
         });
     });
 
@@ -58,7 +59,8 @@ const createMiddleware = (tenantModelInstance: mongoose.Model<ITenantModel>, log
     //             };
 
     //             try {
-    //                 await contentModelInstance.findByIdAndUpdate({ _id: req.params.id, tenantId: req.params.tenantId }, { $set: updates }).exec();
+    //                 await contentModelInstance.
+    // findByIdAndUpdate({ _id: req.params.id, tenantId: req.params.tenantId }, { $set: updates }).exec();
     //                 logger.info(`Update of contentpage with title '${req.body.title}' was successful`);
     //                 res.sendStatus(200);
     //             } catch (ex) {
@@ -70,14 +72,14 @@ const createMiddleware = (tenantModelInstance: mongoose.Model<ITenantModel>, log
 
     router.get('/tenants/:id', rootAuthorize, (req, res) => {
         tenantModelInstance.findOne({ _id: req.params.id }).exec()
-            .then(doc => {
+            .then((doc) => {
                 if (!doc) {
                     res.sendStatus(404);
                 } else {
                     res.send(createEditModel(doc));
                 }
             })
-            .catch(err => handleError(err, res, logger));
+            .catch((err) => handleError(err, res, logger));
     });
 
     router.delete('/tenants/:id', rootAuthorize, (req, res) => {
@@ -86,34 +88,36 @@ const createMiddleware = (tenantModelInstance: mongoose.Model<ITenantModel>, log
         tenantModelInstance.remove({ _id: req.params.id }).exec()
             .then(() => {
                 logger.info(`Deletion of tenant with id '${req.params.id}' was successful`);
-                res.sendStatus(200)
+                res.sendStatus(200);
             })
-            .catch(err => handleError(err, res, logger));
+            .catch((err) => handleError(err, res, logger));
     });
 
     return router;
-}
+};
 
 const createEditModel = (doc: ITenantModel) => {
     return {
         id: doc._id,
         tenantId: doc.tenantId,
         email: doc.email,
-        sites: doc.sites
+        sites: doc.sites,
     };
 };
 
-const validateFromRequest = (request: express.Request, response: express.Response, logger: LoggerInstance, successHandler: () => void) => {
+const validateFromRequest = (req: express.Request, res: express.Response,
+                             logger: LoggerInstance, successHandler: () => void,
+) => {
     check('email', 'cannot be empty').not().isEmpty;
     check('sites', 'sites cannot be empty').not().isEmpty;
 
-    const result = validationResult(request);
+    const result = validationResult(req);
     if (!result.isEmpty()) {
         const validationErrors = result.array();
 
-        validationErrors.forEach(err => logger.error(`Validation error: '${err}' occured!`));
+        validationErrors.forEach((err) => logger.error(`Validation error: '${err}' occured!`));
 
-        response.status(400).json({ validationErrors: validationErrors });
+        res.status(400).json({ validationErrors });
     } else {
         successHandler();
     }
@@ -123,7 +127,7 @@ const createListModel = (doc: ITenantModel) => {
     return {
         id: doc._id,
         tenantId: doc.tenantId,
-        email: doc.email
+        email: doc.email,
     };
 };
 

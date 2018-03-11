@@ -2,7 +2,7 @@ class EditModel {
     constructor(id: string) {
         this.id = id;
     }
-    
+
     id: string;
     tenantId: string;
     sites: string[];
@@ -11,8 +11,8 @@ class EditModel {
     photo: string = '';
 
     update(key: string, value: string) {
-        if (key === 'id') this.id = value;
-        if (key === 'displayName') this.displayName = value;
+        if (key === 'id') { this.id = value; }
+        if (key === 'displayName') { this.displayName = value; }
     }
 
     static fromJson(json: any) {
@@ -22,7 +22,7 @@ class EditModel {
         editModel.displayName = json.displayName;
         editModel.email = json.email;
         editModel.photo = json.photo;
-        
+
         return editModel;
     }
 }

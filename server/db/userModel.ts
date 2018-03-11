@@ -4,8 +4,6 @@ import * as mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 export interface IUser {
-    tenantId: string,
-    sites: string[],
     displayName: string,
     email: string,
     gender: string,
@@ -19,14 +17,6 @@ export interface IUser {
 export interface IUserModel extends IUser, mongoose.Document{}
 
 export const userSchema = new Schema({
-    tenantId: {
-        type: String,
-        required: true
-    },
-    sites: {
-        type: [String],
-        required: true
-    },
     displayName: {
         type: String,
         required: true

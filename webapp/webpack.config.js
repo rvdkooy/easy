@@ -12,6 +12,12 @@ var webpackConfig = {
     },
     module: {
         rules: [
+            {
+                test: /\.ts$/,
+                enforce: 'pre',
+                loader: 'tslint-loader',
+                options: { /* Loader options go here */ }
+            },
             { 
                 test: /\.tsx?$/,
                 loader: "awesome-typescript-loader",

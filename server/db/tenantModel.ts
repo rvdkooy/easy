@@ -33,12 +33,16 @@ if (mongoose.modelNames().find(m => m === 'Tenant')) {
     TenantModel = mongoose.model<ITenantModel>('Tenant', tenantSchema);
 }
 
-export const findTenantByEmail = (email: string) => {
-    return TenantModel.findOne({ email: email }).exec();
+export const findTenantsByEmail = (email: string): Promise<ITenantModel[]> => {
+    return TenantModel.find({ email: email }).exec();
 };
 
 export const findTenantBySite = (host: string) => {
     return TenantModel.findOne({ sites: host }).exec();
+}
+
+export const findAllTenants = (): Promise<ITenantModel[]> => {
+    return TenantModel.find().exec();
 }
 
 export default TenantModel;

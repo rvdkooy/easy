@@ -14,5 +14,5 @@ export const retrieveCurrentUser = (): Promise<User> => {
                 return null;
             }
             return res.json();
-        }); 
+        });
 };

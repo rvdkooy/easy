@@ -1,26 +1,25 @@
 import * as express from 'express';
 
 export const authenticatedApi = (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    
     if (!req.isAuthenticated || !req.isAuthenticated()) {
         res.sendStatus(401);
     } else {
         next();
     }
-}
+};
 
 export const tenantAuthorize = (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (!req.user || (req.user.tenantId !== req.params.tenantId)) {
         res.sendStatus(403);
     } else {
-        next(); 
+        next();
     }
-}
+};
 
 export const rootAuthorize = (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (!req.user || req.user.tenantId !== '*') {
         res.sendStatus(403);
     } else {
-        next(); 
+        next();
     }
-}
+};
