@@ -1,24 +1,24 @@
-import * as React from 'react';
 import Typography from 'material-ui/Typography';
-import LogsTable from './logsTable';
+import * as React from 'react';
 import { BreadCrumbs, PaddedPaper } from '../common';
 import { getLogs, LogItem } from './logsService';
+import LogsTable from './logsTable';
 
 class LogsPage extends React.Component<undefined, State> {
 
     state: State = {
-        logs: []
+        logs: [],
     };
 
     componentDidMount() {
-        getLogs(75).then(logs => {
-            this.setState({ logs: logs });
-        })
+        getLogs(75).then((logs) => {
+            this.setState({ logs });
+        });
     }
 
     render() {
         const breadCrumbItems = [
-            { text: 'Logs' }
+            { text: 'Logs' },
         ];
 
         return (
@@ -34,7 +34,7 @@ class LogsPage extends React.Component<undefined, State> {
 }
 
 interface State {
-    logs: LogItem[]
-};
+    logs: LogItem[];
+}
 
 export default LogsPage;
