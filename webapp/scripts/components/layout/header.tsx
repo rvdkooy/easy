@@ -11,6 +11,7 @@ import Typography from 'material-ui/Typography';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { UserProps, withUser } from '../../services/userProvider';
+import { withTenant, WithTenantProps } from '../../services/withTenant';
 import LeftMenu from './leftMenu';
 
 const styles = {
@@ -31,26 +32,15 @@ const styles = {
     },
 };
 
-class Header extends React.Component<Props, State> {
-
-    state: State = {
-        tenants: [
-            'www.vdkooy.com' ,
-            'www.thijsvanderkooij.nl',
-            'www.stefvanderkooij.nl',
-            'www.sharpsolutions.nl',
-        ],
-        selectedTenant: 'www.vdkooy.com',
-    };
-
+class Header extends React.Component<Props> {
     _renderTenants = () => {
-        return this.state.tenants.map((t) => {
-            return (<MenuItem key={t} value={t}>{ t }</MenuItem>);
+        return this.props.currentUser.tenants.map((t) => {
+            return (<MenuItem key={t.tenantId} value={t.site}>{ t.site }</MenuItem>);
         });
     }
 
     _onTenantChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
-        this.setState({ selectedTenant: e.target.value });
+        this.props.onTenantChanged(e.target.value);
     }
 
     render() {
@@ -65,7 +55,7 @@ class Header extends React.Component<Props, State> {
                     </Typography>
                     <Select
                         className={classes.tenantSelector}
-                        value={this.state.selectedTenant}
+                        value={this.props.selectedTenant.site}
                         onChange={this._onTenantChanged}
                     >
                         { this._renderTenants() }
@@ -83,16 +73,18 @@ class Header extends React.Component<Props, State> {
     }
 }
 
-interface State {
-    tenants: string[];
-    selectedTenant: string;
+interface OuterProps {
+    onTenantChanged: (site: string) => void;
 }
 
 interface StyleProps extends WithStyles<keyof typeof styles> {}
-interface Props extends StyleProps, UserProps { test: boolean; }
+
+interface Props extends StyleProps, UserProps, WithTenantProps, OuterProps { }
 
 const WithStylesComponent = withStyles(styles)<UserProps>(Header);
 
-const WithUserComponent = withUser<{ }>(WithStylesComponent);
+const WithUserComponent = withUser<WithTenantProps>(WithStylesComponent);
 
-export default WithUserComponent;
+const WithTenantComponent = withTenant<OuterProps>(WithUserComponent);
+
+export default WithTenantComponent;

@@ -1,56 +1,62 @@
-import * as React from 'react';
-import * as PropTypes from 'prop-types';
-import { CircularProgress } from 'material-ui/Progress';
 import Button from 'material-ui/Button';
-import Typography from 'material-ui/Typography';
-import PaddedPaper from '../common/paddedPaper';
+import { CircularProgress } from 'material-ui/Progress';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
+import Typography from 'material-ui/Typography';
+import * as PropTypes from 'prop-types';
+import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { Container, BreadCrumbs } from '../common';
+import { BreadCrumbs, Container } from '../common';
+import PaddedPaper from '../common/paddedPaper';
 
-import ListRow from './contentPagesListRow';
-import { getContentPages, deleteContentPage } from './contentPagesApi'
-import ListModel from './models/list';
 import { notify } from '../../services/notificationService';
-import { withUser, UserProps } from '../../services/userProvider';
+import { withTenant, WithTenantProps } from '../../services/withTenant';
+import { deleteContentPage, getContentPages } from './contentPagesApi';
+import ListRow from './contentPagesListRow';
+import ListModel from './models/list';
 
-class ContentPagesList extends React.Component<Props, State> {
+class ContentPagesList extends React.Component<WithTenantProps, State> {
 
     state: State = {
         isLoading: false,
-        contentPages: []
+        contentPages: [],
     };
 
     componentDidMount() {
-        this._refreshList();
+        this._refreshList(this.props.selectedTenant.tenantId);
     }
 
-    _refreshList = () => {
+    componentWillReceiveProps(nextProps: WithTenantProps) {
+        if (this.props.selectedTenant !== nextProps.selectedTenant) {
+            this._refreshList(nextProps.selectedTenant.tenantId);
+        }
+    }
+
+    _refreshList = (tenantId: string) => {
         this.setState({ isLoading: true });
-        getContentPages(this.props.currentUser.tenantId).then(contentPages => {
+        getContentPages(tenantId).then((contentPages) => {
             this.setState({
                 isLoading: false,
-                contentPages: contentPages
+                contentPages,
             });
         })
         .catch(() => notify('An error occured while getting the content pages', 'ERROR'));
-    };
+    }
 
     _onDeleteClicked = (id: string) => {
-        deleteContentPage(this.props.currentUser.tenantId, id)
+        deleteContentPage(this.props.selectedTenant.tenantId, id)
             .then(() => {
                 notify('Content page deleted', 'INFO');
-                this._refreshList();
+                this._refreshList(this.props.selectedTenant.tenantId);
             })
             .catch(() => notify('An error occured while deleting the content page', 'ERROR'));
-    };
+    }
 
     render() {
         const breadCrumbItems = [
-            { text: 'Content Pages' }
+            { text: 'Content Pages' },
         ];
 
-        var rows = this.state.contentPages.map(p => {
+        const rows = this.state.contentPages.map((p) => {
             return (
                 <ListRow
                     key={p.id}
@@ -58,7 +64,7 @@ class ContentPagesList extends React.Component<Props, State> {
                     onDelete={this._onDeleteClicked}
                 />
             );
-        })
+        });
 
         return (
             <div>
@@ -97,13 +103,9 @@ class ContentPagesList extends React.Component<Props, State> {
     }
 }
 
-interface Props extends UserProps {
-
-}
-
 interface State {
-    contentPages: ListModel[],
-    isLoading: boolean
+    contentPages: ListModel[];
+    isLoading: boolean;
 }
 
-export default withUser<{}>(ContentPagesList);
+export default withTenant<{}>(ContentPagesList);

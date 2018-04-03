@@ -9,7 +9,7 @@ export const authenticatedApi = (req: express.Request, res: express.Response, ne
 };
 
 export const tenantAuthorize = (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (!req.user || (req.user.tenantId !== req.params.tenantId)) {
+    if (!req.user || (req.user.tenants.find((t: any) => t.tenantId === req.params.tenantId) === null )) {
         res.sendStatus(403);
     } else {
         next();
@@ -17,7 +17,7 @@ export const tenantAuthorize = (req: express.Request, res: express.Response, nex
 };
 
 export const rootAuthorize = (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (!req.user || req.user.tenantId !== '*') {
+    if (!req.user || req.user.tenants.find((t: any) => t.tenantId === '*') === null) {
         res.sendStatus(403);
     } else {
         next();

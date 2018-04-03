@@ -4,12 +4,13 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { notify } from '../../services/notificationService';
 import { UserProps, withUser } from '../../services/userProvider';
+import { withTenant, WithTenantProps } from '../../services/withTenant';
 import { BreadCrumbs, Container, PaddedPaper } from '../common';
 import { deleteFile, FileItem, getFiles } from './filesService';
 import FilesTable from './filesTable';
 import UploadFileDialog from './uploadFileDialog';
 
-class FilesPage extends React.Component<UserProps, State> {
+class FilesPage extends React.Component<Props, State> {
 
     state: State = {
         files: [],
@@ -21,7 +22,7 @@ class FilesPage extends React.Component<UserProps, State> {
     }
 
     _refreshFilesTable = () => {
-        getFiles(this.props.currentUser.tenantId)
+        getFiles(this.props.selectedTenant.tenantId)
             .then((files) => {
                 this.setState({ files });
             })
@@ -43,7 +44,7 @@ class FilesPage extends React.Component<UserProps, State> {
     }
 
     _onDeleteFile = (key: string) => {
-        deleteFile(this.props.currentUser.tenantId, key)
+        deleteFile(this.props.selectedTenant.tenantId, key)
             .then(() => {
                 notify(`File: '${key} was deleted successfully'`, 'INFO');
                 this._refreshFilesTable();
@@ -87,4 +88,8 @@ interface State {
     showUploadDialog: boolean;
 }
 
-export default withUser<{}>(FilesPage);
+interface Props extends UserProps, WithTenantProps {}
+
+const WrappedWithTenant = withTenant<UserProps>(FilesPage);
+
+export default withUser<{}>(WrappedWithTenant);

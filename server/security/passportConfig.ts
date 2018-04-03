@@ -1,42 +1,57 @@
-import * as passport from 'passport';
-import * as express from 'express';
-import * as mongoose from 'mongoose';
-import { Strategy as GoogleStrategy } from 'passport-google-oauth2';
 import * as config from 'config';
-import UserModel, { IUserModel, findByEmail } from '../db/userModel';
-import { ITenantModel, findTenantsByEmail, findAllTenants } from '../db/tenantModel';
+import * as express from 'express';
+import { get } from 'http';
+import * as mongoose from 'mongoose';
+import * as passport from 'passport';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth2';
 import { LoggerInstance } from 'winston';
 import { GOOGLE_AUTH } from '../config';
-import { get } from 'http';
+import { findAllTenants, findTenantsByEmail, ITenantModel } from '../db/tenantModel';
+import UserModel, { findByEmail, IUserModel } from '../db/userModel';
 
-const serializeUser = (userModel: IUserModel, associatedTenants: ITenantModel[]) => {
-    return {
-        displayName: userModel.displayName,
-        tenants: associatedTenants.map(t => ({ tenantId: t.tenantId, sites: t.sites })),
-        email: userModel.email,
-        photo: userModel.photo
-    };
+interface TenantDto {
+    tenantId: string;
+    site: string;
 }
 
-const getAssociatedTenants = async (email: string, ROOT_ACCOUNT: string) => {
-    if (email === ROOT_ACCOUNT) {
-        return await findAllTenants()
-    } else {
-        return await findTenantsByEmail(email);
-    }
+const serializeUser = (userModel: IUserModel, associatedTenants: TenantDto[]) => {
+    return {
+        displayName: userModel.displayName,
+        tenants: associatedTenants,
+        email: userModel.email,
+        photo: userModel.photo,
+    };
 };
 
-export const configurePassport = (app: express.Express, tenantModelInstance: mongoose.Model<ITenantModel>, logger: LoggerInstance) => {
-    const GOOGLE_AUTH = config.get('GOOGLE_AUTH') as GOOGLE_AUTH;
+const getAssociatedTenants = async (email: string, ROOT_ACCOUNT: string): Promise<TenantDto[]> => {
+    let tenants = [];
+    if (email === ROOT_ACCOUNT) {
+        tenants = await findAllTenants();
+    } else {
+        tenants = await findTenantsByEmail(email);
+    }
+    return tenants.map((t) => {
+        return {
+            tenantId: t.tenantId,
+            site: (t.sites.length) ? t.sites[0] : 'N/A',
+        };
+    });
+};
+
+export const configurePassport = (app: express.Express,
+                                  tenantModelInstance: mongoose.Model<ITenantModel>,
+                                  logger: LoggerInstance) => {
+
+    const GOOGLEAUTH = config.get('GOOGLE_AUTH') as GOOGLE_AUTH;
     const ROOT_ACCOUNT = config.get('ROOT_ACCOUNT') as string;
 
     app.use(passport.initialize());
     app.use(passport.session());
 
     passport.use(new GoogleStrategy({
-        clientID: GOOGLE_AUTH.CLIENT_ID,
-        clientSecret: GOOGLE_AUTH.CLIENT_SECRET,
-        callbackURL: GOOGLE_AUTH.CALLBACK_URL
+        clientID: GOOGLEAUTH.CLIENT_ID,
+        clientSecret: GOOGLEAUTH.CLIENT_SECRET,
+        callbackURL: GOOGLEAUTH.CALLBACK_URL,
     }, async (accessToken: string, refreshToken: string, profile: any, cb: any) => {
 
         try {
@@ -44,21 +59,21 @@ export const configurePassport = (app: express.Express, tenantModelInstance: mon
             const associatedTenants = await getAssociatedTenants(email, ROOT_ACCOUNT);
 
             if (!associatedTenants) {
-                logger.error("The user that wants to login is not associated with any tenant");
+                logger.error('The user that wants to login is not associated with any tenant');
                 cb(null, false);
             } else {
                 const existingUser = await findByEmail(email);
 
                 if (!existingUser) {
-                    var newUser = new UserModel({
+                    const newUser = new UserModel({
                         displayName: profile.displayName,
                         email: profile.emails[0].value,
                         gender: profile.gender,
                         photo: (profile.photos.length) ? profile.photos[0].value : null,
                         provider: {
                             name: 'google',
-                            id: profile.id
-                        }
+                            id: profile.id,
+                        },
                     });
 
                     await newUser.save();
@@ -72,7 +87,7 @@ export const configurePassport = (app: express.Express, tenantModelInstance: mon
         } catch (err) {
             logger.error(err);
             logger.error(`Error occured while logging in the current user '${profile.displayNam}'`);
-            cb(err)
+            cb(err);
         }
     }));
 

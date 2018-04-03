@@ -4,9 +4,12 @@ import Snackbar from 'material-ui/Snackbar';
 import { withStyles, WithStyles } from 'material-ui/styles';
 import { Theme } from 'material-ui/styles';
 import Typography from 'material-ui/Typography';
+import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { listenToNotifications, messageType } from '../../services/notificationService';
+import { UserProps, withUser } from '../../services/userProvider';
+import { Tenant } from '../../services/userService';
 import ContentPagesPage from '../contentpages/contentPagesPage';
 import Dashboard from '../dashboard/main';
 import FilesPage from '../files/filesPage';
@@ -44,8 +47,20 @@ const styles = (theme: Theme) => ({
 
 class Layout extends React.Component<Props, State> {
     _unregisterListenToNotifications: () => void | null = null;
+
+    static childContextTypes = {
+        selectedTenant: PropTypes.object.isRequired,
+    };
+
+    getChildContext() {
+        return {
+            selectedTenant: this.state.selectedTenant,
+        };
+    }
+
     state: State = {
         snackbarMessage: null,
+        selectedTenant: this.props.currentUser.tenants[0],
     };
 
     _closeSnackbar = () => {
@@ -62,6 +77,11 @@ class Layout extends React.Component<Props, State> {
 
     componentWillUnmount() {
         this._unregisterListenToNotifications && this._unregisterListenToNotifications();
+    }
+
+    _onTenantChanged = (site: string) => {
+        const tenant = this.props.currentUser.tenants.find((t) => t.site === site);
+        this.setState({ selectedTenant: tenant });
     }
 
     _renderSnackbarContent = () => {
@@ -84,7 +104,7 @@ class Layout extends React.Component<Props, State> {
 
         return (
           <div className={classes.root}>
-            <Header />
+            <Header onTenantChanged={this._onTenantChanged} />
             <div className={classes.mainContent}>
                 <LeftMenu open />
                 <div className={classes.rightContent}>
@@ -121,8 +141,9 @@ interface State {
         message: string,
         type: messageType,
     };
+    selectedTenant: Tenant;
 }
 
-interface Props extends WithStyles<'root' | 'rightContent' | 'mainContent' | 'snackbarIcon'> { }
+interface Props extends UserProps, WithStyles<'root' | 'rightContent' | 'mainContent' | 'snackbarIcon'> { }
 
-export default withRoot(withStyles(styles)<Props>(Layout));
+export default withRoot(withUser<{}>(withStyles(styles)<Props>(Layout)));

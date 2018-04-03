@@ -4,41 +4,41 @@ import * as mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 export interface IUser {
-    displayName: string,
-    email: string,
-    gender: string,
-    photo: string,
+    displayName: string;
+    email: string;
+    gender: string;
+    photo: string;
     provider: {
         id: string,
-        name: string
-    }
+        name: string,
+    };
 }
 
-export interface IUserModel extends IUser, mongoose.Document{}
+export interface IUserModel extends IUser, mongoose.Document { }
 
 export const userSchema = new Schema({
     displayName: {
         type: String,
-        required: true
+        required: true,
     },
     email : {
         type: String,
-        required: true
+        required: true,
     },
     gender: {
         type: String,
-        required: true
+        required: true,
     },
     photo : String,
     provider: {
         id: String,
-        name: String
+        name: String,
     },
 });
 
 let UserModel: mongoose.Model<IUserModel>;
 
-if (mongoose.modelNames().find(m => m === 'UserModel')) {
+if (mongoose.modelNames().find((m) => m === 'UserModel')) {
     UserModel = mongoose.model<IUserModel>('UserModel');
 } else {
     UserModel = mongoose.model<IUserModel>('UserModel', userSchema);
@@ -47,5 +47,5 @@ if (mongoose.modelNames().find(m => m === 'UserModel')) {
 export default UserModel;
 
 export const findByEmail = (email: string) => {
-    return UserModel.findOne({ email: email}).exec();
+    return UserModel.findOne({ email }).exec();
 };

@@ -1,12 +1,12 @@
-import * as React from 'react';
 import * as PropTypes from 'prop-types';
+import * as React from 'react';
 import { User } from './userService';
 
 export class CurrentUserProvider extends React.Component<UserProviderProps> {
 
     static childContextTypes = {
-        currentUser: PropTypes.object.isRequired
-    }
+        currentUser: PropTypes.object.isRequired,
+    };
 
     getChildContext() {
         return { currentUser: this.props.currentUser };
@@ -17,28 +17,28 @@ export class CurrentUserProvider extends React.Component<UserProviderProps> {
     }
 }
 
-export function withUser<P>(Component: React.ComponentClass<UserProps> | React.ComponentType<UserProps>): React.ComponentClass<P> {
-
+export function withUser<P>(Component: React.ComponentClass<UserProps> | React.ComponentType<UserProps>):
+    React.ComponentClass<P> {
+    // tslint:disable-next-line
     class WithUser extends React.Component<UserProps & P> {
 
         static contextTypes = {
-            currentUser: PropTypes.object.isRequired
-        }
-        
-        render() {
+            currentUser: PropTypes.object.isRequired,
+        };
 
-            return <Component currentUser={ this.context.currentUser } { ...this.props } />
+        render() {
+            return (<Component currentUser={ this.context.currentUser } { ...this.props } />);
         }
     }
 
     return WithUser;
-};
+}
 
-export interface UserProps { 
-    currentUser: User
+export interface UserProps {
+    currentUser: User;
 }
 
 interface UserProviderProps {
-    children: JSX.Element,
-    currentUser: User
+    children: JSX.Element;
+    currentUser: User;
 }
