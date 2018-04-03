@@ -9,10 +9,15 @@ export const authenticatedApi = (req: express.Request, res: express.Response, ne
 };
 
 export const tenantAuthorize = (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (!req.user || (req.user.tenants.find((t: any) => t.tenantId === req.params.tenantId) === null )) {
+    if (!req.user || !req.user.tenants) {
         res.sendStatus(403);
     } else {
-        next();
+        const tenant = req.user.tenants.find((t: any) => t.tenantId === req.params.tenantId);
+        if (!tenant) {
+            res.sendStatus(403);
+        } else {
+            next();
+        }
     }
 };
 

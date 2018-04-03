@@ -2,14 +2,14 @@
 import { expect } from 'chai';
 import 'mocha';
 import * as mockgoose from 'mockgoose';
-import { get, put, post, del } from '../utils/httpClient';
+import { Mockgoose } from 'mockgoose';
 import { ContentPageModel } from '../../../server/db';
 import createRoutes from '../../../server/routes/contentPages';
-import createTestHost, { TestHost } from '../utils/testHost';
+import logger from '../utils/consoleLogger';
+import { del, get, post, put } from '../utils/httpClient';
 import { addUser } from '../utils/mockedExpressMiddleware';
 import { initializeInMemoryMondoDb, MongoConnection } from '../utils/mockedMongoDb';
-import logger from '../utils/consoleLogger';
-import { Mockgoose } from 'mockgoose';
+import createTestHost, { TestHost } from '../utils/testHost';
 
 describe('content pages route tests', () => {
     describe('when not authorized', () => {
@@ -53,25 +53,26 @@ describe('content pages route tests', () => {
 
     describe('When authorized', () => {
         let testHost: TestHost;
-        let mockgoose: mockgoose.Mockgoose;
+        let _mockgoose: mockgoose.Mockgoose;
 
         before(async () => {
-            mockgoose = await initializeInMemoryMondoDb();
+            _mockgoose = await initializeInMemoryMondoDb();
             testHost = createTestHost();
-            testHost.express.use('/api', addUser({ tenantId: "100" }), createRoutes(ContentPageModel, logger));
+            testHost.express.use('/api', addUser({ tenants: [ { tenantId: '100' } ] }),
+                createRoutes(ContentPageModel, logger));
             testHost.listen();
         });
 
-        it("should be able to retrieve content pages", async () => {
-            mockgoose.helper.reset();
+        it('should be able to retrieve content pages', async () => {
+            _mockgoose.helper.reset();
 
             const newContentPage =  new ContentPageModel({
-                tenantId: "100",
-                title: "my title",
-                url: "/",
-                template: 'default'
+                tenantId: '100',
+                title: 'my title',
+                url: '/',
+                template: 'default',
             });
-            
+
             await newContentPage.save();
 
             const response = await get('http://localhost:1234/api/100/contentpages');
@@ -79,16 +80,16 @@ describe('content pages route tests', () => {
             expect(JSON.parse(response.body).length).to.equal(1);
         });
 
-        it("should be able to retrieve a single content page", async () => {
-            mockgoose.helper.reset();
+        it('should be able to retrieve a single content page', async () => {
+            _mockgoose.helper.reset();
 
             const newContentPage =  new ContentPageModel({
-                tenantId: "100",
+                tenantId: '100',
                 title: new Date().getTime().toString(),
-                url: "/",
-                template: 'default'
+                url: '/',
+                template: 'default',
             });
-            
+
             await newContentPage.save();
 
             const response = await get(`http://localhost:1234/api/100/contentpages/${newContentPage._id}`);
@@ -96,36 +97,36 @@ describe('content pages route tests', () => {
             expect(JSON.parse(response.body).title).to.equal(newContentPage.title);
         });
 
-        it("should be able to add a new content page", async () => {
+        it('should be able to add a new content page', async () => {
             const payload = {
                 title: 'some title',
                 url: 'some url',
-                template: 'default'
+                template: 'default',
             };
 
             const response = await post('http://localhost:1234/api/100/contentpages', { json: true, body: payload });
             expect(response.statusCode).to.equal(200);
         });
 
-        it("should be able to edit an existing content page", async () => {
+        it('should be able to edit an existing content page', async () => {
             const payload = {
                 title: 'some title',
                 url: 'some url',
-                template: 'default'
+                template: 'default',
             };
 
             const response = await post('http://localhost:1234/api/100/contentpages', { json: true, body: payload });
             expect(response.statusCode).to.equal(200);
         });
 
-        it("should be able to delete an existing content page", async () => {
+        it('should be able to delete an existing content page', async () => {
             const newContentPage =  new ContentPageModel({
-                tenantId: "100",
-                title: "my title",
-                url: "/",
-                template: 'default'
+                tenantId: '100',
+                title: 'my title',
+                url: '/',
+                template: 'default',
             });
-            
+
             await newContentPage.save();
 
             const response = await del(`http://localhost:1234/api/100/contentpages/${newContentPage._id}`);
@@ -134,7 +135,7 @@ describe('content pages route tests', () => {
 
         after(async () => {
             await testHost.close();
-            await mockgoose.helper.mongoose.connection.close();
+            await _mockgoose.helper.mongoose.connection.close();
         });
     });
 });
