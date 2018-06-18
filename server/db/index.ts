@@ -1,6 +1,7 @@
 import mongoose = require('mongoose'); 
 export { default as UserModel } from './userModel';
 export { default as ContentPageModel } from './contentPageModel';
+export { default as TenantModel } from './tenantModel';
 
 mongoose.Promise = global.Promise;
 

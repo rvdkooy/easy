@@ -1,10 +1,15 @@
 import { query } from '../utils/httpClient';
 
 export interface User {
-    tenantId: string;
-    sites: string[];
+    tenants: Tenant[];
     displayName: string;
     photo: string;
+    rootAccount: boolean;
+}
+
+export interface Tenant {
+    tenantId: string;
+    site: string;
 }
 
 export const retrieveCurrentUser = (): Promise<User> => {
@@ -14,5 +19,5 @@ export const retrieveCurrentUser = (): Promise<User> => {
                 return null;
             }
             return res.json();
-        }); 
+        });
 };

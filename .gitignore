@@ -62,3 +62,6 @@ dist
 
 #config related
 server/config/
+
+#localfiles (cache)
+server/localfiles/

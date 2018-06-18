@@ -1,7 +1,7 @@
 import * as express from 'express';
 import * as mongoose from 'mongoose';
-import { IUserModel } from '../db/userModel';
 import { LoggerInstance } from 'winston';
+import { IUserModel } from '../db/userModel';
 
 const router = express.Router();
 
@@ -13,8 +13,8 @@ const handleError = (error: Error, res: express.Response, logger: LoggerInstance
 const createMiddleware = (userModelInstance: mongoose.Model<IUserModel>, logger: LoggerInstance) => {
   router.get('/users', (req, res) => {
     userModelInstance.find({}).exec()
-    .then(docs => res.send(docs.map(createListModel)))
-    .catch(err => handleError(err, res, logger));
+    .then((docs) => res.send(docs.map(createListModel)))
+    .catch((err) => handleError(err, res, logger));
   });
 
   router.get('/users/current', (req, res) => {
@@ -27,45 +27,42 @@ const createMiddleware = (userModelInstance: mongoose.Model<IUserModel>, logger:
 
   router.get('/users/:id', (req, res) => {
     userModelInstance.findById(req.params.id).exec()
-    .then(doc => {
+    .then((doc) => {
       if (doc) {
         res.send(createEditModel(doc));
       } else {
         res.sendStatus(404);
       }
     })
-    .catch(err => handleError(err, res, logger));
+    .catch((err) => handleError(err, res, logger));
   });
 
   router.delete('/users/:id', (req, res) => {
     userModelInstance.remove({ _id: req.params.id }).exec()
       .then(() => res.sendStatus(200))
-      .catch(err => handleError(err, res, logger));
+      .catch((err) => handleError(err, res, logger));
   });
 
   return router;
-}
+};
 
 const createEditModel = (doc: IUserModel) => {
   return {
     id: doc._id,
-    tenantId: doc.tenantId,
-    sites: doc.sites,
     displayName: doc.displayName,
     email: doc.email,
     photo: doc.photo,
     gender: doc.gender,
-    provider: doc.provider
+    provider: doc.provider,
   };
 };
 
 const createListModel = (doc: IUserModel) => {
   return {
     id: doc._id,
-    tenantId: doc.tenantId,
     displayName: doc.displayName,
     email: doc.email,
-    photo: doc.photo
+    photo: doc.photo,
   };
 };
 

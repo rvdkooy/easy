@@ -1,22 +1,22 @@
-import * as React from 'react';
-import * as PropTypes from 'prop-types';
-import { CircularProgress } from 'material-ui/Progress';
 import Button from 'material-ui/Button';
-import Typography from 'material-ui/Typography';
+import { CircularProgress } from 'material-ui/Progress';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
+import Typography from 'material-ui/Typography';
+import * as PropTypes from 'prop-types';
+import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { Container, BreadCrumbs, PaddedPaper } from '../common';
+import { BreadCrumbs, Container, PaddedPaper } from '../common';
 
 import { notify } from '../../services/notificationService';
-import UsersListRow from './usersListRow';
-import { getUsers, deleteUser } from './usersApi'
 import ListModel from './models/list';
+import { deleteUser, getUsers } from './usersApi';
+import UsersListRow from './usersListRow';
 
-class UsersList extends React.Component<Props, State> {
+class UsersList extends React.Component<undefined, State> {
 
     state: State = {
         isLoading: false,
-        users: []
+        users: [],
     };
 
     componentDidMount() {
@@ -25,27 +25,27 @@ class UsersList extends React.Component<Props, State> {
 
     _refreshUsers = () => {
         this.setState({ isLoading: true });
-        getUsers().then(users => {
+        getUsers().then((users) => {
             this.setState({
                 isLoading: false,
-                users: users
+                users,
             });
         })
         .catch(() => notify('An error occured while retrieving the list of users', 'ERROR'));
-    };
+    }
 
     _onDeleteClicked = (id: string) => {
         deleteUser(id)
             .then(this._refreshUsers)
-            .catch(() => notify('An error occured while deleting the user', 'ERROR'))
-    };
+            .catch(() => notify('An error occured while deleting the user', 'ERROR'));
+    }
 
     render() {
         const breadCrumbItems = [
-            { text: 'Users' }
+            { text: 'Users' },
         ];
 
-        var rows = this.state.users.map(user => {
+        const rows = this.state.users.map((user) => {
             return (
                 <UsersListRow
                     key={user.id}
@@ -53,7 +53,7 @@ class UsersList extends React.Component<Props, State> {
                     onDelete={this._onDeleteClicked}
                 />
             );
-        })
+        });
 
         return (
             <div>
@@ -87,13 +87,9 @@ class UsersList extends React.Component<Props, State> {
     }
 }
 
-interface Props {
-
-}
-
 interface State {
-    users: ListModel[],
-    isLoading: boolean
+    users: ListModel[];
+    isLoading: boolean;
 }
 
 export default UsersList;

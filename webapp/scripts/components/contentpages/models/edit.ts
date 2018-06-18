@@ -17,7 +17,6 @@ export default class EditModel {
     keywords: string;
     description: string;
 
-
     update(key: string, value: any) {
         switch (key) {
             case 'title':

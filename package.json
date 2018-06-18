@@ -5,14 +5,15 @@
   "main": "index.js",
   "scripts": {
     "compile:server": "tsc --project ./server",
-    "compile:js": "webpack",
+    "compile:js": "webpack --config ./webapp/webpack.config.js",
     "dev:server": "nodemon --exec \"./node_modules/.bin/ts-node --project server\" -- ./server/server.ts --config ./server/nodemon.json",
-    "dev:js": "webpack --watch",
+    "dev:js": "npm run compile:js -- --watch",
     "dev": "concurrently --kill-others \"npm run dev:server\" \"npm run dev:js\"",
     "debug:server": "npm run compile:server && npm run start",
-    "test": "echo \"Warning: no test specified\" && exit 0",
     "postinstall": "npm run compile:server && npm run compile:js",
-    "start": "node ./server/dist/server.js"
+    "start": "node ./server/dist/server.js",
+    "test:server": "TS_NODE_PROJECT=__tests__/server mocha -r ts-node/register --watch-extensions ts ./__tests__/**/*.spec.ts --timeout 120000 --exit",
+    "test": "npm run test:server"
   },
   "repository": {
     "type": "git",
@@ -72,6 +73,7 @@
     "react-dom": "^16.2.0",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
+    "shortid": "^2.2.8",
     "source-map-loader": "^0.2.3",
     "ts-node": "^3.3.0",
     "tsc": "^1.20150623.0",
@@ -83,5 +85,17 @@
     "winston-daily-rotate-file": "^1.7.2",
     "winston-mongodb": "^3.0.1",
     "yazl": "^2.4.3"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.2",
+    "@types/mocha": "^2.2.48",
+    "@types/request": "^2.47.0",
+    "@types/shortid": "0.0.29",
+    "chai": "^4.1.2",
+    "mocha": "^5.0.0",
+    "mockgoose": "^7.3.5",
+    "request": "^2.83.0",
+    "tslint": "^5.9.1",
+    "tslint-loader": "^3.6.0"
   }
 }

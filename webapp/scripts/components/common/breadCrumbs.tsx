@@ -1,20 +1,20 @@
+import HomeIcon from 'material-ui-icons/Home';
+import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
+import { Theme } from 'material-ui/styles';
+import withStyles, { WithStyles } from 'material-ui/styles/withStyles';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
-import withStyles, { WithStyles } from 'material-ui/styles/withStyles';
-import { Theme } from 'material-ui/styles';
-import HomeIcon from 'material-ui-icons/Home';
 
 const styles = (theme: Theme) => ({
     list: {
-        height: 40
+        height: 40,
     },
     listItem: {
         float: 'left',
         paddingTop: 10,
         paddingRight: 0,
         paddingBottom: 2,
-        paddingLeft: 0 
+        paddingLeft: 0 ,
     },
     text: {
         paddingRight: 10,
@@ -23,8 +23,8 @@ const styles = (theme: Theme) => ({
         '& h3': {
             fontWeight: 'bold',
         },
-        paddingRight: 10,
-    } as React.CSSProperties
+        'paddingRight': 10,
+    } as React.CSSProperties,
 });
 
 {/* <ListItemIcon>
@@ -32,14 +32,13 @@ const styles = (theme: Theme) => ({
 </ListItemIcon> */}
 
 const BreadCrumbs = (props: Props) => {
-    
+
     const items = [(<ListItem key="home" className={props.classes.listItem}>
                         <Link to="/admin">
-                        
                             <ListItemText className={props.classes.text} primary="Home" />
                         </Link>
                     </ListItem>)];
-    
+
     props.items.forEach((item, index) => {
         items.push((<ListItem key={`arrow_${index}`} className={props.classes.listItem}>
                         <ListItemText className={props.classes.text} primary="/" />
@@ -53,8 +52,8 @@ const BreadCrumbs = (props: Props) => {
                                 </Link> : <ListItemText className={props.classes.textBold} primary={item.text} />
                         }
                     </ListItem>));
-    })
-    
+    });
+
     return (
         <List className={props.classes.list} dense>
             { items }
@@ -63,12 +62,12 @@ const BreadCrumbs = (props: Props) => {
 };
 
 interface Props extends WithStyles<'list' | 'listItem' | 'text' | 'textBold'> {
-    items: Item[]
+    items: Item[];
 }
 
 interface Item {
-    text: string,
-    url?: string
+    text: string;
+    url?: string;
 }
 
 export default withStyles(styles)<{ items: Item[] }>(BreadCrumbs);

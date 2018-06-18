@@ -7,18 +7,21 @@ import { AWS } from '../config';
 const defaultRegion = 'eu-west-1';
 
 export class S3Client {
-    constructor(accessKeyId: string, secretAccessKey: string,
-        bucketName: string, endpoint: string,
+    constructor(
+        accessKeyId: string,
+        secretAccessKey: string,
+        bucketName: string,
+        endpoint: string,
         logger: LoggerInstance) {
 
         const options: aws.S3.Types.ClientConfiguration = {
-            accessKeyId: accessKeyId,
-            secretAccessKey: secretAccessKey,
+            accessKeyId,
+            secretAccessKey,
             s3ForcePathStyle: true,
-            region: defaultRegion
+            region: defaultRegion,
         };
 
-        if (process.env.NODE_ENV !== 'production') options.endpoint = endpoint;
+        if (process.env.NODE_ENV !== 'production') { options.endpoint = endpoint; }
 
         this.s3 = new aws.S3(options);
         this.bucketName = bucketName;
@@ -37,13 +40,15 @@ export class S3Client {
                 ACL: acl || 'public-read',
             };
 
-            this.s3.putObject(params, (err, data) => {
+            this.s3.putObject(params, (err, putObjData) => {
                 if (err) {
-                    this.logger.error(`Error uploading object to bucket with name '${this.bucketName}' and key ('${key}') to s3: ${err.message}`);
-                    if (err.stack) this.logger.error(err.stack);
+                    this.logger.error(
+                        `Error uploading object to bucket with name '${this.bucketName}'
+                        and key ('${key}') to s3: ${err.message}`);
+                    if (err.stack) { this.logger.error(err.stack); }
                     reject(err);
                 } else {
-                    resolve(data);
+                    resolve(putObjData);
                 }
             });
         });
@@ -53,11 +58,12 @@ export class S3Client {
 
         return new Promise((resolve, reject) => {
             this.s3.listObjects({
-                Bucket: this.bucketName
+                Bucket: this.bucketName,
+                Prefix: prefix,
             }, (err, data) => {
                 if (err) {
                     this.logger.error(`Error listing objects from s3 with bucket name: '${this.bucketName}'`);
-                    if (err.stack) this.logger.error(err.stack);
+                    if (err.stack) { this.logger.error(err.stack); }
                     reject(err);
                 } else {
                     resolve(data);
@@ -70,23 +76,23 @@ export class S3Client {
         return new Promise((resolve, reject) => {
             this.s3.deleteObject({
                 Bucket: this.bucketName,
-                Key: key
+                Key: key,
             }, (err, data) => {
                 if (err) {
                     this.logger.error(`Error deleting object with key: '${key}' from bucket: '${this.bucketName}'`);
-                    if (err.stack) this.logger.error(err.stack);
+                    if (err.stack) { this.logger.error(err.stack); }
                     reject(err);
                 } else {
                     resolve(data);
                 }
-            })
+            });
         });
     }
 
     createBucket = () => {
-        this.listBuckets().then(data => {
+        this.listBuckets().then((data) => {
             if (data.Buckets) {
-                const found = data.Buckets.find(b => b.Name === this.bucketName);
+                const found = data.Buckets.find((b) => b.Name === this.bucketName);
 
                 if (!found) {
                     this.logger.info(`No bucket found yet, creating: '${this.bucketName}'`);
@@ -94,12 +100,12 @@ export class S3Client {
                         Bucket: this.bucketName,
                         ACL: 'public-read',
                         CreateBucketConfiguration: {
-                            LocationConstraint: defaultRegion
-                        }
-                    }, (err, data) => {
+                            LocationConstraint: defaultRegion,
+                        },
+                    }, (err, createData) => {
                         if (err) {
                             this.logger.error(`Error creating a bucket with name: '${this.bucketName}'`);
-                            if (err.stack) this.logger.error(err.stack);
+                            if (err.stack) { this.logger.error(err.stack); }
                         }
                     });
                 } else {
@@ -114,7 +120,7 @@ export class S3Client {
             this.s3.listBuckets((err, data) => {
                 if (err) {
                     this.logger.error(`Error listing buckets`);
-                    if (err.stack) this.logger.error(err.stack);
+                    if (err.stack) { this.logger.error(err.stack); }
                     reject(err);
                 } else {
                     resolve(data);
@@ -130,11 +136,4 @@ export const createS3Client = (awsSettings: AWS, logger: LoggerInstance) => {
         awsSettings.S3.BUCKETNAME,
         awsSettings.S3.ENDPOINT,
         logger);
-}
-
-
-// const file = path.join(rootDir, 'pdf-test.pdf');
-
-// fs.readFile(file, (err, data) => {
-//     if (err) { throw err; }
-// });
+};

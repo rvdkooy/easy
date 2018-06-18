@@ -1,24 +1,23 @@
-import * as React from 'react';
-import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 import { WithStyles, withStyles } from 'material-ui/styles';
 import { Theme } from 'material-ui/styles';
+import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 import Typography from 'material-ui/Typography';
-import LogsTable from '../logging/logsTable';
+import * as React from 'react';
 import { getLogs, LogItem } from '../logging/logsService';
-
+import LogsTable from '../logging/logsTable';
 
 class LogsWidget extends React.Component<undefined, State> {
 
     state: State = {
-        logs: []
+        logs: [],
     };
 
     componentDidMount() {
         setTimeout(() => {
-            getLogs(10).then(logs => {
-                this.setState({ logs })
+            getLogs(10).then((logs) => {
+                this.setState({ logs });
             });
-        }, 250)
+        }, 250);
     }
 
     render() {
@@ -31,7 +30,7 @@ class LogsWidget extends React.Component<undefined, State> {
     }
 }
 interface State {
-    logs: LogItem[]
+    logs: LogItem[];
 }
 
 export default LogsWidget;

@@ -1,30 +1,32 @@
-import * as React from 'react';
-import * as PropTypes from 'prop-types';
-import { match } from 'react-router-dom';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
+import * as PropTypes from 'prop-types';
+import * as React from 'react';
+import { match } from 'react-router-dom';
 
-import { ProgressIndicator, BreadCrumbs } from '../../components/common';
+import { BreadCrumbs, ProgressIndicator } from '../../components/common';
+import { notify } from '../../services/notificationService';
+import { UserProps, withUser } from '../../services/userProvider';
+import { withTenant, WithTenantProps } from '../../services/withTenant';
 import ContentPageForm from './contentPageForm';
 import { getContentPage, updateContentPage } from './contentPagesApi';
 import EditModel from './models/edit';
-import { notify } from '../../services/notificationService';
 
 class EditContentPage extends React.Component<Props, State> {
     state: State = {
         model: null,
-        isLoading: true
+        isLoading: true,
     };
 
     componentDidMount() {
-        getContentPage(this.props.match.params.id)
+        getContentPage(this.props.selectedTenant.tenantId, this.props.match.params.id)
             .then((model) => {
                 this.setState({
                     model,
-                    isLoading: false
+                    isLoading: false,
                 });
             })
-            .catch(err => {
+            .catch((err) => {
                 this.setState({ isLoading: false });
                 notify('An error occured while retrieving the content page.', 'ERROR');
             });
@@ -33,20 +35,24 @@ class EditContentPage extends React.Component<Props, State> {
     _onPropertyChange = (e: React.FormEvent<HTMLInputElement>) => {
         this.state.model.update(e.currentTarget.name, e.currentTarget.value);
         this.forceUpdate();
-    };
+    }
 
     _onSubmit = (e: React.MouseEvent<HTMLInputElement>) => {
         e.preventDefault();
 
-        updateContentPage(this.state.model).then(() => {
+        updateContentPage(this.props.selectedTenant.tenantId, this.state.model)
+        .then(() => {
             notify('Content page changed.', 'INFO');
-        }, (err: Error) => { }); // show error message
-    };
+        })
+        .catch((err) => {
+            notify(err, 'ERROR');
+        });
+    }
 
     render() {
         const breadCrumbItems = [
             { text: 'Content Pages', url: '/admin/contentpages' },
-            { text: 'Edit' }
+            { text: 'Edit' },
         ];
 
         return (
@@ -72,13 +78,15 @@ class EditContentPage extends React.Component<Props, State> {
     }
 }
 
-interface Props {
-    match: match<{ id: string }>
+interface Props extends UserProps, WithTenantProps {
+    match: match<{ id: string }>;
 }
 
 interface State {
-    model: EditModel,
-    isLoading: boolean
+    model: EditModel;
+    isLoading: boolean;
 }
 
-export default EditContentPage;
+const WrappedWithTenant = withTenant<UserProps>(EditContentPage);
+
+export default withUser<{}>(WrappedWithTenant);

@@ -1,12 +1,14 @@
 import * as express from 'express';
-import * as mongoose from 'mongoose';
-import * as Handlebars from 'handlebars';
 import * as fs from 'fs';
+import * as Handlebars from 'handlebars';
 import * as path from 'path';
-import { IContentPageModel, findContentPageByUrl } from '../db/contentPageModel';
 import { LoggerInstance } from 'winston';
+import { findContentPageByUrl, IContentPageModel } from '../db/contentPageModel';
+import { findTenantBySite } from '../db/tenantModel';
 
-const createMiddleware = (rootDir: string, logger: LoggerInstance, contentModelInstance: mongoose.Model<IContentPageModel>) => {
+const createMiddleware = (
+        rootDir: string,
+        logger: LoggerInstance) => {
     const router = express.Router();
 
     router.get(['/admin', '/admin/*', '!/admin/api/*'], (req, res) => {
@@ -22,44 +24,51 @@ const createMiddleware = (rootDir: string, logger: LoggerInstance, contentModelI
         res.redirect('/');
     });
 
-    router.get('/*', (req, res) => {
-        findContentPageByUrl(req.path).then(contentPage => {
+    router.get('/*', async (req, res) => {
+        const tenant = await findTenantBySite(req.hostname);
+        if (tenant) {
+            const contentPage = await findContentPageByUrl(tenant.tenantId, req.path);
             if (contentPage) {
-
                 const model = {
                     title: contentPage.title,
                     content: contentPage.content,
                     description: contentPage.description,
-                    keywords: contentPage.keywords
+                    keywords: contentPage.keywords,
                 };
 
-                handleCustomTheme(res, model);
+                handleCustomTheme(req, res, model, tenant.tenantId);
             } else {
                 res.render('404');
             }
-        });
+        } else {
+            res.render('404');
+        }
     });
 
-
-    const handleCustomTheme = (res: express.Response, model: object) => {
-        const customThemeFile = path.resolve(rootDir, './localfiles/themes/layout.hbs');
+    const handleCustomTheme = async (
+        req: express.Request,
+        res: express.Response,
+        model: object,
+        tenantId: string,
+    ) => {
+        const customThemeFile = path.resolve(rootDir, `./localfiles/themes/${tenantId}/layout.hbs`);
 
         fs.stat(customThemeFile, (err, stat) => {
             if (err) {
-                res.render('index', model)
+                res.render('index', model);
             } else {
-                fs.readFile(path.resolve(customThemeFile), 'utf8', (err, data) => {
-                    if (err) {
-                        logger.error(err.message);
+                fs.readFile(path.resolve(customThemeFile), 'utf8', (fsErr, data) => {
+                    if (fsErr) {
+                        logger.error(fsErr.message);
                         res.send(400);
                     }
-                    
-                    var template = Handlebars.compile(data);
+
+                    const template = Handlebars.compile(data);
                     res.send(template(model));
                 });
             }
         });
-    }
+    };
 
     return router;
 };

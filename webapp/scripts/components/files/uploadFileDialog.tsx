@@ -1,16 +1,18 @@
-import * as React from 'react';
 import Button from 'material-ui/Button';
-import Typography from 'material-ui/Typography';
-import TextField from 'material-ui/TextField';
 import Dialog, { DialogActions, DialogContent, DialogContentText, DialogTitle } from 'material-ui/Dialog';
+import TextField from 'material-ui/TextField';
+import Typography from 'material-ui/Typography';
+import * as React from 'react';
+import { notify } from '../../services/notificationService';
+import { UserProps, withUser } from '../../services/userProvider';
+import { withTenant, WithTenantProps } from '../../services/withTenant';
 import { Container } from '../common';
 import { uploadFile } from './filesService';
-import { notify } from '../../services/notificationService';
 
-class UploadFileDialog extends React.Component<Props, State> {
+class UploadFileDialog extends React.Component<InnerProps, State> {
 
     state: State = {
-        fileName: null
+        fileName: null,
     };
 
     _form: HTMLFormElement = null;
@@ -22,20 +24,20 @@ class UploadFileDialog extends React.Component<Props, State> {
         } else {
             this.setState({ fileName: this._fileInput.files[0].name });
         }
-    };
+    }
 
     _uploadClicked = () => {
         const file = this._fileInput.files[0];
-        
-        uploadFile(file)
+
+        uploadFile(this.props.selectedTenant.tenantId, file)
             .then(() => {
-                notify(`File: ${file.name} uploaded successfully.`, "INFO")
+                notify(`File: ${file.name} uploaded successfully.`, 'INFO');
                 this.props.onClose(true);
             })
-            .catch(err => {
-                notify(`An error occured while uploading your file`, "ERROR");
+            .catch((err) => {
+                notify(`An error occured while uploading your file`, 'ERROR');
             });
-    };
+    }
 
     _onClose = () => {
         this.setState({ fileName: null });
@@ -56,14 +58,14 @@ class UploadFileDialog extends React.Component<Props, State> {
                         Select a file from your local computer to upload.
                     </DialogContentText>
                     <Container>
-                        <form ref={form => this._form = form} 
-                                action="" 
+                        <form ref={(form) => this._form = form}
+                                action=""
                                 method="post"
                                 encType="multipart/form-data"
                         >
                             <input
                                 onChange={this._onFileInputChange}
-                                ref={(input => this._fileInput = input)}
+                                ref={((input) => this._fileInput = input)}
                                 style={{ display: 'none' }}
                                 id="file-upload-input"
                                 type="file"
@@ -91,12 +93,16 @@ class UploadFileDialog extends React.Component<Props, State> {
 }
 
 interface State {
-    fileName: string
+    fileName: string;
 }
 
-interface Props {
-    open: boolean,
-    onClose: (refresh?: boolean) => void
+interface OuterProps {
+    open: boolean;
+    onClose: (refresh?: boolean) => void;
 }
 
-export default UploadFileDialog;
+interface InnerProps extends OuterProps, WithTenantProps, UserProps {  }
+
+const WrappedWithTenant = withTenant<UserProps>(UploadFileDialog);
+
+export default withUser<OuterProps>(WrappedWithTenant);
