@@ -1,6 +1,5 @@
 import * as config from 'config';
 import * as express from 'express';
-import { get } from 'http';
 import * as mongoose from 'mongoose';
 import * as passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth2';
@@ -20,6 +19,7 @@ const serializeUser = (userModel: IUserModel, associatedTenants: TenantDto[]) =>
         tenants: associatedTenants,
         email: userModel.email,
         photo: userModel.photo,
+        rootAccount: userModel.rootAccount,
     };
 };
 
@@ -74,10 +74,11 @@ export const configurePassport = (app: express.Express,
                             name: 'google',
                             id: profile.id,
                         },
+                        rootAccount: (email === ROOT_ACCOUNT),
                     });
 
                     await newUser.save();
-                    logger.info(`User '${profile.displayNam}' created`);
+                    logger.info(`User '${profile.displayName}' created`);
                     cb(null, serializeUser(newUser, associatedTenants));
 
                 } else {
@@ -86,7 +87,7 @@ export const configurePassport = (app: express.Express,
             }
         } catch (err) {
             logger.error(err);
-            logger.error(`Error occured while logging in the current user '${profile.displayNam}'`);
+            logger.error(`Error occured while logging in the current user '${profile.displayName}'`);
             cb(err);
         }
     }));

@@ -1,13 +1,12 @@
-import * as React from 'react';
-import * as PropTypes from 'prop-types';
-import TextField from 'material-ui/TextField';
 import { FormControl } from 'material-ui/Form';
-import Tabs, { Tab } from 'material-ui/Tabs';
 import Paper from 'material-ui/Paper';
-import { withStyles, WithStyles, Theme } from 'material-ui/styles';
+import { Theme, withStyles, WithStyles } from 'material-ui/styles';
+import Tabs, { Tab } from 'material-ui/Tabs';
+import TextField from 'material-ui/TextField';
+import * as React from 'react';
 
-import EditModel from './models/edit';
 import { Container, PaddedPaper } from '../common';
+import EditModel from './models/edit';
 
 const styles = (theme: Theme) => ({
     root: theme.mixins.gutters({}),
@@ -16,12 +15,12 @@ const styles = (theme: Theme) => ({
 class ContentPageForm extends React.Component<Props, State> {
 
     state: State = {
-        selectedTab: 0
-    }
+        selectedTab: 0,
+    };
 
     _changeTab = (evt: any, value: number) => {
         this.setState({ selectedTab: value });
-    };
+    }
 
     _renderContentTab = () => {
         const { model, onPropertyChange } = this.props;
@@ -131,20 +130,20 @@ class ContentPageForm extends React.Component<Props, State> {
             </div>
         );
     }
-};
+}
 
 interface Props extends OuterProps, WithStyles<'root'> {
 
 }
 
 interface OuterProps {
-    children: any,
-    model: EditModel,
-    onPropertyChange: (e: React.FormEvent<HTMLInputElement>) => void
+    children: any;
+    model: EditModel;
+    onPropertyChange: (e: React.FormEvent<HTMLInputElement>) => void;
 }
 
 interface State {
-    selectedTab: number
+    selectedTab: number;
 }
 
 export default withStyles(styles)<OuterProps>(ContentPageForm);

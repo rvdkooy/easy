@@ -8,7 +8,7 @@
         "lib": ["dom","es6","dom.iterable","scripthost"]
     },
     "files": [
-        "app.tsx"
+        "./scripts/app.tsx"
     ],
     "include": [
         "typings/**/*"

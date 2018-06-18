@@ -1,17 +1,14 @@
-import * as config from 'config';
 import * as express from 'express';
 import * as fs from 'fs';
 import * as Handlebars from 'handlebars';
-import * as mongoose from 'mongoose';
 import * as path from 'path';
 import { LoggerInstance } from 'winston';
-import { findContentPageByUrl, IContentPageModel, contentPageSchema } from '../db/contentPageModel';
+import { findContentPageByUrl, IContentPageModel } from '../db/contentPageModel';
 import { findTenantBySite } from '../db/tenantModel';
 
 const createMiddleware = (
         rootDir: string,
-        logger: LoggerInstance,
-        contentModelInstance: mongoose.Model<IContentPageModel>) => {
+        logger: LoggerInstance) => {
     const router = express.Router();
 
     router.get(['/admin', '/admin/*', '!/admin/api/*'], (req, res) => {
@@ -31,7 +28,6 @@ const createMiddleware = (
         const tenant = await findTenantBySite(req.hostname);
         if (tenant) {
             const contentPage = await findContentPageByUrl(tenant.tenantId, req.path);
-            console.log(req.path);
             if (contentPage) {
                 const model = {
                     title: contentPage.title,

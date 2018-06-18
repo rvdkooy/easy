@@ -1,7 +1,5 @@
-import { History } from 'history';
 import BusinessIcon from 'material-ui-icons/Business';
 import CloudIcon from 'material-ui-icons/Cloud';
-import EventIcon from 'material-ui-icons/Event';
 import ExpandLess from 'material-ui-icons/ExpandLess';
 import ExpandMore from 'material-ui-icons/ExpandMore';
 import FileUploadIcon from 'material-ui-icons/FileUpload';
@@ -21,7 +19,6 @@ import Collapse from 'material-ui/transitions/Collapse';
 import Typography from 'material-ui/Typography';
 import * as React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { Link } from 'react-router-dom';
 import { UserProps, withUser } from '../../services/userProvider';
 
 const styles = (theme: Theme) => ({

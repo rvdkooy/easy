@@ -12,6 +12,7 @@ export interface IUser {
         id: string,
         name: string,
     };
+    rootAccount: boolean;
 }
 
 export interface IUserModel extends IUser, mongoose.Document { }
@@ -33,6 +34,10 @@ export const userSchema = new Schema({
     provider: {
         id: String,
         name: String,
+    },
+    rootAccount: {
+        type: Boolean,
+        required: true,
     },
 });
 

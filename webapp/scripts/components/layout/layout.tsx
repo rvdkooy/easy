@@ -3,7 +3,6 @@ import ErrorIcon from 'material-ui-icons/ErrorOutline';
 import Snackbar from 'material-ui/Snackbar';
 import { withStyles, WithStyles } from 'material-ui/styles';
 import { Theme } from 'material-ui/styles';
-import Typography from 'material-ui/Typography';
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import { Route, Switch } from 'react-router-dom';
@@ -49,7 +48,7 @@ class Layout extends React.Component<Props, State> {
     _unregisterListenToNotifications: () => void | null = null;
 
     static childContextTypes = {
-        selectedTenant: PropTypes.object.isRequired,
+        selectedTenant: PropTypes.object,
     };
 
     getChildContext() {

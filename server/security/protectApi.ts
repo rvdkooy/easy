@@ -22,7 +22,7 @@ export const tenantAuthorize = (req: express.Request, res: express.Response, nex
 };
 
 export const rootAuthorize = (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    if (!req.user || req.user.tenants.find((t: any) => t.tenantId === '*') === null) {
+    if (!req.user || !req.user.rootAccount) {
         res.sendStatus(403);
     } else {
         next();

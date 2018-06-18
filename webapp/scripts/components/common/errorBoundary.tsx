@@ -1,17 +1,16 @@
-import * as React from 'react';
 import Typography from 'material-ui/Typography';
+import * as React from 'react';
 
 class ErrorBoundary extends React.Component {
     state: State = {
-        hasError: false
+        hasError: false,
     };
 
     componentDidCatch(error: Error, info: any) {
         this.setState({ hasError: true });
-
         console.error(error, info);
     }
-    
+
     render() {
         if (this.state.hasError) {
             return (
@@ -24,7 +23,7 @@ class ErrorBoundary extends React.Component {
 }
 
 interface State {
-    hasError: boolean
+    hasError: boolean;
 }
 
 export default ErrorBoundary;

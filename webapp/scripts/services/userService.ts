@@ -4,6 +4,7 @@ export interface User {
     tenants: Tenant[];
     displayName: string;
     photo: string;
+    rootAccount: boolean;
 }
 
 export interface Tenant {
