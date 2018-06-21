@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as Handlebars from 'handlebars';
 import * as path from 'path';
 import { LoggerInstance } from 'winston';
-import { findContentPageByUrl, IContentPageModel } from '../db/contentPageModel';
+import { findContentPageByUrl } from '../db/contentPageModel';
 import { findTenantBySite } from '../db/tenantModel';
 
 const createMiddleware = (
@@ -41,7 +41,7 @@ const createMiddleware = (
                 res.render('404');
             }
         } else {
-            res.render('404');
+            res.render('easy', { layout: null });
         }
     });
 
