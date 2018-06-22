@@ -1,8 +1,8 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
-import TextField from 'material-ui/TextField';
-import Avatar from 'material-ui/Avatar';
-import { FormControl } from 'material-ui/Form';
+import TextField from '@material-ui/core/TextField';
+import Avatar from '@material-ui/core/Avatar';
+import { FormControl } from '@material-ui/core/Form';
 import EditModel from './models/edit';
 import { Container } from '../common';
 

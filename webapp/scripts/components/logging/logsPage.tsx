@@ -1,4 +1,4 @@
-import Typography from 'material-ui/Typography';
+import Typography from '@material-ui/core/Typography';
 import * as React from 'react';
 import { BreadCrumbs, PaddedPaper } from '../common';
 import { getLogs, LogItem } from './logsService';

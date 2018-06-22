@@ -6,7 +6,6 @@ import ErrorBoundary from './components/common/errorBoundary';
 import Layout from './components/layout/layout';
 import LoginPage from './components/login/index';
 import { CurrentUserProvider } from './services/userProvider';
-import { retrieveCurrentUser } from './services/userService';
 
 bootstrapper().then((user) => {
     // tslint:disable-next-line

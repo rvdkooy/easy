@@ -1,11 +1,5 @@
-import AppBar from 'material-ui/AppBar';
-import Avatar from 'material-ui/Avatar';
-import Button from 'material-ui/Button';
-import { MenuItem } from 'material-ui/Menu';
-import Select from 'material-ui/Select';
-import withStyles, { WithStyles } from 'material-ui/styles/withStyles';
-import Toolbar from 'material-ui/Toolbar';
-import Typography from 'material-ui/Typography';
+import { AppBar, Avatar, Button, MenuItem, Select, Toolbar, Typography } from '@material-ui/core';
+import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import { UserProps, withUser } from '../../services/userProvider';
@@ -40,7 +34,7 @@ class Header extends React.Component<Props> {
         });
     }
 
-    _onTenantChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
+    _onTenantChanged = (e: React.ChangeEvent<HTMLSelectElement>) => {
         this.props.onTenantChanged(e.target.value);
     }
 
@@ -50,7 +44,7 @@ class Header extends React.Component<Props> {
         return (
             <AppBar position="static">
                 <Toolbar>
-                    <Typography type="title" color="inherit" className={classes.flex}>
+                    <Typography variant="title" color="inherit" className={classes.flex}>
                         Easy admin system
                     </Typography>
                     {
@@ -65,7 +59,9 @@ class Header extends React.Component<Props> {
                     }
                     <Button
                         onClick={() => window.location.href = '/logout'}
-                        color="contrast" title={currentUser.displayName}>
+                        title={currentUser.displayName}
+                        color="inherit"
+                    >
                         <Avatar alt="Remy Sharp" src={currentUser.photo} />
                         <Typography color="inherit" className={classes.logoutText}>
                             Logout

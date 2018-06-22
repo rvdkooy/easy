@@ -1,9 +1,9 @@
 import * as React from 'react';
-import Typography from 'material-ui/Typography';
+import Typography from '@material-ui/core/Typography';
 import CardItem from './card';
-import Button from 'material-ui/Button';
-import { Theme, withTheme } from 'material-ui/styles';
-import withStyles, { WithStyles } from 'material-ui/styles/withStyles';
+import Button from '@material-ui/core/Button';
+import { Theme, withTheme } from '@material-ui/core/styles';
+import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
 
 const styles = (theme: Theme) => ({
     cardContainer: {

@@ -1,5 +1,5 @@
-import Button from 'material-ui/Button';
-import Typography from 'material-ui/Typography';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { notify } from '../../services/notificationService';

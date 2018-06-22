@@ -1,9 +1,9 @@
 import * as React from 'react';
-import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
-import { red, amber, blue } from 'material-ui/colors';
-import Chip from 'material-ui/Chip';
-import { CircularProgress } from 'material-ui/Progress';
-import withStyles, { WithStyles } from 'material-ui/styles/withStyles';
+import Table, { TableBody, TableCell, TableHead, TableRow } from '@material-ui/core/Table';
+import { red, amber, blue } from '@material-ui/core/colors';
+import Chip from '@material-ui/core/Chip';
+import { CircularProgress } from '@material-ui/core/Progress';
+import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
 import { LogItem } from './logsService';
 
 const styles = {

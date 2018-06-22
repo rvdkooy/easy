@@ -1,10 +1,10 @@
 import * as React from 'react';
-import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
-import IconButton from 'material-ui/IconButton';
-import DeleteIcon from 'material-ui-icons/Delete'
+import Table, { TableBody, TableCell, TableHead, TableRow } from '@material-ui/core/Table';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete'
 
-import { CircularProgress } from 'material-ui/Progress';
-import withStyles, { WithStyles } from 'material-ui/styles/withStyles';
+import { CircularProgress } from '@material-ui/core/Progress';
+import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
 import { FileItem } from './filesService';
 
 const styles = {

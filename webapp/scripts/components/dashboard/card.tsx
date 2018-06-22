@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { withStyles, WithStyles } from 'material-ui/styles';
-import Typography from 'material-ui/Typography';
-import Button from 'material-ui/Button';
-import Card, { CardMedia, CardContent, CardActions } from 'material-ui/Card';
+import { withStyles, WithStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import Card, { CardMedia, CardContent, CardActions } from '@material-ui/core/Card';
 import { Link } from 'react-router-dom';
 
 const styles= {

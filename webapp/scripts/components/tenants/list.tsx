@@ -1,10 +1,10 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { CircularProgress } from 'material-ui/Progress';
-import Button from 'material-ui/Button';
-import Typography from 'material-ui/Typography';
-import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
+import { CircularProgress } from '@material-ui/core/Progress';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import Table, { TableBody, TableCell, TableHead, TableRow } from '@material-ui/core/Table';
 import { Container, BreadCrumbs, PaddedPaper } from '../common';
 import { notify } from '../../services/notificationService';
 import ListRow from './listRow';

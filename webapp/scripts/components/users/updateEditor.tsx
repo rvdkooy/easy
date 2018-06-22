@@ -1,8 +1,8 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { match } from 'react-router-dom';
-import Button from 'material-ui/Button';
-import Typography from 'material-ui/Typography';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import { ProgressIndicator, BreadCrumbs, PaddedPaper } from '../../components/common';
 import UserForm from './userForm';
 import { getUser, updateUser } from './usersApi';

@@ -1,4 +1,4 @@
-import Typography from 'material-ui/Typography';
+import { Typography } from '@material-ui/core';
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import { PaddedPaper } from '../components/common';
@@ -21,7 +21,7 @@ export function withTenant<P>(Component: React.ComponentClass<WithTenantProps> |
             if (!this.context.selectedTenant) {
                 return (
                     <PaddedPaper>
-                        <Typography type="headline">No tenant selected, please select one!</Typography>
+                        <Typography variant="headline">No tenant selected, please select one!</Typography>
                     </PaddedPaper>
                 );
             }

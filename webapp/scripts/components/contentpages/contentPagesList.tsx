@@ -1,15 +1,11 @@
-import Button from 'material-ui/Button';
-import { CircularProgress } from 'material-ui/Progress';
-import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
-import Typography from 'material-ui/Typography';
-import * as PropTypes from 'prop-types';
+import { Button, CircularProgress, Table, TableBody, TableCell,
+    TableHead, TableRow, Typography } from '@material-ui/core';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { BreadCrumbs, Container } from '../common';
-import PaddedPaper from '../common/paddedPaper';
-
 import { notify } from '../../services/notificationService';
 import { withTenant, WithTenantProps } from '../../services/withTenant';
+import { BreadCrumbs, Container } from '../common';
+import PaddedPaper from '../common/paddedPaper';
 import { deleteContentPage, getContentPages } from './contentPagesApi';
 import ListRow from './contentPagesListRow';
 import ListModel from './models/list';
@@ -69,13 +65,12 @@ class ContentPagesList extends React.Component<WithTenantProps, State> {
         return (
             <div>
                 <BreadCrumbs items={breadCrumbItems} />
-
                 <PaddedPaper>
-                    <Typography type="headline">List of content pages</Typography>
+                    <Typography variant="headline">List of content pages</Typography>
                     <Container>
                         <Button
                             component={({ ...props }) => <Link to="/admin/contentpages/new" { ...props } />}
-                            raised color="primary"
+                            variant="raised" color="primary"
                         >
                             Create a new page
                         </Button>

@@ -1,7 +1,7 @@
-import { WithStyles, withStyles } from 'material-ui/styles';
-import { Theme } from 'material-ui/styles';
-import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
-import Typography from 'material-ui/Typography';
+import { WithStyles, withStyles } from '@material-ui/core/styles';
+import { Theme } from '@material-ui/core/styles';
+import Table, { TableBody, TableCell, TableHead, TableRow } from '@material-ui/core/Table';
+import Typography from '@material-ui/core/Typography';
 import * as React from 'react';
 import { getLogs, LogItem } from '../logging/logsService';
 import LogsTable from '../logging/logsTable';

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { TableCell, TableRow } from 'material-ui/Table';
-import IconButton from 'material-ui/IconButton';
-import DeleteIcon from 'material-ui-icons/Delete'
+import { TableCell, TableRow } from '@material-ui/core/Table';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete'
 import ConfirmModal from '../../components/common/modals/confirmModal';
 import ListModel from './models/list';
 

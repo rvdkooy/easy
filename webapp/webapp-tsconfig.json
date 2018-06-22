@@ -5,7 +5,8 @@
         "module": "commonjs",
         "target": "es5",
         "jsx": "react",
-        "lib": ["dom","es6","dom.iterable","scripthost"]
+        "lib": ["dom","es6","dom.iterable","scripthost"],
+        "allowSyntheticDefaultImports" : true
     },
     "files": [
         "./scripts/app.tsx"
