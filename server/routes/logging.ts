@@ -7,12 +7,12 @@ const createMiddleware = (connection: mongoose.Connection) => {
     router.get('/logs/latest/:number', (req: express.Request, res: express.Response) => {
         connection.db.collection('log', (err, collection) => {
             collection.find({}).sort({timestamp: -1}).limit(+req.params.number).toArray((err2, results) => {
-                res.send(results.map(x => ({
+                res.send(results.map((x) => ({
                     id: x._id,
                     level: x.level,
                     message: x.message,
                     timestamp: x.timestamp,
-                    meta: x.meta
+                    meta: x.meta,
                 })));
             });
         });
