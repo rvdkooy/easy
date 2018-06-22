@@ -1,33 +1,30 @@
+import { IconButton, Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
+import { createStyles, withStyles, WithStyles } from '@material-ui/core/styles';
+import { Delete as DeleteIcon } from '@material-ui/icons';
 import * as React from 'react';
-import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
-import IconButton from 'material-ui/IconButton';
-import DeleteIcon from 'material-ui-icons/Delete'
-
-import { CircularProgress } from 'material-ui/Progress';
-import withStyles, { WithStyles } from 'material-ui/styles/withStyles';
 import { FileItem } from './filesService';
 
-const styles = {
+const styles = createStyles({
     filesTable: {
-        tableLayout: 'fixed'
+        tableLayout: 'fixed',
     },
     nameColumn: {
-        width: 'auto'
+        width: 'auto',
     },
     modifiedColumn: {
-        width: 'auto'
+        width: 'auto',
     },
     sizeColumn: {
-        width: 50
+        width: 50,
     },
     actions: {
-        width: 25
-    }
-};
+        width: 25,
+    },
+});
 
 const FilesTable = (props: Props) => {
     const { classes } = props;
-    
+
     return (
         <Table className={classes.filesTable}>
             <TableHead>
@@ -59,12 +56,12 @@ const FilesTable = (props: Props) => {
 };
 
 interface OuterProps {
-    files: FileItem[],
-    onDeleteFile: (key: string) => void
+    files: FileItem[];
+    onDeleteFile: (key: string) => void;
 }
 
 interface Props extends OuterProps, WithStyles<keyof typeof styles> {
-    
+
 }
 
 export default withStyles(styles)<OuterProps>(FilesTable);

@@ -1,9 +1,6 @@
-import Button from 'material-ui/Button';
-import Typography from 'material-ui/Typography';
-import * as PropTypes from 'prop-types';
+import { Button } from '@material-ui/core';
 import * as React from 'react';
 import { match } from 'react-router-dom';
-
 import { BreadCrumbs, ProgressIndicator } from '../../components/common';
 import { notify } from '../../services/notificationService';
 import { UserProps, withUser } from '../../services/userProvider';
@@ -68,7 +65,6 @@ class EditContentPage extends React.Component<Props, State> {
                             <Button
                                 disabled={!this.state.model.isValid()}
                                 color="primary"
-                                raised
                                 onClick={this._onSubmit}
                             >Update</Button>
                         </ContentPageForm>

@@ -1,27 +1,26 @@
+import { Button, Dialog, DialogActions,
+    DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 import * as React from 'react';
-import * as PropTypes from 'prop-types';
-import Button from 'material-ui/Button';
-import Dialog, { DialogActions, DialogContent, DialogContentText, DialogTitle, } from 'material-ui/Dialog';
 
 class ConfirmModal extends React.PureComponent<Props> {
-    
     public static defaultProps = {
         title: '',
         className: '',
-        onDeny: () => {}
+        // tslint:disable-next-line no-empty
+        onDeny: () => {},
     };
 
     _modalFooterRef: any;
     _confirmBtnRef: any;
     _onDenied = () => {
         this.props.onHide();
-        this.props.onDeny();
+        this.props.onDeny && this.props.onDeny();
     }
 
     _onConfirmed = () => {
         this.props.onHide();
-        this.props.onConfirm(); 
-    };
+        this.props.onConfirm();
+    }
 
     render() {
         return (
@@ -45,16 +44,14 @@ class ConfirmModal extends React.PureComponent<Props> {
     }
 }
 
-
-
 interface Props {
-    title: string,
-    show: boolean,
-    onHide: () => void,
-    onConfirm: () => void,
-    onDeny?: () => void,
-    className?: string,
-    children?: any,
-};
+    title: string;
+    show: boolean;
+    onHide: () => void;
+    onConfirm: () => void;
+    onDeny?: () => void;
+    className?: string;
+    children?: any;
+}
 
 export default ConfirmModal;

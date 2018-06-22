@@ -1,21 +1,23 @@
+import { Button, Card, CardActions, CardContent,
+    CardMedia, Typography } from '@material-ui/core';
+import { createStyles,withStyles, WithStyles } from '@material-ui/core/styles';
 import * as React from 'react';
-import { withStyles, WithStyles } from 'material-ui/styles';
-import Typography from 'material-ui/Typography';
-import Button from 'material-ui/Button';
-import Card, { CardMedia, CardContent, CardActions } from 'material-ui/Card';
 import { Link } from 'react-router-dom';
 
-const styles= {
+const styles = createStyles({
     card: {
         flex: '0 1 30%',
-    } as React.CSSProperties,
+    },
     media: {
         height: 125,
-    }
-}
+    },
+});
 
 const CardItem = (props: Props) => {
-    const outerProps = props;
+    const ButtonComponent = ({...inner}) => {
+        return <Link to={ props.href } {...inner} />;
+    };
+
     return (
         <Card className={props.classes.card}>
             <CardMedia
@@ -24,7 +26,7 @@ const CardItem = (props: Props) => {
                 title=""
             />
             <CardContent>
-                <Typography type="headline" component="h2">
+                <Typography variant="headline" component="h2">
                     { props.title }
                 </Typography>
                 <Typography component="p">
@@ -33,8 +35,8 @@ const CardItem = (props: Props) => {
             </CardContent>
             <CardActions>
                 <Button
-                    component={({ ...props }) => <Link to={ outerProps.href } { ...props } />}
-                    dense color="primary">
+                    component={ButtonComponent}
+                    color="primary">
                     { `Go to ${props.title}` }
                 </Button>
             </CardActions>
@@ -44,10 +46,10 @@ const CardItem = (props: Props) => {
 
 interface Props extends WithStyles<'card' | 'media'>, OuterProps { }
 interface OuterProps {
-    title: string,
-    description: string,
-    href: string,
-    image: string
+    title: string;
+    description: string;
+    href: string;
+    image: string;
 }
 
 export default withStyles(styles)<OuterProps>(CardItem);

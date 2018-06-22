@@ -1,34 +1,32 @@
+import { Chip, Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core';
+import { amber, blue, red } from '@material-ui/core/colors';
+import { createStyles, withStyles, WithStyles } from '@material-ui/core/styles';
 import * as React from 'react';
-import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
-import { red, amber, blue } from 'material-ui/colors';
-import Chip from 'material-ui/Chip';
-import { CircularProgress } from 'material-ui/Progress';
-import withStyles, { WithStyles } from 'material-ui/styles/withStyles';
 import { LogItem } from './logsService';
 
-const styles = {
+const styles = createStyles({
     logsTable: {
-        tableLayout: 'fixed'
+        tableLayout: 'fixed',
     },
     whenColumn: {
-        width: 120
+        width: 120,
     },
     levelColumn: {
-        width: 50
+        width: 50,
     },
     messageColumn: {
-        width: 'auto'
+        width: 'auto',
     },
     info: {
-        backgroundColor: blue.A100
+        backgroundColor: blue.A100,
     },
     warning: {
-        backgroundColor: amber.A100
+        backgroundColor: amber.A100,
     },
     error: {
-        backgroundColor: red.A100
-    }
-};
+        backgroundColor: red.A100,
+    },
+});
 
 const LogsTable = (props: Props) => {
     const { classes } = props;
@@ -72,7 +70,7 @@ const LogsTable = (props: Props) => {
 };
 
 interface Props extends WithStyles<keyof typeof styles> {
-    logs: LogItem[]
+    logs: LogItem[];
 }
 
 export default withStyles(styles)<{ logs: LogItem[] }>(LogsTable);

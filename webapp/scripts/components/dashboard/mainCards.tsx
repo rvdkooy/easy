@@ -1,18 +1,16 @@
+import { createStyles } from '@material-ui/core/styles';
+import withStyles, { WithStyles } from '@material-ui/core/styles/withStyles';
 import * as React from 'react';
-import Typography from 'material-ui/Typography';
 import CardItem from './card';
-import Button from 'material-ui/Button';
-import { Theme, withTheme } from 'material-ui/styles';
-import withStyles, { WithStyles } from 'material-ui/styles/withStyles';
 
-const styles = (theme: Theme) => ({
+const styles = createStyles({
     cardContainer: {
         marginTop: 16,
         marginBottom: 16,
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-between'
-    } as React.CSSProperties
+        justifyContent: 'space-between',
+    },
 });
 
 class MainCards extends React.Component<Props> {
@@ -22,21 +20,20 @@ class MainCards extends React.Component<Props> {
         return (
             <div>
                 <div className={classes.cardContainer}>
-                    
                     <CardItem
                         title="Content Pages"
                         description="this is where you can manage your content"
-                        href="/contentpages"
+                        href="/admin/contentpages"
                         image="/contentpages" />
                     <CardItem
                         title="Theme"
                         description="this is where you can manage your website theme"
-                        href="/theme"
+                        href="/admin/theme"
                         image="/contentpages" />
                     <CardItem
                         title="Users"
                         description="This is where you can manage your users"
-                        href="/users"
+                        href="/admin/users"
                         image="/test" />
                 </div>
             </div>

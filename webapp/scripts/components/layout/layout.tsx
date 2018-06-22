@@ -1,8 +1,7 @@
-import DoneIcon from 'material-ui-icons/Done';
-import ErrorIcon from 'material-ui-icons/ErrorOutline';
-import Snackbar from 'material-ui/Snackbar';
-import { withStyles, WithStyles } from 'material-ui/styles';
-import { Theme } from 'material-ui/styles';
+import { Snackbar } from '@material-ui/core';
+import { withStyles, WithStyles } from '@material-ui/core/styles';
+import { StyleRulesCallback } from '@material-ui/core/styles';
+import { Done as DoneIcon, Error as ErrorIcon } from '@material-ui/icons';
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import { Route, Switch } from 'react-router-dom';
@@ -19,14 +18,14 @@ import withRoot from '../withRoot';
 import Header from './header';
 import LeftMenu from './leftMenu';
 
-const styles = (theme: Theme) => ({
+const styles: StyleRulesCallback<'root' | 'rightContent' | 'mainContent' | 'snackbarIcon'> = (theme) => ({
     root: {
         marginTop: 0,
         width: '100%',
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
-    } as React.CSSProperties, // somehow this is needed for the 'flexDirection' property
+    },
     rightContent: theme.mixins.gutters({
         paddingBottom: theme.spacing.unit * 2,
         display: 'flex',
@@ -37,7 +36,7 @@ const styles = (theme: Theme) => ({
         flexDirection: 'row',
         flex: '1 0 auto',
         display: 'flex',
-    } as React.CSSProperties,
+    },
     snackbarIcon: {
         verticalAlign: 'top',
         marginRight: 8,
@@ -125,7 +124,7 @@ class Layout extends React.Component<Props, State> {
                   open={!!this.state.snackbarMessage}
                   autoHideDuration={4000}
                   onClose={this._closeSnackbar}
-                  SnackbarContentProps={{
+                  ContentProps={{
                     'aria-describedby': 'message-id',
                   }}
                   message={this._renderSnackbarContent()}

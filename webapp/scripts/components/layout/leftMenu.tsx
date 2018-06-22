@@ -1,27 +1,15 @@
-import BusinessIcon from 'material-ui-icons/Business';
-import CloudIcon from 'material-ui-icons/Cloud';
-import ExpandLess from 'material-ui-icons/ExpandLess';
-import ExpandMore from 'material-ui-icons/ExpandMore';
-import FileUploadIcon from 'material-ui-icons/FileUpload';
-import HomeIcon from 'material-ui-icons/Home';
-import ListIcon from 'material-ui-icons/List';
-import SecurityIcon from 'material-ui-icons/Security';
-import SettingsIcon from 'material-ui-icons/Settings';
-import StarIcon from 'material-ui-icons/Star';
-import TocIcon from 'material-ui-icons/Toc';
-import WebIcon from 'material-ui-icons/Web';
-import Avatar from 'material-ui/Avatar';
-import Divider from 'material-ui/Divider';
-import Drawer from 'material-ui/Drawer';
-import List, { ListItem, ListItemIcon, ListItemText, ListSubheader } from 'material-ui/List';
-import { Theme, WithStyles, withStyles } from 'material-ui/styles';
-import Collapse from 'material-ui/transitions/Collapse';
-import Typography from 'material-ui/Typography';
+import { Avatar, Collapse, Divider, Drawer, List, ListItem,
+    ListItemIcon, ListItemText, ListSubheader, Typography } from '@material-ui/core';
+import { StyleRulesCallback, Theme, WithStyles, withStyles } from '@material-ui/core/styles';
+import { Business as BusinessIcon, Cloud as CloudIcon, ExpandLess, ExpandMore,
+    FileUpload as FileUploadIcon, Home as HomeIcon, List as ListIcon,
+    Security as SecurityIcon, Settings as SettingsIcon, Star as StarIcon,
+    Toc as TocIcon, Web as WebIcon } from '@material-ui/icons';
 import * as React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { UserProps, withUser } from '../../services/userProvider';
 
-const styles = (theme: Theme) => ({
+const styles: StyleRulesCallback<'menu' | 'avatar' | 'drawerPaper' | 'nested'> = (theme) => ({
     menu: {
         width: 250,
     },
@@ -32,7 +20,7 @@ const styles = (theme: Theme) => ({
         position: 'relative',
         height: '100%',
         width: 240,
-    } as React.CSSProperties,
+    },
     nested: {
         paddingLeft: theme.spacing.unit * 4,
     },
@@ -79,7 +67,7 @@ class LeftMenu extends React.Component<AllProps, State> {
                 }}
                 anchor="left"
                 open={this.props.open}
-                type="permanent"
+                variant="permanent"
             >
                 <div className={classes.menu}>
                     <div className={classes.avatar}>

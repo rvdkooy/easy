@@ -1,8 +1,6 @@
+import { Button, Paper, Typography } from '@material-ui/core';
+import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
 import * as React from 'react';
-import Paper from 'material-ui/Paper';
-import Typography from 'material-ui/Typography';
-import Button from 'material-ui/Button';
-import { Theme, withStyles, WithStyles } from 'material-ui/styles';
 
 const styles = (theme: Theme) => ({
     root: theme.mixins.gutters({
@@ -15,13 +13,13 @@ const styles = (theme: Theme) => ({
 const LoginPage = (props: Props) => {
     return (
         <Paper className={props.classes.root}>
-            <Typography type="headline" component="h3">
+            <Typography variant="headline" component="h3">
                 Login
             </Typography>
                 <Typography component="p">
                     You can login with your google account
             </Typography>
-            <Button raised color="primary" href="/auth/google">
+            <Button variant="raised" color="primary" href="/auth/google">
                 Login
             </Button>
         </Paper>

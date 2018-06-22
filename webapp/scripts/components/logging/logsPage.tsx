@@ -1,4 +1,4 @@
-import Typography from 'material-ui/Typography';
+import { Typography } from '@material-ui/core';
 import * as React from 'react';
 import { BreadCrumbs, PaddedPaper } from '../common';
 import { getLogs, LogItem } from './logsService';
@@ -25,7 +25,7 @@ class LogsPage extends React.Component<undefined, State> {
             <div>
                 <BreadCrumbs items={breadCrumbItems} />
                 <PaddedPaper>
-                    <Typography type="headline">Logs</Typography>
+                    <Typography variant="headline">Logs</Typography>
 
                     <LogsTable logs={this.state.logs} />
                 </PaddedPaper>

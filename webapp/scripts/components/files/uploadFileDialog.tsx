@@ -1,7 +1,5 @@
-import Button from 'material-ui/Button';
-import Dialog, { DialogActions, DialogContent, DialogContentText, DialogTitle } from 'material-ui/Dialog';
-import TextField from 'material-ui/TextField';
-import Typography from 'material-ui/Typography';
+import { Button, Dialog, DialogActions, DialogContent,
+    DialogContentText, DialogTitle, Typography } from '@material-ui/core';
 import * as React from 'react';
 import { notify } from '../../services/notificationService';
 import { UserProps, withUser } from '../../services/userProvider';
@@ -49,7 +47,7 @@ class UploadFileDialog extends React.Component<InnerProps, State> {
             <Dialog
                 fullWidth
                 open={this.props.open}
-                onClose={this.props.onClose}
+                onClose={this._onClose}
                 aria-labelledby="form-dialog-title"
             >
                 <DialogTitle id="form-dialog-title">File Upload dialog</DialogTitle>
@@ -72,7 +70,7 @@ class UploadFileDialog extends React.Component<InnerProps, State> {
                             />
                         </form>
                         <label htmlFor="file-upload-input">
-                            <Button raised component="span" color="primary">
+                            <Button component="span" color="primary">
                                 Select file
                             </Button>
                         </label>

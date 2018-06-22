@@ -1,18 +1,15 @@
+import { FormControl, TextField } from '@material-ui/core';
 import * as React from 'react';
-import * as PropTypes from 'prop-types';
-import TextField from 'material-ui/TextField';
-import Avatar from 'material-ui/Avatar';
-import { FormControl } from 'material-ui/Form';
 import { PaddedPaper } from '../common';
-import EditModel from './models/edit';
 import { Container } from '../common';
+import EditModel from './models/edit';
 
 const TenantForm = (props: Props) => {
     const { model, onPropertyChange, createMode, children } = props;
     return (
         <PaddedPaper>
             <form>
-                { !props.createMode && 
+                { !props.createMode &&
                     <Container>
                         <FormControl fullWidth>
                             <TextField
@@ -55,10 +52,10 @@ const TenantForm = (props: Props) => {
 };
 
 interface Props {
-    model: EditModel,
-    onPropertyChange: (e: React.FormEvent<HTMLInputElement>) => void,
-    createMode?: boolean,
-    children?: JSX.Element
+    model: EditModel;
+    onPropertyChange: (e: React.FormEvent<HTMLInputElement>) => void;
+    createMode?: boolean;
+    children?: JSX.Element;
 }
 
 export default TenantForm;
