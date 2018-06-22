@@ -9,7 +9,8 @@ const styles = createStyles({
         height: 40,
     },
     listItem: {
-        // float: 'left',
+        width: 'auto',
+        float: 'left',
         paddingTop: 10,
         paddingRight: 0,
         paddingBottom: 2,

@@ -1,7 +1,5 @@
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import { Button, Typography } from '@material-ui/core';
 import * as React from 'react';
-import { Link } from 'react-router-dom';
 import { notify } from '../../services/notificationService';
 import { UserProps, withUser } from '../../services/userProvider';
 import { withTenant, WithTenantProps } from '../../services/withTenant';
@@ -61,11 +59,11 @@ class FilesPage extends React.Component<Props, State> {
             <div>
                 <BreadCrumbs items={breadCrumbItems} />
                 <PaddedPaper>
-                    <Typography type="headline">Uploaded files</Typography>
+                    <Typography variant="headline">Uploaded files</Typography>
                     <Container>
                         <Button
                             onClick={this._onNewFileUploadClicked}
-                            raised color="primary"
+                            color="primary"
                         >
                             Upload new file
                         </Button>

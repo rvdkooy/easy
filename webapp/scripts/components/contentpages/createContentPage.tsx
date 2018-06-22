@@ -1,11 +1,6 @@
-import AppBar from '@material-ui/core/AppBar';
-import Button from '@material-ui/core/Button';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import * as PropTypes from 'prop-types';
+import { Button } from '@material-ui/core';
 import * as React from 'react';
-import { match } from 'react-router-dom';
-import { BreadCrumbs, ProgressIndicator } from '../../components/common';
+import { BreadCrumbs } from '../../components/common';
 import { notify } from '../../services/notificationService';
 import { UserProps, withUser } from '../../services/userProvider';
 import { withTenant, WithTenantProps } from '../../services/withTenant';
@@ -50,7 +45,6 @@ class CreateContentPage extends React.Component<Props, State> {
                         <Button
                             disabled={!this.state.model.isValid()}
                             color="primary"
-                            raised
                             onClick={this._onUpdate}
                         >Create and close</Button>
                     </ContentPageForm>

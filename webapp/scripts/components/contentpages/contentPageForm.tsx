@@ -1,8 +1,5 @@
-import { FormControl } from '@material-ui/core/Form';
-import Paper from '@material-ui/core/Paper';
+import { FormControl, Paper, Tab, Tabs, TextField } from '@material-ui/core';
 import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
-import Tabs, { Tab } from '@material-ui/core/Tabs';
-import TextField from '@material-ui/core/TextField';
 import * as React from 'react';
 
 import { Container, PaddedPaper } from '../common';

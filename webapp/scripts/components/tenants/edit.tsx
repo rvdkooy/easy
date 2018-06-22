@@ -1,20 +1,17 @@
+import { Button } from '@material-ui/core';
 import * as React from 'react';
-import * as PropTypes from 'prop-types';
 import { match } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-
-import { ProgressIndicator, BreadCrumbs } from '../../components/common';
-import Form from './form';
-import { getTenant, updateTenant } from './api';
-import EditModel from './models/edit';
+import { BreadCrumbs, ProgressIndicator } from '../../components/common';
 import { notify } from '../../services/notificationService';
-import { withUser, UserProps } from '../../services/userProvider';
+import { UserProps, withUser } from '../../services/userProvider';
+import { getTenant, updateTenant } from './api';
+import Form from './form';
+import EditModel from './models/edit';
 
 class EditTenant extends React.Component<Props, State> {
     state: State = {
         model: null,
-        isLoading: true
+        isLoading: true,
     };
 
     componentDidMount() {
@@ -22,32 +19,31 @@ class EditTenant extends React.Component<Props, State> {
             .then((model) => {
                 this.setState({
                     model,
-                    isLoading: false
+                    isLoading: false,
                 });
             })
-            .catch(err => {
+            .catch((err) => {
                 this.setState({ isLoading: false });
                 notify('An error occured while retrieving the tenant.', 'ERROR');
             });
     }
 
     _onPropertyChange = (e: React.FormEvent<HTMLInputElement>) => {
-        //this.state.model.update(e.currentTarget.name, e.currentTarget.value);
         this.forceUpdate();
-    };
+    }
 
     _onSubmit = (e: React.MouseEvent<HTMLInputElement>) => {
         e.preventDefault();
 
         updateTenant(this.state.model).then(() => {
             notify('Tenant changed.', 'INFO');
-        }, (err: Error) => { }); // show error message
-    };
+        }, (err: Error) => notify('An error occured while updating the tenant', 'ERROR'));
+    }
 
     render() {
         const breadCrumbItems = [
             { text: 'Tenants', url: '/admin/tenants' },
-            { text: 'Edit' }
+            { text: 'Edit' },
         ];
 
         return (
@@ -62,7 +58,6 @@ class EditTenant extends React.Component<Props, State> {
                         <Button
                             disabled={!this.state.model.isValid()}
                             color="primary"
-                            raised
                             onClick={this._onSubmit}
                         >Update</Button>
                     </Form>)
@@ -73,12 +68,12 @@ class EditTenant extends React.Component<Props, State> {
 }
 
 interface Props extends UserProps {
-    match: match<{ id: string }>
+    match: match<{ id: string }>;
 }
 
 interface State {
-    model: EditModel,
-    isLoading: boolean
+    model: EditModel;
+    isLoading: boolean;
 }
 
 export default withUser<{}>(EditTenant);

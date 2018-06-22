@@ -1,13 +1,7 @@
-import Button from '@material-ui/core/Button';
-import { CircularProgress } from '@material-ui/core/Progress';
-import Table, { TableBody, TableCell, TableHead, TableRow } from '@material-ui/core/Table';
-import Typography from '@material-ui/core/Typography';
-import * as PropTypes from 'prop-types';
+import { CircularProgress, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
 import * as React from 'react';
-import { Link } from 'react-router-dom';
-import { BreadCrumbs, Container, PaddedPaper } from '../common';
-
 import { notify } from '../../services/notificationService';
+import { BreadCrumbs, Container, PaddedPaper } from '../common';
 import ListModel from './models/list';
 import { deleteUser, getUsers } from './usersApi';
 import UsersListRow from './usersListRow';
@@ -59,7 +53,7 @@ class UsersList extends React.Component<undefined, State> {
             <div>
                 <BreadCrumbs items={breadCrumbItems} />
                 <PaddedPaper>
-                    <Typography type="headline">List of users</Typography>
+                    <Typography variant="headline">List of users</Typography>
                     <Container>
                         {
                             (this.state.isLoading) ?

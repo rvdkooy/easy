@@ -62,6 +62,10 @@ class ContentPagesList extends React.Component<WithTenantProps, State> {
             );
         });
 
+        const ButtonComponent = (props: any) => {
+            return (<Link to="/admin/contentpages/new" { ...props } />);
+        };
+
         return (
             <div>
                 <BreadCrumbs items={breadCrumbItems} />
@@ -69,7 +73,7 @@ class ContentPagesList extends React.Component<WithTenantProps, State> {
                     <Typography variant="headline">List of content pages</Typography>
                     <Container>
                         <Button
-                            component={({ ...props }) => <Link to="/admin/contentpages/new" { ...props } />}
+                            component={ButtonComponent}
                             variant="raised" color="primary"
                         >
                             Create a new page

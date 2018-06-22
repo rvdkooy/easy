@@ -1,35 +1,30 @@
+import { Avatar, IconButton, TableCell, TableRow} from '@material-ui/core';
+import { Delete as DeleteIcon } from '@material-ui/icons';
 import * as React from 'react';
-import * as PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { TableCell, TableRow } from '@material-ui/core/Table';
-import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete'
 import ConfirmModal from '../../components/common/modals/confirmModal';
 import ListModel from './models/list';
 
 class UsersListRow extends React.Component<Props, State> {
 
     state = {
-        confirmDelete: false
-    }
+        confirmDelete: false,
+    };
 
     _onDeleteClicked = () => {
         this.setState({ confirmDelete: true });
-    };
+    }
 
     _onHideConfirmDelete = () => {
         this.setState({ confirmDelete: false });
-    };
-
+    }
 
     _onDeleteConfirmed = () => {
         this.props.onDelete(this.props.user.id);
-    };
+    }
 
     render() {
         const { user } = this.props;
-        
         return (
             <TableRow key={user.id}>
                 <TableCell>
@@ -55,15 +50,15 @@ class UsersListRow extends React.Component<Props, State> {
             </TableRow>
         );
     }
-};
+}
 
 interface Props {
-    user: ListModel,
-    onDelete: (id: string) => void
+    user: ListModel;
+    onDelete: (id: string) => void;
 }
 
 interface State {
-    confirmDelete: boolean
+    confirmDelete: boolean;
 }
 
 export default UsersListRow;

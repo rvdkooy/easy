@@ -4,16 +4,16 @@ import { StyleRulesCallback } from '@material-ui/core/styles';
 import { Done as DoneIcon, Error as ErrorIcon } from '@material-ui/icons';
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
-// import { Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { listenToNotifications, messageType } from '../../services/notificationService';
 import { UserProps, withUser } from '../../services/userProvider';
 import { Tenant } from '../../services/userService';
-// import ContentPagesPage from '../contentpages/contentPagesPage';
-// import Dashboard from '../dashboard/main';
-// import FilesPage from '../files/filesPage';
-// import LogsPage from '../logging/logsPage';
-// import TenantsPage from '../tenants/tenantsPage';
-// import UsersPage from '../users/usersPage';
+import ContentPagesPage from '../contentpages/contentPagesPage';
+import Dashboard from '../dashboard/main';
+import FilesPage from '../files/filesPage';
+import LogsPage from '../logging/logsPage';
+import TenantsPage from '../tenants/tenantsPage';
+import UsersPage from '../users/usersPage';
 import withRoot from '../withRoot';
 import Header from './header';
 import LeftMenu from './leftMenu';
@@ -106,14 +106,14 @@ class Layout extends React.Component<Props, State> {
             <div className={classes.mainContent}>
                 <LeftMenu open />
                 <div className={classes.rightContent}>
-                    {/* <Switch>
+                    <Switch>
                         <Route exact path="/admin" component={Dashboard} />
                         <Route path="/admin/users" component={UsersPage} />
                         <Route path="/admin/logs" component={LogsPage} />
                         <Route path="/admin/files" component={FilesPage} />
                         <Route path="/admin/tenants" component={TenantsPage} />
                         <Route path="/admin/contentpages" component={ContentPagesPage} />
-                    </Switch> */}
+                    </Switch>
                 </div>
             </div>
             <Snackbar
