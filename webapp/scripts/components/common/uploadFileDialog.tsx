@@ -5,7 +5,7 @@ import { notify } from '../../services/notificationService';
 import { UserProps, withUser } from '../../services/userProvider';
 import { withTenant, WithTenantProps } from '../../services/withTenant';
 import { Container } from '../common';
-import { uploadFile } from './filesService';
+import { uploadFile } from '../files/filesService';
 
 class UploadFileDialog extends React.Component<InnerProps, State> {
 

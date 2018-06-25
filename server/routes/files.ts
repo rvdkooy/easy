@@ -1,13 +1,12 @@
 import * as express from 'express';
-import * as path from 'path';
 import * as fs from 'fs';
-import { check, validationResult } from 'express-validator/check'
-import { LoggerInstance } from 'winston';
-import { S3Client } from '../infrastructure/storageService';
-import { unzip, fsUtils } from '../infrastructure';
-import { tenantAuthorize } from '../security/protectApi';
 import * as multer from 'multer';
+import * as path from 'path';
+import { LoggerInstance } from 'winston';
+import { unzip } from '../infrastructure';
 import { ensureDirExists } from '../infrastructure/fsUtils';
+import { S3Client } from '../infrastructure/storageService';
+import { tenantAuthorize } from '../security/protectApi';
 
 const upload = multer();
 const router = express.Router();
@@ -17,7 +16,10 @@ const handleError = (error: Error, res: express.Response, logger: LoggerInstance
     res.sendStatus(400);
 };
 
-const createMiddleware = (rootDir: string, s3Client: S3Client, logger: LoggerInstance
+const createMiddleware = (
+    rootDir: string,
+    s3Client: S3Client,
+    logger: LoggerInstance,
 ) => {
     router.get('/:tenantId/files', tenantAuthorize, async (req, res) => {
         try {
@@ -28,13 +30,13 @@ const createMiddleware = (rootDir: string, s3Client: S3Client, logger: LoggerIns
                     key: file.Key,
                     lastModified: file.LastModified,
                     etag: file.ETag,
-                    size: file.Size
+                    size: file.Size,
                 })));
             } else {
                 res.send([]);
             }
-        } catch(err) {
-            handleError(err, res, logger)
+        } catch (err) {
+            handleError(err, res, logger);
         }
     });
 
@@ -43,33 +45,39 @@ const createMiddleware = (rootDir: string, s3Client: S3Client, logger: LoggerIns
         const uploadedFile = req.file;
 
         if (!uploadedFile) {
-            res.status(400).json({ validationErrors: ["File is required"] });
+            res.status(400).json({ validationErrors: ['File is required'] });
         } else {
+            const key = `${tenantId}/docs/${uploadedFile.originalname}`;
+            s3Client.uploadFile(key, uploadedFile.buffer)
+                .then(() => res.sendStatus(200))
+                .catch((err) => handleError(err, res, logger));
+        }
+    });
 
-            // temp theme logic
-            if (uploadedFile.originalname === 'theme.zip') {
-                const tenantLocalThemeDir = path.resolve(rootDir, `./localfiles/themes/${tenantId}`);
-                ensureDirExists(tenantLocalThemeDir)
-                    .then(() => {
-                    const tmZipFile = path.resolve(rootDir, `./localfiles/tmp/${tenantId}_${new Date().getTime()}_theme.zip`);
+    router.post('/:tenantId/files/uploadtheme', tenantAuthorize, upload.single('file'), (req, res) => {
+        const tenantId = req.params.tenantId;
+        const uploadedFile = req.file;
 
-                    fs.writeFileSync(tmZipFile, uploadedFile.buffer);
+        if (!uploadedFile || !uploadedFile.originalname.endsWith('.zip')) {
+            res.status(400).json({ validationErrors: ['Zip file is required'] });
+        } else {
+            const tenantLocalThemeDir = path.resolve(rootDir, `./localfiles/themes/${tenantId}`);
+            ensureDirExists(tenantLocalThemeDir).then(() => {
+                const tempZipFileName = `./localfiles/tmp/${tenantId}_${new Date().getTime()}_theme.zip`;
+                const tmZipFile = path.resolve(rootDir, tempZipFileName);
 
-                    return unzip(tmZipFile, tenantLocalThemeDir).then(() => {
-                        fs.unlinkSync(tmZipFile)
+                fs.writeFileSync(tmZipFile, uploadedFile.buffer);
 
-                        s3Client.uploadFile(`${tenantId}/themes/theme.zip`, uploadedFile.buffer)
-                            .then(() => res.sendStatus(200))
-                            .catch(err => handleError(err, res, logger));
-                    });
+                return unzip(tmZipFile, tenantLocalThemeDir).then(() => {
+                    fs.unlinkSync(tmZipFile);
+
+                    s3Client.uploadFile(`${tenantId}/themes/theme.zip`, uploadedFile.buffer)
+                        .then(() => res.sendStatus(200))
+                        .catch((err) => handleError(err, res, logger));
                 })
-                .catch(err => handleError(err, res, logger));
-            } else {
-                let key = `${tenantId}/docs/${uploadedFile.originalname}`;
-                s3Client.uploadFile(key, uploadedFile.buffer)
-                    .then(() => res.sendStatus(200))
-                    .catch(err => handleError(err, res, logger));
-            }
+                .catch((err) => handleError(err, res, logger));
+            })
+            .catch((err) => handleError(err, res, logger));
         }
     });
 
@@ -78,12 +86,12 @@ const createMiddleware = (rootDir: string, s3Client: S3Client, logger: LoggerIns
             const tenantId = req.params.tenantId;
             await s3Client.deleteFile(req.body.key);
             res.send(200);
-        } catch(err) {
+        } catch (err) {
             handleError(err, res, logger);
         }
     });
 
     return router;
-}
+};
 
 export default createMiddleware;

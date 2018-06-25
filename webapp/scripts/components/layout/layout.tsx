@@ -1,6 +1,6 @@
 import { Snackbar } from '@material-ui/core';
-import { withStyles, WithStyles } from '@material-ui/core/styles';
 import { StyleRulesCallback } from '@material-ui/core/styles';
+import { withStyles, WithStyles } from '@material-ui/core/styles';
 import { Done as DoneIcon, Error as ErrorIcon } from '@material-ui/icons';
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
@@ -13,6 +13,7 @@ import Dashboard from '../dashboard/main';
 import FilesPage from '../files/filesPage';
 import LogsPage from '../logging/logsPage';
 import TenantsPage from '../tenants/tenantsPage';
+import ThemePage from '../themes/themePage';
 import UsersPage from '../users/usersPage';
 import withRoot from '../withRoot';
 import Header from './header';
@@ -113,6 +114,7 @@ class Layout extends React.Component<Props, State> {
                         <Route path="/admin/files" component={FilesPage} />
                         <Route path="/admin/tenants" component={TenantsPage} />
                         <Route path="/admin/contentpages" component={ContentPagesPage} />
+                        <Route path="/admin/theme" component={ThemePage} />
                     </Switch>
                 </div>
             </div>

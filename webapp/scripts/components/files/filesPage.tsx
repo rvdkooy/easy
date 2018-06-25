@@ -4,9 +4,9 @@ import { notify } from '../../services/notificationService';
 import { UserProps, withUser } from '../../services/userProvider';
 import { withTenant, WithTenantProps } from '../../services/withTenant';
 import { BreadCrumbs, Container, PaddedPaper } from '../common';
+import UploadFileDialog from '../common/uploadFileDialog';
 import { deleteFile, FileItem, getFiles } from './filesService';
 import FilesTable from './filesTable';
-import UploadFileDialog from './uploadFileDialog';
 
 class FilesPage extends React.Component<Props, State> {
 
