@@ -36,7 +36,7 @@ const createMiddleware = (
                     keywords: contentPage.keywords,
                 };
 
-                handleCustomTheme(req, res, model, tenant.tenantId);
+                handleCustomTheme(res, model, tenant.tenantId);
             } else {
                 res.render('404');
             }
@@ -46,7 +46,6 @@ const createMiddleware = (
     });
 
     const handleCustomTheme = async (
-        req: express.Request,
         res: express.Response,
         model: object,
         tenantId: string,
