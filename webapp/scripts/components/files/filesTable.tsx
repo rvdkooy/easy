@@ -2,7 +2,7 @@ import { IconButton, Table, TableBody, TableCell, TableHead, TableRow } from '@m
 import { createStyles, withStyles, WithStyles } from '@material-ui/core/styles';
 import { Delete as DeleteIcon } from '@material-ui/icons';
 import * as React from 'react';
-import { FileItem } from './filesService';
+import { FileItem } from './filesApi';
 
 const styles = createStyles({
     filesTable: {

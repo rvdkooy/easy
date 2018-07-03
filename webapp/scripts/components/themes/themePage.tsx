@@ -5,7 +5,7 @@ import { UserProps, withUser } from '../../services/userProvider';
 import { withTenant, WithTenantProps } from '../../services/withTenant';
 import { Alert, BreadCrumbs, Container, PaddedPaper } from '../common';
 import UploadFileDialog from '../common/uploadFileDialog';
-import { deleteFile, FileItem, getFiles } from '../files/filesService';
+import { getLatestTheme } from './themeApi';
 
 class ThemePage extends React.Component<Props, State> {
 
@@ -14,19 +14,23 @@ class ThemePage extends React.Component<Props, State> {
         currentTheme: null,
     };
 
-    // componentDidMount() {
-    //     this._refreshFilesTable();
-    // }
+    componentDidMount() {
+        this._refreshTheme();
+    }
 
-    // _refreshFilesTable = () => {
-    //     getFiles(this.props.selectedTenant.tenantId)
-    //         .then((files) => {
-    //             this.setState({ files });
-    //         })
-    //         .catch(() => {
-    //             notify('An error occured while retrieving the list of files', 'ERROR');
-    //         });
-    // }
+    _refreshTheme = () => {
+        getLatestTheme(this.props.selectedTenant.tenantId)
+            .then((theme) => {
+                this.setState({ currentTheme: 'test' });
+            })
+            .catch((err) => {
+                if (err instanceof Response && err.status === 404) {
+                    this.setState({ currentTheme: null });
+                } else {
+                    notify('An error occured while retrieving the the current theme', 'ERROR');
+                }
+            });
+    }
 
     _onNewThemeUploadClicked = () => {
         this.setState({ showUploadDialog: true });
@@ -70,6 +74,7 @@ class ThemePage extends React.Component<Props, State> {
                     <Container>
                         <Button
                             onClick={this._onNewThemeUploadClicked}
+                            variant="raised"
                             color="primary"
                         >
                             Upload new theme

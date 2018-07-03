@@ -1,11 +1,10 @@
-import { del, post, put, query } from '../../utils/httpClient';
+import { del, get, post, put } from '../../utils/httpClient';
 import EditModel from './models/edit';
 import ListModel from './models/list';
 
 export function getUsers(): Promise<ListModel[]> {
-    return query('/admin/api/users')
-        .then((res: Response) => res.json()
-        .then((json) => json.map((x: any) => ListModel.fromJson(x))));
+    return get('/admin/api/users')
+        .then((json) => json.map((x: any) => ListModel.fromJson(x)));
 }
 
 export function saveUser(model: EditModel) {
@@ -17,8 +16,8 @@ export function updateUser(model: EditModel) {
 }
 
 export function getUser(id: string): Promise<EditModel> {
-    return query(`/admin/api/users/${id}`)
-        .then((res: Response) => res.json().then((json) => EditModel.fromJson(json)));
+    return get(`/admin/api/users/${id}`)
+        .then((json) => EditModel.fromJson(json));
 }
 
 export function deleteUser(id: string) {

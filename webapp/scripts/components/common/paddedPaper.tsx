@@ -1,14 +1,14 @@
+import { Paper } from '@material-ui/core';
+import { Theme, withStyles, WithStyles } from '@material-ui/core/styles';
 import * as React from 'react';
-import Paper from '@material-ui/core/Paper';
-import { withStyles, WithStyles, Theme } from '@material-ui/core/styles';
 
 const styles = (theme: Theme) => {
     return {
         root: theme.mixins.gutters({
             paddingTop: theme.spacing.unit * 2,
-            paddingBottom: theme.spacing.unit * 2
-        })
-    }
+            paddingBottom: theme.spacing.unit * 2,
+        }),
+    };
 };
 
 const PaddedPaper = (props: Props) => {
@@ -20,7 +20,7 @@ const PaddedPaper = (props: Props) => {
 };
 
 interface Props extends WithStyles<'root'> {
-    children: any
+    children: any;
 }
 
 export default withStyles(styles)<{}>(PaddedPaper);

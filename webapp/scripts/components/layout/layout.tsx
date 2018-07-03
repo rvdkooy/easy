@@ -1,13 +1,13 @@
 import { Snackbar } from '@material-ui/core';
-import { StyleRulesCallback } from '@material-ui/core/styles';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
+import { StyleRulesCallback } from '@material-ui/core/styles';
 import { Done as DoneIcon, Error as ErrorIcon } from '@material-ui/icons';
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { listenToNotifications, messageType } from '../../services/notificationService';
+import { Tenant } from '../../services/userApi';
 import { UserProps, withUser } from '../../services/userProvider';
-import { Tenant } from '../../services/userService';
 import ContentPagesPage from '../contentpages/contentPagesPage';
 import Dashboard from '../dashboard/main';
 import FilesPage from '../files/filesPage';

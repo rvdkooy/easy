@@ -2,14 +2,13 @@ import { Typography } from '@material-ui/core';
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
 import { PaddedPaper } from '../components/common';
-import { Tenant } from './userService';
+import { Tenant } from './userApi';
 
 export interface WithTenantProps {
     selectedTenant: Tenant;
 }
 
-export function withTenant<P>(Component: React.ComponentClass<WithTenantProps> |
-                                       React.ComponentType<WithTenantProps>): React.ComponentClass<P> {
+export function withTenant<P>(Component: React.ComponentType<WithTenantProps>): React.ComponentClass<P> {
 
     class WithTenant extends React.Component<WithTenantProps & P> {
 

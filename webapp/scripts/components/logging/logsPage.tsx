@@ -1,7 +1,7 @@
 import { Typography } from '@material-ui/core';
 import * as React from 'react';
 import { BreadCrumbs, PaddedPaper } from '../common';
-import { getLogs, LogItem } from './logsService';
+import { getLogs, LogItem } from './logsApi';
 import LogsTable from './logsTable';
 
 class LogsPage extends React.Component<undefined, State> {

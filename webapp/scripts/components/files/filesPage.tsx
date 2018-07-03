@@ -5,7 +5,7 @@ import { UserProps, withUser } from '../../services/userProvider';
 import { withTenant, WithTenantProps } from '../../services/withTenant';
 import { BreadCrumbs, Container, PaddedPaper } from '../common';
 import UploadFileDialog from '../common/uploadFileDialog';
-import { deleteFile, FileItem, getFiles } from './filesService';
+import { deleteFile, FileItem, getFiles } from './filesApi';
 import FilesTable from './filesTable';
 
 class FilesPage extends React.Component<Props, State> {

@@ -1,68 +1,121 @@
-const checkStatus = (res: Response) => {
-    if (res.ok) {
-        return res;
-    } else {
-        const error = new Error(res.statusText || res.status.toString());
-        error.message = 'http error';
-        throw error;
-    }
+const _errorListeners: HttpClientErrorListener[] = [];
+
+const buildHeaders = async () => {
+    const headers = {
+        'Accept': 'application/problem+json, application/json',
+        'Content-Type': 'application/json',
+    } as { [key: string]: string };
+
+    return headers;
 };
 
-export const query = (url: string) => {
-    return fetch(new Request(url),
-    {
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        credentials: 'include',
+const createRequest = (url: string, method: string, data?: any): Promise<any> => {
+    return new Promise(async (resolve, reject) => {
+        const requestInit = {
+            body: (data) ? JSON.stringify(data) : undefined,
+            credentials: 'include',
+            headers: await buildHeaders(),
+            method,
+        } as RequestInit;
+
+        fetch(url, requestInit).then((response) => {
+            if (response.ok) {
+                const contentType = response.headers.get('Content-Type');
+                if (contentType && contentType.indexOf('json') !== -1) {
+                    response.json().then((json) => resolve(json));
+                } else {
+                    resolve();
+                }
+            } else {
+                handleGlobalErrorResult(response);
+                const contentType = response.headers.get('Content-Type');
+                if (contentType && contentType.indexOf('application/problem+json') !== -1) {
+                    response.json().then((json) => reject(new ProblemDetails(json)));
+                } else {
+                    reject(response);
+                }
+            }
+        })
+        .catch((err) => {
+            handleGlobalErrorResult(err);
+            reject(err);
+        });
     });
-    // .then(checkStatus); //todo
 };
+
+export function get(url: string) {
+    return createRequest(url, 'GET');
+}
+
+export function post(url: string, data?: object) {
+    return createRequest(url, 'POST', data);
+}
 
 export const postFormData = (url: string, formData: FormData) => {
-    return fetch(new Request(url) , {
-        method: 'POST',
-        credentials: 'include',
-        body: formData,
-    }).then(checkStatus);
-};
-
-export const post = (url: string, data: object) => {
-    return fetch(new Request(url) , {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify(data),
-    });
-    // .then(checkStatus); //todo
+    return createRequest(url , 'POST', formData);
 };
 
 export function put(url: string, data: object) {
-    return fetch(new Request(url), {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify(data),
-    });
-    // .then(checkStatus); //todo
+    return createRequest(url, 'PUT', data);
 }
 
 export function del(url: string, data?: object) {
-    const requestInit = {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-    } as RequestInit;
-
-    if (data) {
-        requestInit.body = JSON.stringify(data);
-    }
-    return fetch(new Request(url), requestInit);
-    // .then(checkStatus); //todo
+    return createRequest(url, 'DELETE', data);
 }
+
+const handleGlobalErrorResult = (response: Response) => {
+    _errorListeners.forEach((listener) => {
+        listener(response);
+    });
+};
+
+const onError = (listener: HttpClientErrorListener) => {
+    _errorListeners.push(listener);
+};
+
+type HttpClientErrorListener = (response: Response) => void;
+
+export class ProblemDetails {
+    static ErrorType = { commandValidation: 'CommandValidation', domain: 'Domain', system: 'System' };
+
+    title: string;
+    instance: string;
+    type: string;
+    status: number;
+    detail: string;
+    fields?: Array<{ key: string, value: string }>;
+
+    constructor(json: any) {
+        this.title = json.title;
+        this.instance = json.instance;
+        this.type = json.type;
+        this.status = json.status;
+        this.detail = json.detail;
+        this.fields = json.fields || [];
+    }
+}
+
+export const handleProblemDetails = (pd: ProblemDetails, cb: (message: string) => void) => {
+    if (pd.title === ProblemDetails.ErrorType.domain) {
+        cb(pd.detail);
+    } else if (pd.title === ProblemDetails.ErrorType.commandValidation) {
+        pd.fields.forEach((f) => cb(`${f.key}: ${f.value}`));
+    } else {
+        cb('An error occured');
+    }
+};
+
+export enum Status {
+    Pending = 'pending',
+    Ready = 'ready',
+    Error = 'error',
+}
+
+export default {
+    ProblemDetails,
+    del,
+    get,
+    onError,
+    post,
+    put,
+};

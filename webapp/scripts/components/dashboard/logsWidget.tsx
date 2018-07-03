@@ -1,6 +1,6 @@
 import { Typography } from '@material-ui/core';
 import * as React from 'react';
-import { getLogs, LogItem } from '../logging/logsService';
+import { getLogs, LogItem } from '../logging/logsApi';
 import LogsTable from '../logging/logsTable';
 
 class LogsWidget extends React.Component<undefined, State> {

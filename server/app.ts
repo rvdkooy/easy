@@ -8,7 +8,8 @@ import * as path from 'path';
 import { Config } from './config';
 import { connect as dbConnect, ContentPageModel, TenantModel, UserModel } from './db';
 import { createS3Client, setupEnvironment, setupLogger  } from './infrastructure/';
-import { contentPagesRoutes, defaultRoutes, filesRoutes, loggingRoutes, TenantRoutes, usersRoutes } from './routes';
+import { contentPagesRoutes, defaultRoutes, filesRoutes,
+    loggingRoutes, tenantRoutes, themeRoutes, usersRoutes } from './routes';
 import { authenticatedApi, configurePassport } from './security';
 
 const MongoStore = connectMongo(expressSession);
@@ -42,7 +43,8 @@ const createApp = (config: Config, rootDir: string) => {
         usersRoutes(UserModel, logger),
         loggingRoutes(mongooseConnection),
         filesRoutes(rootDir, s3Client, logger),
-        TenantRoutes(TenantModel, logger),
+        themeRoutes(rootDir, s3Client, logger),
+        tenantRoutes(TenantModel, logger),
         (req, res) => res.send(404),
     );
     app.use('/', defaultRoutes(rootDir, logger));

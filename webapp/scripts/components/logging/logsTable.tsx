@@ -2,7 +2,7 @@ import { Chip, Table, TableBody, TableCell, TableHead, TableRow } from '@materia
 import { amber, blue, red } from '@material-ui/core/colors';
 import { createStyles, withStyles, WithStyles } from '@material-ui/core/styles';
 import * as React from 'react';
-import { LogItem } from './logsService';
+import { LogItem } from './logsApi';
 
 const styles = createStyles({
     logsTable: {
