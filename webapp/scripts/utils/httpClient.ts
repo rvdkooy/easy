@@ -52,7 +52,13 @@ export function post(url: string, data?: object) {
 }
 
 export const postFormData = (url: string, formData: FormData) => {
-    return createRequest(url , 'POST', formData);
+    const requestInit = {
+        body: formData,
+        credentials: 'include',
+        method: 'POST',
+    } as RequestInit;
+
+    return fetch(url , requestInit);
 };
 
 export function put(url: string, data: object) {

@@ -6,6 +6,7 @@ import { withTenant, WithTenantProps } from '../../services/withTenant';
 import { Alert, BreadCrumbs, Container, PaddedPaper } from '../common';
 import UploadFileDialog from '../common/uploadFileDialog';
 import { getLatestTheme } from './themeApi';
+import { uploadTheme } from './themeApi';
 
 class ThemePage extends React.Component<Props, State> {
 
@@ -42,6 +43,10 @@ class ThemePage extends React.Component<Props, State> {
         // if (refresh) {
         //     this._refreshFilesTable();
         // }
+    }
+
+    _uploadFile = (file: File) => {
+        return uploadTheme(this.props.selectedTenant.tenantId, file);
     }
 
     _onDeleteTheme = (key: string) => {
@@ -84,6 +89,7 @@ class ThemePage extends React.Component<Props, State> {
                 <UploadFileDialog
                     open={ this.state.showUploadDialog }
                     onClose={ this._onCloseUploadDialog }
+                    uploadFile={ this._uploadFile }
                 />
             </div>);
     }
