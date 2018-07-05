@@ -24,7 +24,7 @@ const createRequest = (url: string, method: string, data?: any): Promise<any> =>
                 if (contentType && contentType.indexOf('json') !== -1) {
                     response.json().then((json) => resolve(json));
                 } else {
-                    resolve();
+                    resolve(response);
                 }
             } else {
                 handleGlobalErrorResult(response);
@@ -52,13 +52,22 @@ export function post(url: string, data?: object) {
 }
 
 export const postFormData = (url: string, formData: FormData) => {
-    const requestInit = {
-        body: formData,
-        credentials: 'include',
-        method: 'POST',
-    } as RequestInit;
+    return new Promise((resolve, reject) => {
+        const requestInit = {
+            body: formData,
+            credentials: 'include',
+            method: 'POST',
+        } as RequestInit;
 
-    return fetch(url , requestInit);
+        fetch(url , requestInit).then((res) => {
+            if (res.ok) {
+                resolve(res);
+            } else {
+                handleGlobalErrorResult(res);
+                reject(res);
+            }
+        });
+    });
 };
 
 export function put(url: string, data: object) {

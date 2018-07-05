@@ -1,11 +1,8 @@
 import * as express from 'express';
-import * as fs from 'fs';
 import * as multer from 'multer';
-import * as path from 'path';
 import { LoggerInstance } from 'winston';
-import { unzip } from '../infrastructure';
-import { ensureDirExists } from '../infrastructure/fsUtils';
 import { S3Client } from '../infrastructure/storageService';
+import { ThemeProvider } from '../infrastructure/themeProvider';
 import { tenantAuthorize } from '../security/protectApi';
 
 const upload = multer();
@@ -17,8 +14,8 @@ const handleError = (error: Error, res: express.Response, logger: LoggerInstance
 };
 
 const createMiddleware = (
-    rootDir: string,
     s3Client: S3Client,
+    themeProvider: ThemeProvider,
     logger: LoggerInstance,
 ) => {
     router.get('/:tenantId/theme', tenantAuthorize, async (req, res) => {
@@ -28,30 +25,21 @@ const createMiddleware = (
             handleError(err, res, logger);
         }
     });
-    router.post('/:tenantId/theme', tenantAuthorize, upload.single('file'), (req, res) => {
+    router.post('/:tenantId/theme', tenantAuthorize, upload.single('file'), async (req, res) => {
         const tenantId = req.params.tenantId;
         const uploadedFile = req.file;
 
         if (!uploadedFile || !uploadedFile.originalname.endsWith('.zip')) {
             res.status(400).json({ validationErrors: ['Zip file is required'] });
         } else {
-            const tenantLocalThemeDir = path.resolve(rootDir, `./localfiles/themes/${tenantId}`);
-            ensureDirExists(tenantLocalThemeDir).then(() => {
-                const tempZipFileName = `./localfiles/tmp/${tenantId}_${new Date().getTime()}_theme.zip`;
-                const tmZipFile = path.resolve(rootDir, tempZipFileName);
+            try {
+                await s3Client.uploadFile(`${tenantId}/themes/theme.zip`, uploadedFile.buffer);
+                await themeProvider.unpack(tenantId, uploadedFile.buffer);
 
-                fs.writeFileSync(tmZipFile, uploadedFile.buffer);
-
-                return unzip(tmZipFile, tenantLocalThemeDir).then(() => {
-                    fs.unlinkSync(tmZipFile);
-
-                    s3Client.uploadFile(`${tenantId}/themes/theme.zip`, uploadedFile.buffer)
-                        .then(() => res.sendStatus(200))
-                        .catch((err) => handleError(err, res, logger));
-                })
-                .catch((err) => handleError(err, res, logger));
-            })
-            .catch((err) => handleError(err, res, logger));
+                res.sendStatus(200);
+            } catch (err) {
+                handleError(err, res, logger);
+            }
         }
     });
 

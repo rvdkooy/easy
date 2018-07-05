@@ -8,6 +8,7 @@ import * as path from 'path';
 import { Config } from './config';
 import { connect as dbConnect, ContentPageModel, TenantModel, UserModel } from './db';
 import { createS3Client, setupEnvironment, setupLogger  } from './infrastructure/';
+import createThemeProvider from './infrastructure/themeProvider';
 import { contentPagesRoutes, defaultRoutes, filesRoutes,
     loggingRoutes, tenantRoutes, themeRoutes, usersRoutes } from './routes';
 import { authenticatedApi, configurePassport } from './security';
@@ -19,7 +20,7 @@ const createApp = (config: Config, rootDir: string) => {
     const mongooseConnection = dbConnect(config.DATABASE_CONNECTION_STRING);
     const logger = setupLogger(app, config.DATABASE_CONNECTION_STRING);
     const s3Client = createS3Client(config.AWS, logger);
-
+    const themeProvider = createThemeProvider(rootDir);
     setupEnvironment(rootDir, s3Client, logger);
 
     app.use(expressSession({
@@ -43,7 +44,7 @@ const createApp = (config: Config, rootDir: string) => {
         usersRoutes(UserModel, logger),
         loggingRoutes(mongooseConnection),
         filesRoutes(rootDir, s3Client, logger),
-        themeRoutes(rootDir, s3Client, logger),
+        themeRoutes(s3Client, themeProvider, logger),
         tenantRoutes(TenantModel, logger),
         (req, res) => res.send(404),
     );

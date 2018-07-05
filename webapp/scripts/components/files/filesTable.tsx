@@ -15,10 +15,10 @@ const styles = createStyles({
         width: 'auto',
     },
     sizeColumn: {
-        width: 50,
+        width: 75,
     },
     actions: {
-        width: 25,
+        width: 75,
     },
 });
 
@@ -43,9 +43,9 @@ const FilesTable = (props: Props) => {
                             <TableCell>{f.lastModified}</TableCell>
                             <TableCell>{f.size}</TableCell>
                             <TableCell>
-                            <IconButton aria-label="Delete" onClick={props.onDeleteFile.bind(null, f.key)}>
-                                <DeleteIcon />
-                            </IconButton>
+                                <IconButton aria-label="Delete" onClick={props.onDeleteFile.bind(null, f.key)}>
+                                    <DeleteIcon />
+                                </IconButton>
                             </TableCell>
                         </TableRow>
                     );
