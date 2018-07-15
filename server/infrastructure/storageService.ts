@@ -1,6 +1,4 @@
 import * as aws from 'aws-sdk';
-import * as fs from 'fs';
-import * as path from 'path';
 import { LoggerInstance } from 'winston';
 import { AWS } from '../config';
 
@@ -49,6 +47,28 @@ export class S3Client {
                     reject(err);
                 } else {
                     resolve(putObjData);
+                }
+            });
+        });
+    }
+
+    getFile = (key: string): Promise<aws.S3.GetObjectOutput> => {
+        return new Promise((resolve, reject) => {
+            this.s3.getObject({
+                Bucket: this.bucketName,
+                Key: key,
+            }, (err, data) => {
+                if (err) {
+                    if (err.code === 'NoSuchKey') {
+                        this.logger.info(
+                            `S3 Object with key: '${key}' does not exist in bucket: '${this.bucketName}'`);
+                        resolve();
+                    } else {
+                        this.logger.error(err.message);
+                        reject(err);
+                    }
+                } else {
+                    resolve(data);
                 }
             });
         });

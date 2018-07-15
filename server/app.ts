@@ -20,8 +20,8 @@ const createApp = (config: Config, rootDir: string) => {
     const mongooseConnection = dbConnect(config.DATABASE_CONNECTION_STRING);
     const logger = setupLogger(app, config.DATABASE_CONNECTION_STRING);
     const s3Client = createS3Client(config.AWS, logger);
-    const themeProvider = createThemeProvider(rootDir);
-    setupEnvironment(rootDir, s3Client, logger);
+    const themeProvider = createThemeProvider(rootDir, s3Client);
+    setupEnvironment(rootDir, s3Client, logger, themeProvider);
 
     app.use(expressSession({
         secret: config.SESSION_SECRET ,

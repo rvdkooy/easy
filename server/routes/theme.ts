@@ -33,9 +33,7 @@ const createMiddleware = (
             res.status(400).json({ validationErrors: ['Zip file is required'] });
         } else {
             try {
-                await s3Client.uploadFile(`${tenantId}/themes/theme.zip`, uploadedFile.buffer);
-                await themeProvider.unpack(tenantId, uploadedFile.buffer);
-
+                await themeProvider.newOrUpdate(tenantId, uploadedFile.buffer);
                 res.sendStatus(200);
             } catch (err) {
                 handleError(err, res, logger);
