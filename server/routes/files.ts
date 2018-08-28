@@ -9,6 +9,7 @@ const router = express.Router();
 
 const handleError = (error: Error, res: express.Response, logger: LoggerInstance) => {
     logger.error(`The following error occured: ${error.message}`);
+    if (error.stack) { logger.error(error.stack); }
     res.sendStatus(400);
 };
 
@@ -32,6 +33,7 @@ const createMiddleware = (
                 res.send([]);
             }
         } catch (err) {
+            logger.error(`Error listing objects from s3 with bucket name: '${s3Client.bucketName}'`);
             handleError(err, res, logger);
         }
     });
@@ -46,16 +48,21 @@ const createMiddleware = (
             const key = `${tenantId}/docs/${uploadedFile.originalname}`;
             s3Client.uploadFile(key, uploadedFile.buffer)
                 .then(() => res.sendStatus(200))
-                .catch((err) => handleError(err, res, logger));
+                .catch((err) => {
+                    logger.error(
+                        `Error uploading object to bucket with name '${s3Client.bucketName}'
+                        and key ('${key}') to s3: ${err.message}`);
+                    handleError(err, res, logger);
+                });
         }
     });
 
     router.delete('/:tenantId/files', tenantAuthorize, async (req, res) => {
         try {
-            const tenantId = req.params.tenantId;
             await s3Client.deleteFile(req.body.key);
             res.send(200);
         } catch (err) {
+            logger.error(`Error deleting object with key: '${req.body.key}' from bucket: '${s3Client.bucketName}'`);
             handleError(err, res, logger);
         }
     });

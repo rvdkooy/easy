@@ -29,7 +29,8 @@ const ensureS3BucketsExists = (s3Client: S3Client, logger: LoggerInstance) => {
     try {
         s3Client.createBucket();
     } catch (err) {
-        logger.error(err);
+        logger.error(`Error creating a bucket with name: '${s3Client.bucketName}'`);
+        if (err.stack) { logger.error(err.stack); }
     }
 };
 

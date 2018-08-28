@@ -1,24 +1,31 @@
 import * as aws from 'aws-sdk';
 import * as fs from 'fs';
 import * as path from 'path';
+import { LoggerInstance } from 'winston';
 import { unzip } from '../infrastructure';
 import { ensureDirExists } from '../infrastructure/fsUtils';
 import { S3Client } from './storageService';
 
 const themeKey = (tenantId: string) => `${tenantId}/themes/theme.zip`;
 
-const createThemeProvider = (rootDir: string, s3Client: S3Client): ThemeProvider => {
-    return new ThemeProvider(rootDir, s3Client);
+const createThemeProvider = (rootDir: string, s3Client: S3Client, logger: LoggerInstance): ThemeProvider => {
+    return new ThemeProvider(
+        rootDir,
+        s3Client,
+        logger,
+    );
 };
 
 export class ThemeProvider {
-    constructor(rootDir: string, s3Client: S3Client) {
+    constructor(rootDir: string, s3Client: S3Client, logger: LoggerInstance) {
         this.s3Client = s3Client;
         this.rootDir = rootDir;
+        this.logger = logger;
     }
 
     rootDir: string;
     s3Client: S3Client;
+    logger: LoggerInstance;
 
     unpack = (tenantId: string, file: Buffer) => {
         return new Promise(async (resolve, reject) =>  {
@@ -37,14 +44,20 @@ export class ThemeProvider {
                 fs.unlinkSync(tempFilePath);
                 resolve();
             } catch (err) {
+                this.logger.error(err);
                 reject(err);
             }
         });
     }
 
-    downloadTheme = async (tenantId: string): Promise<aws.S3.GetObjectOutput> => {
-        const theme = await this.s3Client.getFile(themeKey(tenantId));
-        return theme;
+    downloadTheme = async (tenantId: string): Promise<aws.S3.GetObjectOutput | undefined> => {
+        try {
+            const theme = await this.s3Client.getFile(themeKey(tenantId));
+            return theme;
+        } catch (error) {
+            this.logger.error(error.message);
+            return;
+        }
     }
 
     newOrUpdate = async (tenantId: string, file: Buffer) => {
