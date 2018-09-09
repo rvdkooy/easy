@@ -1,6 +1,3 @@
-import { Readable } from 'stream';
-import * as path from 'path';
-import * as fs from 'fs';
 import StreamZip = require('node-stream-zip');
 
 export const unzip = (zipFile: string, outputFolder: string): Promise<string[]> => {
@@ -8,21 +5,21 @@ export const unzip = (zipFile: string, outputFolder: string): Promise<string[]> 
 
         const zip = new StreamZip({
             file: zipFile,
-            storeEntries: true
+            storeEntries: true,
         });
 
-        zip.on('error', (err) => reject(err))
+        zip.on('error', (err) => reject(err));
         zip.on('ready', () => {
             zip.extract(null, outputFolder, (err, count) => {
                 if (err) {
-                    zip.close(); 
+                    zip.close();
                     reject(err.message);
                 } else {
                     const zipEntries = zip.entries();
                     const files = Object.keys(zipEntries);
-                    zip.close();   
+                    zip.close();
                     resolve(files);
-                }     
+                }
             });
         });
     });

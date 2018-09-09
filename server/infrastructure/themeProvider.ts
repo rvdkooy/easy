@@ -16,6 +16,14 @@ const createThemeProvider = (rootDir: string, s3Client: S3Client, logger: Logger
     );
 };
 
+const getTenantLocalThemeDir = async (rootDir: string, tenantId: string, create: boolean = false) => {
+    const tenantLocalThemeDir = path.resolve(rootDir, `./localfiles/themes/${tenantId}`);
+    if (create) {
+        await ensureDirExists(tenantLocalThemeDir);
+    }
+    return tenantLocalThemeDir;
+};
+
 export class ThemeProvider {
     constructor(rootDir: string, s3Client: S3Client, logger: LoggerInstance) {
         this.s3Client = s3Client;
@@ -30,8 +38,7 @@ export class ThemeProvider {
     unpack = (tenantId: string, file: Buffer) => {
         return new Promise(async (resolve, reject) =>  {
             try {
-                const tenantLocalThemeDir = path.resolve(this.rootDir, `./localfiles/themes/${tenantId}`);
-                await ensureDirExists(tenantLocalThemeDir);
+                const tenantLocalThemeDir = await getTenantLocalThemeDir(this.rootDir, tenantId, true);
 
                 const tempFilePath = path.resolve(
                     this.rootDir,
@@ -63,6 +70,21 @@ export class ThemeProvider {
     newOrUpdate = async (tenantId: string, file: Buffer) => {
         await this.s3Client.uploadFile(themeKey(tenantId), file);
         await this.unpack(tenantId, file);
+    }
+
+    getThemeFor = async (tenantId: string) => {
+        try {
+            const tenantLocalThemeDir = await getTenantLocalThemeDir(this.rootDir, tenantId);
+            const themeFile = path.resolve(tenantLocalThemeDir, 'layout.hbs');
+            if (fs.existsSync(themeFile)) {
+                return 'layout.hbs';
+            } else {
+                return;
+            }
+        } catch (error) {
+            this.logger.error(error.message);
+            return;
+        }
     }
 }
 

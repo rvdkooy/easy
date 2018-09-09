@@ -14,7 +14,7 @@ const handleError = (error: Error, res: express.Response, logger: LoggerInstance
     res.sendStatus(400);
 };
 
-const createMiddleware = (
+const createMiddleware =    (
     contentModelInstance: mongoose.Model<IContentPageModel>,
     logger: LoggerInstance,
 ) => {

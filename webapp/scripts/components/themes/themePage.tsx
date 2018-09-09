@@ -22,7 +22,7 @@ class ThemePage extends React.Component<Props, State> {
     _refreshTheme = () => {
         getLatestTheme(this.props.selectedTenant.tenantId)
             .then((theme) => {
-                this.setState({ currentTheme: 'test' });
+                this.setState({ currentTheme: theme.theme });
             })
             .catch((err) => {
                 if (err instanceof Response && err.status === 404) {

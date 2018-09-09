@@ -10,7 +10,7 @@ export const get = (url: string, options?: request.CoreOptions): Promise<request
             }
         });
     });
-}
+};
 
 export const post = (url: string, options?: request.CoreOptions): Promise<request.Response> => {
     return new Promise((resolve, reject) => {
@@ -22,7 +22,7 @@ export const post = (url: string, options?: request.CoreOptions): Promise<reques
             }
         });
     });
-}
+};
 
 export const put = (url: string, options?: request.CoreOptions): Promise<request.Response> => {
     return new Promise((resolve, reject) => {
@@ -34,7 +34,7 @@ export const put = (url: string, options?: request.CoreOptions): Promise<request
             }
         });
     });
-}
+};
 
 export const del = (url: string, options?: request.CoreOptions): Promise<request.Response> => {
     return new Promise((resolve, reject) => {
@@ -46,4 +46,4 @@ export const del = (url: string, options?: request.CoreOptions): Promise<request
             }
         });
     });
-}
+};

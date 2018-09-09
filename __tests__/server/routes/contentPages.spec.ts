@@ -2,13 +2,12 @@
 import { expect } from 'chai';
 import 'mocha';
 import * as mockgoose from 'mockgoose';
-import { Mockgoose } from 'mockgoose';
 import { ContentPageModel } from '../../../server/db';
 import createRoutes from '../../../server/routes/contentPages';
 import logger from '../utils/consoleLogger';
 import { del, get, post, put } from '../utils/httpClient';
 import { addUser } from '../utils/mockedExpressMiddleware';
-import { initializeInMemoryMondoDb, MongoConnection } from '../utils/mockedMongoDb';
+import { initializeInMemoryMondoDb } from '../utils/mockedMongoDb';
 import createTestHost, { TestHost } from '../utils/testHost';
 
 describe('content pages route tests', () => {

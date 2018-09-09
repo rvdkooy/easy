@@ -44,7 +44,7 @@ const createApp = (config: Config, rootDir: string) => {
         usersRoutes(UserModel, logger),
         loggingRoutes(mongooseConnection),
         filesRoutes(rootDir, s3Client, logger),
-        themeRoutes(s3Client, themeProvider, logger),
+        themeRoutes(themeProvider, logger),
         tenantRoutes(TenantModel, logger),
         (req, res) => res.send(404),
     );
