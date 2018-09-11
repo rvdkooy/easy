@@ -8,7 +8,9 @@ import * as path from 'path';
 import { Config } from './config';
 import { connect as dbConnect, ContentPageModel, TenantModel, UserModel } from './db';
 import { createS3Client, setupEnvironment, setupLogger  } from './infrastructure/';
-import { contentPagesRoutes, defaultRoutes, filesRoutes, loggingRoutes, TenantRoutes, usersRoutes } from './routes';
+import createThemeProvider from './infrastructure/themeProvider';
+import { contentPagesRoutes, defaultRoutes, filesRoutes,
+    loggingRoutes, tenantRoutes, themeRoutes, usersRoutes } from './routes';
 import { authenticatedApi, configurePassport } from './security';
 
 const MongoStore = connectMongo(expressSession);
@@ -17,9 +19,9 @@ const createApp = (config: Config, rootDir: string) => {
 
     const mongooseConnection = dbConnect(config.DATABASE_CONNECTION_STRING);
     const logger = setupLogger(app, config.DATABASE_CONNECTION_STRING);
-    const s3Client = createS3Client(config.AWS, logger);
-
-    setupEnvironment(rootDir, s3Client, logger);
+    const s3Client = createS3Client(config.AWS);
+    const themeProvider = createThemeProvider(rootDir, s3Client, logger);
+    setupEnvironment(rootDir, s3Client, logger, themeProvider);
 
     app.use(expressSession({
         secret: config.SESSION_SECRET ,
@@ -42,7 +44,8 @@ const createApp = (config: Config, rootDir: string) => {
         usersRoutes(UserModel, logger),
         loggingRoutes(mongooseConnection),
         filesRoutes(rootDir, s3Client, logger),
-        TenantRoutes(TenantModel, logger),
+        themeRoutes(themeProvider, logger),
+        tenantRoutes(TenantModel, logger),
         (req, res) => res.send(404),
     );
     app.use('/', defaultRoutes(rootDir, logger));

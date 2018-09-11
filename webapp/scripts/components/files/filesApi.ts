@@ -1,8 +1,7 @@
-import { del, postFormData, query } from '../../utils/httpClient';
+import { del, get, postFormData } from '../../utils/httpClient';
 
 export const getFiles = (tenantId: string): Promise<FileItem[]> => {
-    return query(`/admin/api/${tenantId}/files`)
-        .then((res) => res.json());
+    return get(`/admin/api/${tenantId}/files`);
 };
 
 export const uploadFile = (tenantId: string, file: File) => {

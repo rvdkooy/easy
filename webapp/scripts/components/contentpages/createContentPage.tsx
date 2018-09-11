@@ -1,5 +1,6 @@
 import { Button } from '@material-ui/core';
 import * as React from 'react';
+import { RouteComponentProps, withRouter } from 'react-router';
 import { BreadCrumbs } from '../../components/common';
 import { notify } from '../../services/notificationService';
 import { UserProps, withUser } from '../../services/userProvider';
@@ -23,6 +24,7 @@ class CreateContentPage extends React.Component<Props, State> {
 
         saveContentPage(this.props.selectedTenant.tenantId, this.state.model)
         .then(() => {
+            this.props.history.push('/admin/contentpages');
             notify('Content page created.', 'INFO');
         })
         .catch((err) => {
@@ -44,6 +46,7 @@ class CreateContentPage extends React.Component<Props, State> {
                     >
                         <Button
                             disabled={!this.state.model.isValid()}
+                            variant="raised"
                             color="primary"
                             onClick={this._onUpdate}
                         >Create and close</Button>
@@ -52,12 +55,13 @@ class CreateContentPage extends React.Component<Props, State> {
     }
 }
 
-interface Props extends UserProps, WithTenantProps {}
+interface Props extends UserProps, WithTenantProps, RouteComponentProps<any> {}
 
 interface State {
     model: EditModel;
 }
 
-const WrappedWithTenant = withTenant<UserProps>(CreateContentPage);
+const RouterWrapped = withRouter(CreateContentPage);
+const TenantWrapped = withTenant<UserProps>(RouterWrapped);
 
-export default withUser<{}>(WrappedWithTenant);
+export default withUser(TenantWrapped);

@@ -1,11 +1,11 @@
-import * as http from 'http';
-import * as express from 'express';
 import * as bodyParser from 'body-parser';
+import * as express from 'express';
+import * as http from 'http';
 
 export interface TestHost {
-    close: Function,
-    listen: (port?: number) => void,
-    express: express.Express
+    close: (cb?: () => void) => void;
+    listen: (port?: number) => void;
+    express: express.Express;
 }
 
 const createTestHost = () => {
@@ -13,27 +13,26 @@ const createTestHost = () => {
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
 
-
     app.get('/test', (req, res) => {
         res.sendStatus(200);
     });
-    
-    var server = http.createServer(app);
-    
-    const close = (cb?: Function) => {
+
+    const server = http.createServer(app);
+
+    const close = (cb?: () => void) => {
+        app.removeAllListeners();
         server.close(cb);
-    }
-    
+    };
+
     const listen = (port?: number) => {
         server.listen(port || 1234);
-    }
-    
+    };
+
     return {
         close,
         listen,
-        express: app
-    };;
+        express: app,
+    };
 };
-
 
 export default createTestHost;

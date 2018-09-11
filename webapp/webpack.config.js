@@ -26,7 +26,8 @@ var webpackConfig = {
             // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
             { enforce: "pre", test: /\.ts$/, loader: "source-map-loader" }
         ]
-    }
+    },
+    devtool : "source-map",
 };
 
 module.exports = webpackConfig;

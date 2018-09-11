@@ -3,9 +3,7 @@ import { Button, Dialog, DialogActions, DialogContent,
 import * as React from 'react';
 import { notify } from '../../services/notificationService';
 import { UserProps, withUser } from '../../services/userProvider';
-import { withTenant, WithTenantProps } from '../../services/withTenant';
 import { Container } from '../common';
-import { uploadFile } from './filesService';
 
 class UploadFileDialog extends React.Component<InnerProps, State> {
 
@@ -26,15 +24,13 @@ class UploadFileDialog extends React.Component<InnerProps, State> {
 
     _uploadClicked = () => {
         const file = this._fileInput.files[0];
-
-        uploadFile(this.props.selectedTenant.tenantId, file)
-            .then(() => {
-                notify(`File: ${file.name} uploaded successfully.`, 'INFO');
-                this.props.onClose(true);
-            })
-            .catch((err) => {
-                notify(`An error occured while uploading your file`, 'ERROR');
-            });
+        this.props.uploadFile(file).then(() => {
+            notify(`File: ${file.name} uploaded successfully.`, 'INFO');
+            this.props.onClose(true);
+        })
+        .catch(() => {
+            notify(`An error occured while uploading your file`, 'ERROR');
+        });
     }
 
     _onClose = () => {
@@ -70,7 +66,11 @@ class UploadFileDialog extends React.Component<InnerProps, State> {
                             />
                         </form>
                         <label htmlFor="file-upload-input">
-                            <Button component="span" color="primary">
+                            <Button
+                                component="span"
+                                color="primary"
+                                variant="contained"
+                            >
                                 Select file
                             </Button>
                         </label>
@@ -97,10 +97,9 @@ interface State {
 interface OuterProps {
     open: boolean;
     onClose: (refresh?: boolean) => void;
+    uploadFile: (fileList: File) => Promise<any>;
 }
 
-interface InnerProps extends OuterProps, WithTenantProps, UserProps {  }
+interface InnerProps extends OuterProps, UserProps {  }
 
-const WrappedWithTenant = withTenant<UserProps>(UploadFileDialog);
-
-export default withUser<OuterProps>(WrappedWithTenant);
+export default withUser<OuterProps>(UploadFileDialog);

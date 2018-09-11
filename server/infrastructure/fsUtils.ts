@@ -9,9 +9,9 @@ export const ensureDirExists = (dirPath: string) => {
                 resolve();
             }
         });
-    });   
-}
+    });
+};
 
 export default {
-    ensureDirExists
-}
+    ensureDirExists,
+};

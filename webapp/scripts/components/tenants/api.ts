@@ -1,11 +1,10 @@
-import { del, post, put, query } from '../../utils/httpClient';
+import { del, get, post, put } from '../../utils/httpClient';
 import EditModel from './models/edit';
 import ListModel from './models/list';
 
 export function getTenants(): Promise<ListModel[]> {
-    return query('/admin/api/tenants')
-        .then((res: Response) => res.json()
-        .then((json) => json.map((x: any) => ListModel.fromJson(x))));
+    return get('/admin/api/tenants')
+        .then((json) => json.map((x: any) => ListModel.fromJson(x)));
 }
 
 export function saveTenant(model: EditModel) {
@@ -17,8 +16,8 @@ export function updateTenant(model: EditModel) {
 }
 
 export function getTenant(id: string): Promise<EditModel> {
-    return query(`/admin/api/tenants/${id}`)
-        .then((res: Response) => res.json().then((json) => EditModel.fromJson(json)));
+    return get(`/admin/api/tenants/${id}`)
+        .then((json) => EditModel.fromJson(json));
 }
 
 export function deleteTenant(tenantId: string) {

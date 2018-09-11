@@ -1,4 +1,4 @@
-import { query } from '../utils/httpClient';
+import { get } from '../utils/httpClient';
 
 export interface User {
     tenants: Tenant[];
@@ -13,11 +13,10 @@ export interface Tenant {
 }
 
 export const retrieveCurrentUser = (): Promise<User> => {
-    return query('/admin/api/users/current')
-        .then((res: Response) => {
-            if (res.status === 401) {
+    return get('/admin/api/users/current')
+        .catch((err) => {
+            if (err.status === 401) {
                 return null;
             }
-            return res.json();
         });
 };

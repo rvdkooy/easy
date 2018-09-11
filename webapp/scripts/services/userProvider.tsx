@@ -1,6 +1,6 @@
 import * as PropTypes from 'prop-types';
 import * as React from 'react';
-import { User } from './userService';
+import { User } from './userApi';
 
 export class CurrentUserProvider extends React.Component<UserProviderProps> {
 

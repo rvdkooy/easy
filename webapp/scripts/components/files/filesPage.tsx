@@ -4,9 +4,10 @@ import { notify } from '../../services/notificationService';
 import { UserProps, withUser } from '../../services/userProvider';
 import { withTenant, WithTenantProps } from '../../services/withTenant';
 import { BreadCrumbs, Container, PaddedPaper } from '../common';
-import { deleteFile, FileItem, getFiles } from './filesService';
+import UploadFileDialog from '../common/uploadFileDialog';
+import { deleteFile, FileItem, getFiles } from './filesApi';
+import { uploadFile } from './filesApi';
 import FilesTable from './filesTable';
-import UploadFileDialog from './uploadFileDialog';
 
 class FilesPage extends React.Component<Props, State> {
 
@@ -50,6 +51,10 @@ class FilesPage extends React.Component<Props, State> {
             .catch(() => notify('An error occured while deleting your file', 'ERROR'));
     }
 
+    _uploadFile = (file: File) => {
+        return uploadFile(this.props.selectedTenant.tenantId, file);
+    }
+
     render() {
         const breadCrumbItems = [
             { text: 'Files' },
@@ -76,6 +81,7 @@ class FilesPage extends React.Component<Props, State> {
                 <UploadFileDialog
                     open={ this.state.showUploadDialog }
                     onClose={ this._onCloseUploadDialog }
+                    uploadFile={ this._uploadFile }
                 />
             </div>);
     }
