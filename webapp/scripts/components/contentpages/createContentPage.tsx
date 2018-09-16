@@ -38,7 +38,10 @@ class CreateContentPage extends React.Component<Props, State> {
             { text: 'Create new' },
         ];
         return (<div>
-                    <BreadCrumbs items={breadCrumbItems} />
+                    <BreadCrumbs
+                        rootItemText={this.props.selectedTenant.site}
+                        items={breadCrumbItems}
+                    />
 
                     <ContentPageForm
                         model={this.state.model}

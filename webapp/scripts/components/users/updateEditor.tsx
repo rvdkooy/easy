@@ -3,6 +3,7 @@ import * as React from 'react';
 import { match } from 'react-router-dom';
 import { BreadCrumbs, PaddedPaper, ProgressIndicator } from '../../components/common';
 import { notify } from '../../services/notificationService';
+import { withTenant, WithTenantProps } from '../../services/withTenant';
 import EditModel from './models/edit';
 import UserForm from './userForm';
 import { getUser, updateUser } from './usersApi';
@@ -49,7 +50,10 @@ class UpdateEditor extends React.Component<Props, State> {
 
         return (
             <div>
-                <BreadCrumbs items={breadCrumbItems} />
+                <BreadCrumbs
+                    rootItemText={this.props.selectedTenant.site}
+                    items={breadCrumbItems}
+                />
                 <PaddedPaper>
                     <Typography variant="headline">User details</Typography>
                     {
@@ -72,7 +76,7 @@ class UpdateEditor extends React.Component<Props, State> {
     }
 }
 
-interface Props {
+interface Props extends WithTenantProps {
     match: match<{ id: string }>;
 }
 
@@ -81,4 +85,4 @@ interface State {
     isLoading: boolean;
 }
 
-export default UpdateEditor;
+export default withTenant(UpdateEditor);

@@ -68,7 +68,10 @@ class ContentPagesList extends React.Component<WithTenantProps, State> {
 
         return (
             <div>
-                <BreadCrumbs items={breadCrumbItems} />
+                <BreadCrumbs
+                    items={breadCrumbItems}
+                    rootItemText={this.props.selectedTenant.site}
+                />
                 <PaddedPaper>
                     <Typography variant="headline">List of content pages</Typography>
                     <Container>

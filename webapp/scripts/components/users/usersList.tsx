@@ -1,12 +1,13 @@
 import { CircularProgress, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core';
 import * as React from 'react';
 import { notify } from '../../services/notificationService';
+import { withTenant, WithTenantProps } from '../../services/withTenant';
 import { BreadCrumbs, Container, PaddedPaper } from '../common';
 import ListModel from './models/list';
 import { deleteUser, getUsers } from './usersApi';
 import UsersListRow from './usersListRow';
 
-class UsersList extends React.Component<undefined, State> {
+class UsersList extends React.Component<WithTenantProps, State> {
 
     state: State = {
         isLoading: false,
@@ -51,7 +52,10 @@ class UsersList extends React.Component<undefined, State> {
 
         return (
             <div>
-                <BreadCrumbs items={breadCrumbItems} />
+                <BreadCrumbs
+                    rootItemText={this.props.selectedTenant.site}
+                    items={breadCrumbItems}
+                />
                 <PaddedPaper>
                     <Typography variant="headline">List of users</Typography>
                     <Container>
@@ -86,4 +90,4 @@ interface State {
     isLoading: boolean;
 }
 
-export default UsersList;
+export default withTenant(UsersList);

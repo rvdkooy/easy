@@ -3,12 +3,13 @@ import { Button, CircularProgress, Table, TableBody, TableCell, TableHead,
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { notify } from '../../services/notificationService';
+import { withTenant, WithTenantProps } from '../../services/withTenant';
 import { BreadCrumbs, Container, PaddedPaper } from '../common';
 import { deleteTenant, getTenants } from './api';
 import ListRow from './listRow';
 import ListModel from './models/list';
 
-class TenantsList extends React.Component<undefined, State> {
+class TenantsList extends React.Component<WithTenantProps, State> {
 
     state: State = {
         isLoading: false,
@@ -55,7 +56,10 @@ class TenantsList extends React.Component<undefined, State> {
 
         return (
             <div>
-                <BreadCrumbs items={breadCrumbItems} />
+                <BreadCrumbs
+                    rootItemText={this.props.selectedTenant.site}
+                    items={breadCrumbItems}
+                />
                 <PaddedPaper>
                     <Typography variant="headline">List of tenants</Typography>
                     <Container>
@@ -95,4 +99,4 @@ interface State {
     isLoading: boolean;
 }
 
-export default TenantsList;
+export default withTenant(TenantsList);

@@ -36,7 +36,7 @@ const BreadCrumbs = (props: Props) => {
     const items = [(
         <ListItem key="home" className={props.classes.listItem}>
             <Link to="/admin">
-                <ListItemText className={props.classes.text} primary="Home" />
+                <ListItemText className={props.classes.text} primary={props.rootItemText} />
             </Link>
         </ListItem>
     )];
@@ -70,6 +70,7 @@ const BreadCrumbs = (props: Props) => {
 
 interface Props extends WithStyles<'list' | 'listItem' | 'text' | 'textBold'> {
     items: Item[];
+    rootItemText: string;
 }
 
 interface Item {
@@ -77,4 +78,4 @@ interface Item {
     url?: string;
 }
 
-export default withStyles(styles)<{ items: Item[] }>(BreadCrumbs);
+export default withStyles(styles)<{ items: Item[], rootItemText: string }>(BreadCrumbs);

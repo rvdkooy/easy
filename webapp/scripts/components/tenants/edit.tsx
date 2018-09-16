@@ -4,6 +4,7 @@ import { match } from 'react-router-dom';
 import { BreadCrumbs, ProgressIndicator } from '../../components/common';
 import { notify } from '../../services/notificationService';
 import { UserProps, withUser } from '../../services/userProvider';
+import { withTenant, WithTenantProps } from '../../services/withTenant';
 import { getTenant, updateTenant } from './api';
 import Form from './form';
 import EditModel from './models/edit';
@@ -48,7 +49,10 @@ class EditTenant extends React.Component<Props, State> {
 
         return (
             <div>
-                <BreadCrumbs items={breadCrumbItems} />
+                <BreadCrumbs
+                    rootItemText={this.props.selectedTenant.site}
+                    items={breadCrumbItems}
+                />
                 { (this.state.isLoading && <ProgressIndicator />) }
                 {
                     (this.state.model && <Form
@@ -67,7 +71,7 @@ class EditTenant extends React.Component<Props, State> {
     }
 }
 
-interface Props extends UserProps {
+interface Props extends UserProps, WithTenantProps {
     match: match<{ id: string }>;
 }
 
@@ -76,4 +80,7 @@ interface State {
     isLoading: boolean;
 }
 
-export default withUser<{}>(EditTenant);
+const WithUser = withUser<WithTenantProps>(EditTenant);
+const WithTenant = withTenant<{}>(WithUser);
+
+export default WithTenant;

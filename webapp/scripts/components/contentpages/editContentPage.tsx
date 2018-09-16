@@ -54,7 +54,10 @@ class EditContentPage extends React.Component<Props, State> {
 
         return (
             <div>
-                <BreadCrumbs items={breadCrumbItems} />
+                <BreadCrumbs
+                    rootItemText={this.props.selectedTenant.site}
+                    items={breadCrumbItems}
+                />
                 {
                     (this.state.isLoading) ?
                         <ProgressIndicator /> :

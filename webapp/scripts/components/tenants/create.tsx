@@ -3,6 +3,7 @@ import * as React from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { BreadCrumbs, ProgressIndicator } from '../../components/common';
 import { notify } from '../../services/notificationService';
+import { withTenant, WithTenantProps } from '../../services/withTenant';
 import { saveTenant } from './api';
 import Form from './form';
 import EditModel from './models/edit';
@@ -43,7 +44,10 @@ class CreateContentPage extends React.Component<Props, State> {
             { text: 'Create new' },
         ];
         return (<div>
-                    <BreadCrumbs items={breadCrumbItems} />
+                    <BreadCrumbs
+                        rootItemText={this.props.selectedTenant.site}
+                        items={breadCrumbItems}
+                    />
 
                     <Form
                         model={this.state.model}
@@ -64,6 +68,8 @@ interface State {
     model: EditModel;
 }
 
-interface Props extends RouteComponentProps<any> { }
+interface Props extends RouteComponentProps<any>, WithTenantProps { }
 
-export default withRouter(CreateContentPage);
+const WithRouter = withRouter(CreateContentPage);
+
+export default withTenant(WithRouter);

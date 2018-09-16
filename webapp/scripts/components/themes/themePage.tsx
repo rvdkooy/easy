@@ -66,7 +66,10 @@ class ThemePage extends React.Component<Props, State> {
 
         return (
             <div>
-                <BreadCrumbs items={breadCrumbItems} />
+                <BreadCrumbs
+                    rootItemText={this.props.selectedTenant.site}
+                    items={breadCrumbItems}
+                />
                 <PaddedPaper>
                     <Typography variant="headline">Theme</Typography>
                     <Container>
