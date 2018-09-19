@@ -17,11 +17,17 @@ class FilesPage extends React.Component<Props, State> {
     };
 
     componentDidMount() {
-        this._refreshFilesTable();
+        this._refreshFilesTable(this.props.selectedTenant.tenantId);
     }
 
-    _refreshFilesTable = () => {
-        getFiles(this.props.selectedTenant.tenantId)
+    componentWillReceiveProps(nextProps: Props) {
+        if (this.props.selectedTenant !== nextProps.selectedTenant) {
+            this._refreshFilesTable(nextProps.selectedTenant.tenantId);
+        }
+    }
+
+    _refreshFilesTable = (tenantId: string) => {
+        getFiles(tenantId)
             .then((files) => {
                 this.setState({ files });
             })
@@ -38,7 +44,7 @@ class FilesPage extends React.Component<Props, State> {
         this.setState({ showUploadDialog: false });
 
         if (refresh) {
-            this._refreshFilesTable();
+            this._refreshFilesTable(this.props.selectedTenant.tenantId);
         }
     }
 
@@ -46,7 +52,7 @@ class FilesPage extends React.Component<Props, State> {
         deleteFile(this.props.selectedTenant.tenantId, key)
             .then(() => {
                 notify(`File: '${key} was deleted successfully'`, 'INFO');
-                this._refreshFilesTable();
+                this._refreshFilesTable(this.props.selectedTenant.tenantId);
             })
             .catch(() => notify('An error occured while deleting your file', 'ERROR'));
     }

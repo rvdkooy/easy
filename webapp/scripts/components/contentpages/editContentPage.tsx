@@ -16,7 +16,18 @@ class EditContentPage extends React.Component<Props, State> {
     };
 
     componentDidMount() {
-        getContentPage(this.props.selectedTenant.tenantId, this.props.match.params.id)
+        this._getContentPage(this.props.selectedTenant.tenantId, this.props.match.params.id);
+    }
+
+    componentWillReceiveProps(nextProps: Props) {
+        if (nextProps.selectedTenant !== this.props.selectedTenant ||
+            nextProps.match.params.id !== this.props.match.params.id) {
+            this._getContentPage(nextProps.selectedTenant.tenantId, nextProps.match.params.id);
+        }
+    }
+
+    _getContentPage = (tenantId: string, pageId: string) => {
+        getContentPage(tenantId, pageId)
             .then((model) => {
                 this.setState({
                     model,

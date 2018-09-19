@@ -16,11 +16,17 @@ class ThemePage extends React.Component<Props, State> {
     };
 
     componentDidMount() {
-        this._refreshTheme();
+        this._refreshTheme(this.props.selectedTenant.tenantId);
     }
 
-    _refreshTheme = () => {
-        getLatestTheme(this.props.selectedTenant.tenantId)
+    componentWillReceiveProps(nextProps: Props) {
+        if (this.props.selectedTenant !== nextProps.selectedTenant) {
+            this._refreshTheme(nextProps.selectedTenant.tenantId);
+        }
+    }
+
+    _refreshTheme = (tenantId: string) => {
+        getLatestTheme(tenantId)
             .then((theme) => {
                 this.setState({ currentTheme: theme.theme });
             })
