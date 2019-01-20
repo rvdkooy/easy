@@ -56,7 +56,7 @@ const UserForm = (props: Props) => {
 
 interface Props {
     model: EditModel;
-    onPropertyChange: (e: React.FormEvent<HTMLInputElement>) => void;
+    onPropertyChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onSubmit: (e: React.FormEvent<HTMLButtonElement>) => void;
 }
 

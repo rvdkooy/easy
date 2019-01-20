@@ -53,7 +53,7 @@ const TenantForm = (props: Props) => {
 
 interface Props {
     model: EditModel;
-    onPropertyChange: (e: React.FormEvent<HTMLInputElement>) => void;
+    onPropertyChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     createMode?: boolean;
     children?: JSX.Element;
 }

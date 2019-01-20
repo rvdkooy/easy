@@ -14,7 +14,7 @@ class CreateContentPage extends React.Component<Props, State> {
         model: new EditModel(),
     };
 
-    _onPropertyChange = (e: React.FormEvent<HTMLInputElement>) => {
+    _onPropertyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.currentTarget.name === 'email') {
             this.state.model.email = e.currentTarget.value;
         }

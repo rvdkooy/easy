@@ -136,7 +136,7 @@ interface Props extends OuterProps, WithStyles<'root'> {
 interface OuterProps {
     children: any;
     model: EditModel;
-    onPropertyChange: (e: React.FormEvent<HTMLInputElement>) => void;
+    onPropertyChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 interface State {
