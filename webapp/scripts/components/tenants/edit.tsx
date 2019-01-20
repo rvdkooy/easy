@@ -29,7 +29,7 @@ class EditTenant extends React.Component<Props, State> {
             });
     }
 
-    _onPropertyChange = (e: React.FormEvent<HTMLInputElement>) => {
+    _onPropertyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         this.forceUpdate();
     }
 

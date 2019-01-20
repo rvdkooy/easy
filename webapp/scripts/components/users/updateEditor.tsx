@@ -29,7 +29,7 @@ class UpdateEditor extends React.Component<Props, State> {
             });
     }
 
-    _onPropertyChange = (e: React.MouseEvent<HTMLInputElement>) => {
+    _onPropertyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         this.state.model.update(e.currentTarget.name, e.currentTarget.value);
         this.forceUpdate();
     }
