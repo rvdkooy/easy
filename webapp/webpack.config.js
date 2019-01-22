@@ -20,8 +20,8 @@ var webpackConfig = {
             },
             { 
                 test: /\.tsx?$/,
-                loader: "awesome-typescript-loader",
-                options: { configFileName: './webapp/webapp-tsconfig.json' }
+                loader: "ts-loader",
+                options: { context: path.resolve(__dirname), configFile: 'webapp-tsconfig.json' }
             },
             // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
             { enforce: "pre", test: /\.ts$/, loader: "source-map-loader" }
