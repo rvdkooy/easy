@@ -28,7 +28,7 @@ export const userSchema = new Schema({
     },
     gender: {
         type: String,
-        required: true,
+        required: false,
     },
     photo : String,
     provider: {
