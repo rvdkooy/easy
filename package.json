@@ -34,7 +34,7 @@
     "config": "^1.31.0",
     "connect-mongo": "^2.0.3",
     "cookie-parser": "^1.4.3",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "express-session": "^1.15.6",
     "express-validator": "^5.3.1",
     "hbs": "^4.0.1",
